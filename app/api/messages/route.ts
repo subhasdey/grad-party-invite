@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import { Message } from "@/lib/models";
+import { appendMessageToSheet } from "@/lib/googledrive";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,7 @@ export async function POST(req: NextRequest) {
     const colors = ["#FFCB05", "#CFB991", "#0891b2", "#10b981", "#f472b6"];
     const avatar = colors[name.charCodeAt(0) % colors.length];
     const msg = await Message.create({ name, text: text.trim(), avatar });
+    appendMessageToSheet(name, text.trim()).catch((err) => console.error("Sheet append failed:", err));
     return NextResponse.json(msg, { status: 201 });
   } catch (err) {
     console.error(err);

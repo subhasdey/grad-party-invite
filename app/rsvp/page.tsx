@@ -12,11 +12,19 @@ export default function RSVPPage() {
     message: "", song: "", attending: true,
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [confirmationChannels, setConfirmationChannels] = useState<string[]>([]);
+  const [errorText, setErrorText] = useState("");
 
   const update = (k: string, v: string | number | boolean) => setForm(f => ({ ...f, [k]: v }));
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.email.trim() && !form.phone.trim()) {
+      setStatus("error");
+      setErrorText("Please add at least an email or phone number.");
+      return;
+    }
+    setErrorText("");
     setStatus("loading");
     try {
       const res = await fetch("/api/rsvp", {
@@ -24,9 +32,15 @@ export default function RSVPPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      if (!res.ok) throw new Error("Failed");
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Failed");
+      }
+      const data = await res.json();
+      setConfirmationChannels(Array.isArray(data.confirmations) ? data.confirmations : []);
       setStatus("success");
-    } catch {
+    } catch (err) {
+      setErrorText(err instanceof Error ? err.message : "Something went wrong. Please try again.");
       setStatus("error");
     }
   };
@@ -43,8 +57,13 @@ export default function RSVPPage() {
           </h2>
           <p className="text-white/50 text-sm mb-8">
             {form.attending
-              ? `We can't wait to celebrate with you, ${form.name}! Check your email for details.`
+              ? `We can't wait to celebrate with you, ${form.name}!`
               : `We'll miss you, ${form.name}. Your kind wishes mean a lot!`}
+          </p>
+          <p className="text-white/50 text-xs mb-8">
+            {confirmationChannels.length > 0
+              ? `Confirmation sent via ${confirmationChannels.join(" and ")}.`
+              : "Your RSVP has been recorded."}
           </p>
           <div className="flex flex-col gap-3">
             <Link href="/gallery" className="py-3 rounded-xl text-[#00274C] font-semibold text-sm" style={{ background: "#FFCB05" }}>View Gallery</Link>
@@ -95,8 +114,9 @@ export default function RSVPPage() {
           </div>
 
           <input required value={form.name} onChange={e => update("name", e.target.value)} placeholder="Full name *" className={inputCls} />
-          <input required type="email" value={form.email} onChange={e => update("email", e.target.value)} placeholder="Email address *" className={inputCls} />
-          <input type="tel" value={form.phone} onChange={e => update("phone", e.target.value)} placeholder="Phone (for SMS reminders)" className={inputCls} />
+          <input type="email" value={form.email} onChange={e => update("email", e.target.value)} placeholder="Email address" className={inputCls} />
+          <input type="tel" value={form.phone} onChange={e => update("phone", e.target.value)} placeholder="Phone (for SMS confirmation)" className={inputCls} />
+          <p className="text-[11px] text-white/35 px-1">Provide at least one: email or phone.</p>
 
           {form.attending && (
             <>
@@ -140,7 +160,7 @@ export default function RSVPPage() {
             placeholder="Leave a message for the graduates..." rows={3}
             className={`${inputCls} resize-none`} />
 
-          {status === "error" && <p className="text-red-400 text-xs text-center">Something went wrong. Please try again.</p>}
+          {status === "error" && <p className="text-red-400 text-xs text-center">{errorText || "Something went wrong. Please try again."}</p>}
 
           <button type="submit" disabled={status === "loading"}
             className="w-full py-4 rounded-xl font-semibold text-sm transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50"

@@ -13,10 +13,12 @@ function getClient() {
   return twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 }
 
-export async function sendConfirmationSMS(to: string, guestName: string) {
+export async function sendConfirmationSMS(to: string, guestName: string, attending = true) {
   const client = getClient();
   if (!client) { console.log("SMS skipped: Twilio not configured"); return; }
-  const body = `Hi ${guestName}! Your RSVP for ${partyInfo.name}'s Graduation Party is confirmed! Date: ${partyInfo.date} at ${partyInfo.time}. Venue: ${partyInfo.venue}. View: ${partyInfo.url}`;
+  const body = attending
+    ? `Hi ${guestName}! Your RSVP for ${partyInfo.name}'s Graduation Party is confirmed! Date: ${partyInfo.date} at ${partyInfo.time}. Venue: ${partyInfo.venue}. View: ${partyInfo.url}`
+    : `Hi ${guestName}! Thanks for your RSVP response for ${partyInfo.name}'s Graduation Party. We'll miss you. You can still follow updates here: ${partyInfo.url}`;
   try {
     await client.messages.create({ body, from: process.env.TWILIO_PHONE_NUMBER, to });
   } catch (err) {

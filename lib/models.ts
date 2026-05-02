@@ -3,7 +3,7 @@ import mongoose, { Schema, models } from "mongoose";
 // ── RSVP ──
 const rsvpSchema = new Schema({
   name:          { type: String, required: true },
-  email:         { type: String, required: true },
+  email:         String,
   phone:         String,
   adults:        { type: Number, default: 1 },
   kids:          { type: Number, default: 0 },

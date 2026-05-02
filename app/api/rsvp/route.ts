@@ -20,11 +20,38 @@ export async function POST(req: NextRequest) {
   try {
     await connectDB();
     const { name, email, phone, adults, kids, diet, message, attending } = await req.json();
-    if (!name || !email) return NextResponse.json({ error: "Name and email required" }, { status: 400 });
-    const rsvp = await RSVP.create({ name, email, phone, adults: Number(adults) || 1, kids: Number(kids) || 0, diet, message, attending });
-    if (email) sendConfirmationEmail(email, name, attending).catch(() => {});
-    if (phone && attending) sendConfirmationSMS(phone, name).catch(() => {});
-    return NextResponse.json(rsvp, { status: 201 });
+    const safeName = String(name || "").trim();
+    const safeEmail = String(email || "").trim();
+    const safePhone = String(phone || "").trim();
+
+    if (!safeName || (!safeEmail && !safePhone)) {
+      return NextResponse.json(
+        { error: "Name and at least one contact method (email or phone) is required" },
+        { status: 400 }
+      );
+    }
+
+    const rsvp = await RSVP.create({
+      name: safeName,
+      email: safeEmail || undefined,
+      phone: safePhone || undefined,
+      adults: Number(adults) || 1,
+      kids: Number(kids) || 0,
+      diet,
+      message,
+      attending,
+    });
+
+    const confirmations: string[] = [];
+    if (safeEmail) {
+      sendConfirmationEmail(safeEmail, safeName, attending).catch(() => {});
+      confirmations.push("email");
+    }
+    if (safePhone) {
+      sendConfirmationSMS(safePhone, safeName, Boolean(attending)).catch(() => {});
+      confirmations.push("sms");
+    }
+    return NextResponse.json({ rsvp, confirmations }, { status: 201 });
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: "Failed to save RSVP" }, { status: 500 });

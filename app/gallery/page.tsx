@@ -23,9 +23,13 @@ export default function GalleryPage() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const load = () =>
-    fetch("/api/media").then(r => r.json()).then(setMedia).catch(console.error);
+    fetch("/api/media", { cache: "no-store" }).then(r => r.json()).then(setMedia).catch(console.error);
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+    const id = setInterval(load, 10000);
+    return () => clearInterval(id);
+  }, []);
 
   const upload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -80,6 +84,7 @@ export default function GalleryPage() {
         {/* Upload card */}
         <div className="mb-8 p-5 rounded-2xl" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
           <p className="text-xs uppercase tracking-widest text-white/30 mb-4">Share a Memory</p>
+          <p className="text-xs text-white/40 mb-4">Everything shared here is visible to all guests in this live tile gallery.</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
             <div>
