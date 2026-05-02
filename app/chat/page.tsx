@@ -25,15 +25,8 @@ export default function ChatPage() {
   };
 
   useEffect(() => { load(); }, []);
-
-  useEffect(() => {
-    const id = setInterval(load, 3000);
-    return () => clearInterval(id);
-  }, []);
-
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  useEffect(() => { const id = setInterval(load, 3000); return () => clearInterval(id); }, []);
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
 
   const send = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,82 +44,69 @@ export default function ChatPage() {
 
   if (!nameSet) {
     return (
-      <main className="min-h-screen flex items-center justify-center px-6" style={{ background: "radial-gradient(ellipse at center, rgba(6,182,212,0.15) 0%, #0a0618 70%)" }}>
-        <div className="glass p-8 max-w-sm w-full text-center">
-          <div className="text-5xl mb-4">💬</div>
-          <h2 className="font-display text-2xl font-bold text-white mb-2">Join the Party Chat</h2>
-          <p className="text-white/50 mb-6 text-sm">What should we call you?</p>
+      <main className="min-h-screen flex items-center justify-center px-6 bg-[#080c14]">
+        <div className="glass max-w-sm w-full p-8 text-center">
+          <div className="text-4xl mb-4">💬</div>
+          <h2 className="font-display text-2xl font-bold text-white mb-1">Party Chat</h2>
+          <p className="text-white/40 text-sm mb-6">Join the conversation</p>
           <form onSubmit={e => { e.preventDefault(); if (name.trim()) setNameSet(true); }}>
-            <input
-              autoFocus
-              value={name}
-              onChange={e => setName(e.target.value)}
+            <input autoFocus value={name} onChange={e => setName(e.target.value)}
               placeholder="Your name"
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 mb-4"
-            />
-            <button
-              type="submit"
-              className="w-full py-3 rounded-xl text-white font-semibold transition-all hover:scale-[1.02]"
-              style={{ background: "linear-gradient(135deg, #7c3aed, #db2777)" }}
-            >
+              className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 text-sm mb-3" />
+            <button type="submit" className="w-full py-3 rounded-xl font-semibold text-sm" style={{ background: "#FFCB05", color: "#00274C" }}>
               Join Chat
             </button>
           </form>
+          <Link href="/" className="inline-block mt-4 text-white/30 hover:text-white/60 text-xs transition-all">← Back</Link>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="flex flex-col h-screen" style={{ background: "radial-gradient(ellipse at 80% 100%, rgba(6,182,212,0.1) 0%, #0a0618 60%)" }}>
+    <main className="flex flex-col h-screen bg-[#080c14]">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 glass">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.07]" style={{ background: "rgba(8,12,20,0.9)", backdropFilter: "blur(16px)" }}>
         <div className="flex items-center gap-3">
-          <Link href="/" className="text-white/40 hover:text-white/70 transition-all text-sm">←</Link>
+          <Link href="/" className="text-white/30 hover:text-white/60 text-sm transition-all">←</Link>
           <div>
-            <h1 className="font-display text-xl font-bold gradient-text">Party Chat</h1>
-            <p className="text-white/40 text-xs">Chatting as <span className="text-purple-400">{name}</span></p>
+            <h1 className="font-display text-lg font-bold text-white">Party Chat</h1>
+            <p className="text-white/30 text-xs">Chatting as <span style={{ color: "#FFCB05" }}>{name}</span></p>
           </div>
         </div>
         <div className="flex gap-2">
-          <Link href="/gallery" className="px-3 py-1.5 glass rounded-full text-white/60 hover:text-white text-xs transition-all">Gallery</Link>
-          <Link href="/rsvp" className="px-3 py-1.5 rounded-full text-white text-xs" style={{ background: "linear-gradient(135deg, #7c3aed, #db2777)" }}>RSVP</Link>
+          <Link href="/gallery" className="px-3 py-1.5 glass rounded-full text-white/50 hover:text-white text-xs transition-all">Gallery</Link>
+          <Link href="/rsvp" className="px-3 py-1.5 rounded-full text-xs font-semibold" style={{ background: "#FFCB05", color: "#00274C" }}>RSVP</Link>
         </div>
       </div>
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4 chat-scroll">
         {messages.length === 0 && (
-          <div className="text-center text-white/30 py-20">
-            <div className="text-4xl mb-3">🎉</div>
-            <p>Be the first to say something!</p>
+          <div className="text-center text-white/20 py-20 text-sm">
+            <div className="text-4xl mb-3">🎓</div>
+            <p>Be the first to send a message!</p>
           </div>
         )}
-        {messages.map((msg, i) => {
+        {messages.map(msg => {
           const isMe = msg.name === name;
           return (
             <div key={msg.id} className={`flex gap-3 ${isMe ? "flex-row-reverse" : "flex-row"}`}>
               {!isMe && (
-                <div
-                  className="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
-                  style={{ background: msg.avatar }}
-                >
+                <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 text-[#080c14]"
+                  style={{ background: msg.avatar }}>
                   {msg.name[0]?.toUpperCase()}
                 </div>
               )}
-              <div className={`max-w-[75%] ${isMe ? "items-end" : "items-start"} flex flex-col gap-1`}>
-                {!isMe && <span className="text-xs text-white/40 px-1">{msg.name}</span>}
-                <div
-                  className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
-                    isMe
-                      ? "text-white rounded-tr-sm"
-                      : "bg-white/8 text-white/90 rounded-tl-sm border border-white/10"
-                  }`}
-                  style={isMe ? { background: "linear-gradient(135deg, #7c3aed, #db2777)" } : {}}
-                >
+              <div className={`max-w-[75%] flex flex-col gap-1 ${isMe ? "items-end" : "items-start"}`}>
+                {!isMe && <span className="text-[11px] text-white/30 px-1">{msg.name}</span>}
+                <div className="px-4 py-2.5 rounded-2xl text-sm leading-relaxed"
+                  style={isMe
+                    ? { background: "#FFCB05", color: "#00274C", borderBottomRightRadius: 4 }
+                    : { background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.85)", border: "1px solid rgba(255,255,255,0.08)", borderBottomLeftRadius: 4 }}>
                   {msg.text}
                 </div>
-                <span className="text-xs text-white/25 px-1">{timeAgo(msg.createdAt)}</span>
+                <span className="text-[10px] text-white/20 px-1">{timeAgo(msg.createdAt)}</span>
               </div>
             </div>
           );
@@ -135,21 +115,15 @@ export default function ChatPage() {
       </div>
 
       {/* Input */}
-      <div className="px-4 py-4 border-t border-white/10">
-        <form onSubmit={send} className="flex gap-3">
-          <input
-            value={text}
-            onChange={e => setText(e.target.value)}
-            placeholder="Type a message..."
-            className="flex-1 bg-white/5 border border-white/10 rounded-full px-5 py-3 text-white placeholder-white/20 transition-all"
-          />
-          <button
-            type="submit"
-            disabled={!text.trim() || sending}
-            className="w-12 h-12 rounded-full flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 disabled:opacity-40"
-            style={{ background: "linear-gradient(135deg, #7c3aed, #db2777)" }}
-          >
-            <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+      <div className="px-4 py-4 border-t border-white/[0.07]">
+        <form onSubmit={send} className="flex gap-2">
+          <input value={text} onChange={e => setText(e.target.value)}
+            placeholder="Say something..."
+            className="flex-1 bg-white/[0.04] border border-white/10 rounded-full px-5 py-3 text-white placeholder-white/20 text-sm" />
+          <button type="submit" disabled={!text.trim() || sending}
+            className="w-11 h-11 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95 disabled:opacity-30"
+            style={{ background: "#FFCB05" }}>
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="#00274C"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
           </button>
         </form>
       </div>
