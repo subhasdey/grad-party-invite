@@ -10,18 +10,20 @@ export default function Home() {
   const [rsvps, setRsvps] = useState<number | null>(null);
 
   useEffect(() => {
-    fetch("/api/rsvp").then(r => r.json()).then((d: { attending: boolean }[]) =>
-      setRsvps(d.filter(r => r.attending).length)
-    );
+    fetch("/api/rsvp")
+      .then(r => r.json())
+      .then((d: { attending: boolean }[]) => setRsvps(d.filter(r => r.attending).length))
+      .catch(() => {});
+
     const target = new Date("2026-06-26T18:00:00").getTime();
     const tick = () => {
-      const d = target - Date.now();
-      if (d <= 0) return;
+      const diff = target - Date.now();
+      if (diff <= 0) return;
       setCount({
-        days: Math.floor(d / 86400000),
-        hours: Math.floor((d % 86400000) / 3600000),
-        minutes: Math.floor((d % 3600000) / 60000),
-        seconds: Math.floor((d % 60000) / 1000),
+        days:    Math.floor(diff / 86400000),
+        hours:   Math.floor((diff % 86400000) / 3600000),
+        minutes: Math.floor((diff % 3600000) / 60000),
+        seconds: Math.floor((diff % 60000) / 1000),
       });
     };
     tick();
@@ -30,156 +32,163 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#070a10] flex flex-col">
+    <div className="min-h-screen flex flex-col" style={{ background: "#0b0e17" }}>
 
       {/* ── NAV ── */}
-      <nav className="flex items-center justify-between px-6 md:px-12 py-6 fade-up">
-        <span className="text-xs uppercase tracking-[0.2em] text-white/30">Class of 2026</span>
-        <div className="flex items-center gap-1">
+      <nav className="flex items-center justify-between px-6 md:px-12 py-5">
+        <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50">Class of 2026</span>
+        <div className="flex items-center gap-2">
           {([["Gallery", "/gallery"], ["Chat", "/chat"], ["RSVP", "/rsvp"]] as [string,string][]).map(([l, h]) => (
             <Link key={h} href={h}
-              className={`px-4 py-2 rounded-full text-xs font-medium transition-all ${
-                l === "RSVP"
-                  ? "text-[#070a10] font-semibold"
-                  : "text-white/40 hover:text-white/80"
-              }`}
-              style={l === "RSVP" ? { background: "#FFCB05" } : {}}
+              className="px-4 py-2 rounded-full text-sm font-medium transition-all"
+              style={l === "RSVP"
+                ? { background: "#FFCB05", color: "#0b0e17", fontWeight: 600 }
+                : { color: "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.12)" }
+              }
             >{l}</Link>
           ))}
         </div>
       </nav>
 
-      {/* ── MAIN ── */}
-      <main className="flex-1 flex flex-col items-center justify-center px-5 pb-12">
+      {/* ── HERO ── */}
+      <main className="flex-1 flex flex-col items-center justify-center px-5 py-8">
 
-        {/* eyebrow */}
-        <p className="fade-up delay-1 text-[11px] uppercase tracking-[0.25em] text-white/30 mb-10">
-          A twin graduation celebration
+        {/* Eyebrow */}
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] mb-8" style={{ color: "rgba(255,255,255,0.5)" }}>
+          You&rsquo;re invited · A Twin Celebration
         </p>
 
-        {/* ── SPLIT NAMEPLATE ── */}
-        <div className="fade-up delay-2 w-full max-w-3xl grid grid-cols-2 gap-px mb-10 rounded-2xl overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
-
-          {/* IRIS – LEFT – PURDUE */}
-          <div className="relative flex flex-col items-center justify-end pt-10 pb-8 px-6"
-            style={{ background: "linear-gradient(160deg, #0d0b06 0%, #100d04 100%)" }}>
-            {/* Purdue gold top bar */}
-            <div className="absolute top-0 inset-x-0 h-[3px]" style={{ background: "#CFB991" }} />
-            <div className="absolute top-3 left-5 text-[10px] uppercase tracking-widest font-semibold" style={{ color: "#CFB99166" }}>Purdue</div>
-            <div className="absolute top-3 right-5 text-[10px] uppercase tracking-widest" style={{ color: "#CFB99166" }}>Boilermakers</div>
-
-            <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden mb-5 ring-2" style={{ boxShadow: "0 0 0 2px #CFB99140, 0 20px 60px rgba(0,0,0,0.6)" }}>
-              <Image src="/hero.jpeg" alt="Iris Dey" fill={false} width={112} height={112} className="object-cover object-left scale-110" />
-            </div>
-
-            <p className="font-display text-xl md:text-2xl font-bold text-white mb-1">Iris Dey</p>
-            <p className="text-xs mb-3" style={{ color: "#CFB991aa" }}>Purdue University</p>
-            <span className="text-[11px] font-semibold px-3 py-1 rounded-full uppercase tracking-wider" style={{ background: "rgba(207,185,145,0.12)", color: "#CFB991", border: "1px solid rgba(207,185,145,0.2)" }}>
-              Boiler Up!
-            </span>
-          </div>
-
-          {/* INESH – RIGHT – MICHIGAN */}
-          <div className="relative flex flex-col items-center justify-end pt-10 pb-8 px-6"
-            style={{ background: "linear-gradient(160deg, #05080f 0%, #040b1a 100%)" }}>
-            {/* Michigan maize top bar */}
-            <div className="absolute top-0 inset-x-0 h-[3px]" style={{ background: "#FFCB05" }} />
-            <div className="absolute top-3 left-5 text-[10px] uppercase tracking-widest font-semibold" style={{ color: "#FFCB0566" }}>Michigan</div>
-            <div className="absolute top-3 right-5 text-[10px] uppercase tracking-widest" style={{ color: "#FFCB0566" }}>Wolverines</div>
-
-            <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden mb-5" style={{ boxShadow: "0 0 0 2px #FFCB0540, 0 20px 60px rgba(0,0,0,0.6)" }}>
-              <Image src="/hero.jpeg" alt="Inesh Dey" fill={false} width={112} height={112} className="object-cover object-right scale-110" />
-            </div>
-
-            <p className="font-display text-xl md:text-2xl font-bold text-white mb-1">Inesh Dey</p>
-            <p className="text-xs mb-3" style={{ color: "#FFCB05aa" }}>Univ. of Michigan</p>
-            <span className="text-[11px] font-semibold px-3 py-1 rounded-full uppercase tracking-wider" style={{ background: "rgba(255,203,5,0.1)", color: "#FFCB05", border: "1px solid rgba(255,203,5,0.2)" }}>
-              Go Blue!
-            </span>
-          </div>
-        </div>
-
-        {/* ── TITLE ── */}
-        <div className="fade-up delay-3 text-center mb-10">
-          <h1 className="font-display font-bold text-white leading-none tracking-tight">
-            <span className="block text-[clamp(3rem,10vw,7rem)]">Graduation</span>
-            <span className="block text-[clamp(3rem,10vw,7rem)] text-white/20">Party</span>
+        {/* Big title */}
+        <div className="text-center mb-10">
+          <h1 className="font-display font-bold leading-none tracking-tight text-white" style={{ fontSize: "clamp(2.8rem,9vw,6.5rem)" }}>
+            Graduation
           </h1>
+          <h2 className="font-display font-bold leading-none tracking-tight" style={{ fontSize: "clamp(2.8rem,9vw,6.5rem)", color: "rgba(255,255,255,0.35)" }}>
+            Party
+          </h2>
         </div>
 
-        {/* ── DIVIDER + EVENT INFO ── */}
-        <div className="fade-up delay-3 w-full max-w-xl mb-10">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="flex-1 h-px" style={{ background: "linear-gradient(to right, transparent, rgba(255,255,255,0.08))" }} />
-            <span className="text-[10px] uppercase tracking-[0.2em] text-white/25">Event Details</span>
-            <div className="flex-1 h-px" style={{ background: "linear-gradient(to left, transparent, rgba(255,255,255,0.08))" }} />
+        {/* ── PERSON CARDS ── */}
+        <div className="w-full max-w-2xl grid grid-cols-2 gap-3 mb-10">
+
+          {/* IRIS – PURDUE */}
+          <div className="relative rounded-2xl overflow-hidden p-6 flex flex-col items-center text-center"
+            style={{ background: "linear-gradient(145deg, #1a1200 0%, #110e00 100%)", border: "1px solid rgba(207,185,145,0.2)" }}>
+            <div className="absolute top-0 inset-x-0 h-[2px]" style={{ background: "linear-gradient(90deg, transparent, #CFB991, transparent)" }} />
+
+            <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden mb-4 flex-shrink-0"
+              style={{ border: "2px solid rgba(207,185,145,0.4)", boxShadow: "0 8px 32px rgba(0,0,0,0.5)" }}>
+              <Image src="/hero.jpeg" alt="Iris Dey" width={96} height={96} className="object-cover object-left w-full h-full" style={{ transform: "scale(1.2)" }} />
+            </div>
+
+            <p className="font-display text-lg md:text-xl font-bold text-white mb-0.5">Iris Dey</p>
+            <p className="text-xs font-medium mb-3" style={{ color: "#CFB991" }}>Purdue University</p>
+            <div className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#CFB991" }} />
+              <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#CFB991" }}>Boiler Up!</span>
+              <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#CFB991" }} />
+            </div>
+            <p className="text-xs mt-2" style={{ color: "rgba(207,185,145,0.55)" }}>Boilermakers</p>
           </div>
 
-          <div className="grid grid-cols-3 gap-3 text-center mb-4">
+          {/* INESH – MICHIGAN */}
+          <div className="relative rounded-2xl overflow-hidden p-6 flex flex-col items-center text-center"
+            style={{ background: "linear-gradient(145deg, #00111f 0%, #000d18 100%)", border: "1px solid rgba(255,203,5,0.2)" }}>
+            <div className="absolute top-0 inset-x-0 h-[2px]" style={{ background: "linear-gradient(90deg, transparent, #FFCB05, transparent)" }} />
+
+            <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden mb-4 flex-shrink-0"
+              style={{ border: "2px solid rgba(255,203,5,0.4)", boxShadow: "0 8px 32px rgba(0,0,0,0.5)" }}>
+              <Image src="/hero.jpeg" alt="Inesh Dey" width={96} height={96} className="object-cover object-right w-full h-full" style={{ transform: "scale(1.2)" }} />
+            </div>
+
+            <p className="font-display text-lg md:text-xl font-bold text-white mb-0.5">Inesh Dey</p>
+            <p className="text-xs font-medium mb-3" style={{ color: "#FFCB05" }}>Univ. of Michigan</p>
+            <div className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#FFCB05" }} />
+              <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#FFCB05" }}>Go Blue!</span>
+              <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#FFCB05" }} />
+            </div>
+            <p className="text-xs mt-2" style={{ color: "rgba(255,203,5,0.55)" }}>Wolverines</p>
+          </div>
+        </div>
+
+        {/* ── EVENT DETAILS ── */}
+        <div className="w-full max-w-2xl rounded-2xl mb-8 overflow-hidden"
+          style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)" }}>
+
+          <div className="grid grid-cols-3 divide-x" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
             {([
-              ["June 26, 2026", "Date"],
-              ["6:00 PM", "Time"],
-              ["Redmond, WA", "Location"],
-            ] as [string, string][]).map(([val, label]) => (
-              <div key={label}>
-                <p className="text-white text-sm md:text-base font-medium">{val}</p>
-                <p className="text-white/25 text-[10px] uppercase tracking-widest mt-0.5">{label}</p>
+              ["📅", "June 26, 2026", "Date"],
+              ["🕕", "6:00 PM", "Time"],
+              ["📍", "Redmond, WA", "Location"],
+            ] as [string, string, string][]).map(([icon, val, label]) => (
+              <div key={label} className="flex flex-col items-center justify-center py-5 px-3 text-center gap-1">
+                <span className="text-base mb-1">{icon}</span>
+                <p className="text-white font-semibold text-sm md:text-base">{val}</p>
+                <p className="text-xs font-medium uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.45)" }}>{label}</p>
               </div>
             ))}
           </div>
 
-          <p className="text-center text-white/30 text-xs">
-            Redmond Senior &amp; Community Center
-          </p>
-          <p className="text-center text-white/20 text-[11px] mt-1">
-            Hosted by Subhas &amp; Sanchita Dey · RSVP by June 12
-          </p>
+          <div className="border-t px-6 py-4 text-center" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+            <p className="text-sm font-medium text-white mb-0.5">Redmond Senior &amp; Community Center</p>
+            <p className="text-xs" style={{ color: "rgba(255,255,255,0.5)" }}>
+              Hosted by <span className="text-white/80 font-medium">Subhas &amp; Sanchita Dey</span>
+              &nbsp;·&nbsp; RSVP by <span className="text-white/80 font-medium">June 12</span>
+            </p>
+          </div>
         </div>
 
         {/* ── COUNTDOWN ── */}
-        <div className="fade-up delay-4 flex gap-5 md:gap-8 mb-10">
+        <div className="flex gap-4 md:gap-8 mb-10">
           {Object.entries(count).map(([unit, val]) => (
-            <div key={unit} className="flex flex-col items-center gap-1">
-              <span className="font-display text-3xl md:text-4xl font-bold text-white tabular-nums">
-                {String(val).padStart(2, "0")}
-              </span>
-              <span className="text-[10px] uppercase tracking-widest text-white/25">{unit}</span>
+            <div key={unit} className="flex flex-col items-center gap-2">
+              <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center"
+                style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                <span className="font-display text-2xl md:text-3xl font-bold text-white tabular-nums">
+                  {String(val).padStart(2, "0")}
+                </span>
+              </div>
+              <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.45)" }}>{unit}</span>
             </div>
           ))}
         </div>
 
-        {/* ── CTA ── */}
-        <div className="fade-up delay-5 flex flex-col sm:flex-row items-center gap-3">
+        {/* ── BUTTONS ── */}
+        <div className="flex flex-col sm:flex-row items-center gap-3">
           <Link href="/rsvp"
-            className="px-10 py-3.5 rounded-full text-sm font-semibold transition-all hover:scale-105 active:scale-95"
-            style={{ background: "#FFCB05", color: "#070a10" }}>
+            className="px-10 py-3.5 rounded-full text-sm font-bold transition-all hover:scale-105 active:scale-95 tracking-wide"
+            style={{ background: "#FFCB05", color: "#0b0e17" }}>
             RSVP Now
           </Link>
           <Link href="/gallery"
-            className="px-8 py-3.5 rounded-full text-sm text-white/50 hover:text-white transition-all"
-            style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
+            className="px-8 py-3.5 rounded-full text-sm font-medium transition-all hover:bg-white/10"
+            style={{ color: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.15)" }}>
             Gallery
           </Link>
           <Link href="/chat"
-            className="px-8 py-3.5 rounded-full text-sm text-white/50 hover:text-white transition-all"
-            style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
+            className="px-8 py-3.5 rounded-full text-sm font-medium transition-all hover:bg-white/10"
+            style={{ color: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.15)" }}>
             Party Chat
           </Link>
         </div>
 
         {rsvps !== null && rsvps > 0 && (
-          <p className="mt-6 text-white/20 text-xs">{rsvps} guests attending</p>
+          <p className="mt-6 text-xs font-medium" style={{ color: "rgba(255,255,255,0.4)" }}>
+            {rsvps} {rsvps === 1 ? "guest" : "guests"} attending
+          </p>
         )}
       </main>
 
       {/* ── FOOTER ── */}
-      <footer className="flex items-center justify-between px-6 md:px-12 py-5 border-t border-white/[0.05]">
-        <div className="flex items-center gap-3 text-[11px]">
-          <span style={{ color: "#CFB99150" }}>Purdue Boilermakers</span>
-          <span className="text-white/10">×</span>
-          <span style={{ color: "#FFCB0550" }}>Michigan Wolverines</span>
+      <footer className="flex items-center justify-between px-6 md:px-12 py-4"
+        style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+        <div className="flex items-center gap-3 text-xs font-medium">
+          <span style={{ color: "rgba(207,185,145,0.6)" }}>Purdue Boilermakers</span>
+          <span style={{ color: "rgba(255,255,255,0.2)" }}>×</span>
+          <span style={{ color: "rgba(255,203,5,0.6)" }}>Michigan Wolverines</span>
         </div>
-        <Link href="/admin" className="text-white/15 hover:text-white/40 text-[11px] transition-all">Admin</Link>
+        <Link href="/admin" className="text-xs font-medium transition-all" style={{ color: "rgba(255,255,255,0.3)" }}>Admin</Link>
       </footer>
     </div>
   );
