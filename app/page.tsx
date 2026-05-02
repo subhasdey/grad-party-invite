@@ -78,7 +78,7 @@ export default function Home() {
 
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden mb-4 flex-shrink-0"
               style={{ border: "2px solid rgba(207,185,145,0.4)", boxShadow: "0 8px 32px rgba(0,0,0,0.5)" }}>
-              <Image src="/hero.jpeg" alt="Iris Dey" width={96} height={96} className="object-cover object-left w-full h-full" style={{ transform: "scale(1.2)" }} />
+              <Image src="/iris.jpeg" alt="Iris Dey" width={96} height={96} className="object-cover object-top w-full h-full" />
             </div>
 
             <p className="font-display text-lg md:text-xl font-bold text-white mb-0.5">Iris Dey</p>
@@ -98,7 +98,7 @@ export default function Home() {
 
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden mb-4 flex-shrink-0"
               style={{ border: "2px solid rgba(255,203,5,0.4)", boxShadow: "0 8px 32px rgba(0,0,0,0.5)" }}>
-              <Image src="/hero.jpeg" alt="Inesh Dey" width={96} height={96} className="object-cover object-right w-full h-full" style={{ transform: "scale(1.2)" }} />
+              <Image src="/inesh.jpeg" alt="Inesh Dey" width={96} height={96} className="object-cover object-top w-full h-full" />
             </div>
 
             <p className="font-display text-lg md:text-xl font-bold text-white mb-0.5">Inesh Dey</p>
