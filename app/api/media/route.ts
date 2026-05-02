@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
-import { getMedia } from "@/lib/store";
+import connectDB from "@/lib/mongodb";
+import { Media } from "@/lib/models";
 
 export async function GET() {
-  const media = getMedia();
-  return NextResponse.json(media.reverse());
+  await connectDB();
+  const media = await Media.find().sort({ createdAt: -1 }).lean();
+  return NextResponse.json(media);
 }

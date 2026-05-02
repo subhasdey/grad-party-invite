@@ -1,25 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
-import { addRSVP, getRSVPs } from "@/lib/store";
+import connectDB from "@/lib/mongodb";
+import { RSVP } from "@/lib/models";
 import { sendConfirmationEmail } from "@/lib/email";
 import { sendConfirmationSMS } from "@/lib/sms";
 
 export async function GET() {
-  const rsvps = getRSVPs();
+  await connectDB();
+  const rsvps = await RSVP.find().sort({ createdAt: -1 }).lean();
   return NextResponse.json(rsvps);
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { name, email, phone, adults, kids, diet, message, attending } = body;
+    await connectDB();
+    const { name, email, phone, adults, kids, diet, message, attending } = await req.json();
+    if (!name || !email) return NextResponse.json({ error: "Name and email required" }, { status: 400 });
 
-    if (!name || !email) {
-      return NextResponse.json({ error: "Name and email are required" }, { status: 400 });
-    }
+    const rsvp = await RSVP.create({ name, email, phone, adults: Number(adults) || 1, kids: Number(kids) || 0, diet, message, attending });
 
-    const rsvp = addRSVP({ name, email, phone, adults: Number(adults) || 1, kids: Number(kids) || 0, diet, message, attending });
-
-    // Send notifications (non-blocking)
     if (email) sendConfirmationEmail(email, name, attending).catch(() => {});
     if (phone && attending) sendConfirmationSMS(phone, name).catch(() => {});
 
