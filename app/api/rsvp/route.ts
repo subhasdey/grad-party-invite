@@ -50,27 +50,42 @@ export async function POST(req: NextRequest) {
       });
     } catch (dbErr) {
       console.error("RSVP mongo save failed, trying sheet fallback:", dbErr);
-      await appendRsvpToSheet({
-        name: safeName,
-        email: safeEmail || undefined,
-        phone: safePhone || undefined,
-        attending: safeAttending,
-        adults: safeAdults,
-        kids: safeKids,
-        diet: typeof diet === "string" ? diet : undefined,
-        message: typeof message === "string" ? message : undefined,
-      });
-      storage = "sheet_fallback";
-      rsvp = {
-        name: safeName,
-        email: safeEmail || undefined,
-        phone: safePhone || undefined,
-        adults: safeAdults,
-        kids: safeKids,
-        diet,
-        message,
-        attending: safeAttending,
-      };
+      const canUseSheetFallback =
+        Boolean(process.env.GOOGLE_SHEET_ID) &&
+        Boolean(process.env.GOOGLE_CLIENT_ID) &&
+        Boolean(process.env.GOOGLE_CLIENT_SECRET) &&
+        Boolean(process.env.GOOGLE_REFRESH_TOKEN);
+
+      if (!canUseSheetFallback) {
+        throw dbErr;
+      }
+
+      try {
+        await appendRsvpToSheet({
+          name: safeName,
+          email: safeEmail || undefined,
+          phone: safePhone || undefined,
+          attending: safeAttending,
+          adults: safeAdults,
+          kids: safeKids,
+          diet: typeof diet === "string" ? diet : undefined,
+          message: typeof message === "string" ? message : undefined,
+        });
+        storage = "sheet_fallback";
+        rsvp = {
+          name: safeName,
+          email: safeEmail || undefined,
+          phone: safePhone || undefined,
+          adults: safeAdults,
+          kids: safeKids,
+          diet,
+          message,
+          attending: safeAttending,
+        };
+      } catch (sheetErr) {
+        console.error("RSVP sheet fallback failed:", sheetErr);
+        throw dbErr;
+      }
     }
 
     const confirmations: string[] = [];
