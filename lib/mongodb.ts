@@ -9,7 +9,10 @@ export default async function connectDB() {
   if (mongoose.connection.readyState >= 1) return mongoose;
 
   if (!globalWithMongoose._mongoConn) {
-    globalWithMongoose._mongoConn = mongoose.connect(uri).catch((err) => {
+    globalWithMongoose._mongoConn = mongoose.connect(uri, {
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 20000,
+    }).catch((err) => {
       globalWithMongoose._mongoConn = undefined;
       throw err;
     });

@@ -125,3 +125,48 @@ export async function appendMessageToSheet(name: string, text: string): Promise<
     throw new Error(`Failed to append to sheet (${res.status}): ${err}`);
   }
 }
+
+export async function appendRsvpToSheet(input: {
+  name: string;
+  email?: string;
+  phone?: string;
+  attending: boolean;
+  adults: number;
+  kids: number;
+  diet?: string;
+  message?: string;
+}): Promise<void> {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId) throw new Error("Missing GOOGLE_SHEET_ID for RSVP fallback");
+
+  const accessToken = await getAccessToken();
+  const now = new Date().toISOString();
+  const values = [[
+    now,
+    input.name,
+    input.email || "",
+    input.phone || "",
+    input.attending ? "yes" : "no",
+    String(input.adults),
+    String(input.kids),
+    input.diet || "",
+    input.message || "",
+  ]];
+
+  const res = await fetch(
+    `${SHEETS_BASE}/${sheetId}/values/RSVP!A:I:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ values }),
+    }
+  );
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Failed to append RSVP to sheet (${res.status}): ${err}`);
+  }
+}
