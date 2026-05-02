@@ -9,7 +9,7 @@ export default function RSVPPage() {
     name: "", email: "", phone: "",
     adults: 1, kids: 0,
     diet: "non-veg" as Diet,
-    message: "", attending: true,
+    message: "", song: "", attending: true,
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 

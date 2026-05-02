@@ -10,6 +10,7 @@ const rsvpSchema = new Schema({
   diet:          { type: String, enum: ["veg", "non-veg", "both"], default: "non-veg" },
   message:       String,
   attending:     { type: Boolean, default: true },
+  song:          String,
   reminderSent:  { type: Boolean, default: false },
 }, { timestamps: true });
 
