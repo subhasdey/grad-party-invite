@@ -7,7 +7,10 @@ import { createSign } from "crypto";
 
 async function getAccessToken(): Promise<string> {
   const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-  const key = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n");
+  const rawKey = process.env.GOOGLE_PRIVATE_KEY_BASE64
+    ? Buffer.from(process.env.GOOGLE_PRIVATE_KEY_BASE64, "base64").toString("utf8")
+    : process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n");
+  const key = rawKey;
   if (!email || !key) throw new Error("Missing GOOGLE_SERVICE_ACCOUNT_EMAIL or GOOGLE_PRIVATE_KEY");
 
   const now = Math.floor(Date.now() / 1000);
