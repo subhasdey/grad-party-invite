@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { uploadToDrive, appendMediaToSheet } from "@/lib/googledrive";
+import { put } from "@vercel/blob";
+import { appendMediaToSheet } from "@/lib/googledrive";
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,18 +19,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "File too large (max 250MB)" }, { status: 400 });
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
     const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
     const slug = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const blob = await put(slug, file, { access: "public" });
 
-    const result = await uploadToDrive(buffer, slug, file.type || "application/octet-stream");
-    const url = `/api/media/stream/${result.fileId}`;
-    const type = result.isVideo ? "video" : "image";
+    const type = file.type.startsWith("video/") ? "video" : "image";
+    await appendMediaToSheet({ name, url: blob.url, fileId: blob.url, type, caption });
 
-    await appendMediaToSheet({ name, url, fileId: result.fileId, type, caption });
-
-    return NextResponse.json({ name, url, publicId: result.fileId, type, caption }, { status: 201 });
+    return NextResponse.json({ name, url: blob.url, publicId: blob.url, type, caption }, { status: 201 });
   } catch (err) {
     console.error("Upload error:", err);
     const message = err instanceof Error ? err.message : "Upload failed";

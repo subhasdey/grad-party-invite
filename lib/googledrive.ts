@@ -157,6 +157,42 @@ export async function appendRsvpToSheet(input: {
   }
 }
 
+export async function findRsvpRowByEmail(email: string): Promise<{ rowIndex: number; rsvp: Record<string, unknown> } | null> {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId || !email) return null;
+  const accessToken = await getAccessToken();
+  const res = await fetch(`${SHEETS_BASE}/${sheetId}/values/RSVP!A:J`, { headers: { Authorization: `Bearer ${accessToken}` } });
+  if (!res.ok) return null;
+  const data = await res.json();
+  const rows: string[][] = data.values || [];
+  const idx = rows.findIndex(row => row[2]?.toLowerCase() === email.toLowerCase());
+  if (idx === -1) return null;
+  const row = rows[idx];
+  return {
+    rowIndex: idx + 1, // 1-based sheet row
+    rsvp: { name: row[1], email: row[2], phone: row[3], attending: row[4] === "yes", adults: Number(row[5])||1, kids: Number(row[6])||0, diet: row[7]||"non-veg", message: row[8]||"", song: row[9]||"" },
+  };
+}
+
+export async function updateRsvpInSheet(rowIndex: number, input: {
+  name: string; email?: string; phone?: string; attending: boolean;
+  adults: number; kids: number; diet?: string; message?: string; song?: string;
+}): Promise<void> {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId) throw new Error("Missing GOOGLE_SHEET_ID");
+  const accessToken = await getAccessToken();
+  const values = [[
+    new Date().toISOString(), input.name, input.email||"", input.phone||"",
+    input.attending ? "yes" : "no", String(input.adults), String(input.kids),
+    input.diet||"", input.message||"", input.song||"",
+  ]];
+  const res = await fetch(
+    `${SHEETS_BASE}/${sheetId}/values/RSVP!A${rowIndex}:J${rowIndex}?valueInputOption=RAW`,
+    { method: "PUT", headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" }, body: JSON.stringify({ values }) }
+  );
+  if (!res.ok) { const err = await res.text(); throw new Error(`Failed to update RSVP (${res.status}): ${err}`); }
+}
+
 export async function readRsvpsFromSheet(): Promise<object[]> {
   const sheetId = process.env.GOOGLE_SHEET_ID;
   if (!sheetId) return [];

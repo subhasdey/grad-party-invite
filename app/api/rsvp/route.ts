@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { appendRsvpToSheet, readRsvpsFromSheet } from "@/lib/googledrive";
+import { appendRsvpToSheet, readRsvpsFromSheet, findRsvpRowByEmail, updateRsvpInSheet } from "@/lib/googledrive";
 import { sendConfirmationEmail } from "@/lib/email";
 import { sendConfirmationSMS } from "@/lib/sms";
 
@@ -14,49 +14,51 @@ export async function GET() {
   }
 }
 
-export async function POST(req: NextRequest) {
-  try {
-    const { name, email, phone, adults, kids, diet, message, song, attending } = await req.json();
-    const safeName = String(name || "").trim();
-    const safeEmail = String(email || "").trim();
-    const safePhone = String(phone || "").trim();
-    const safeAdults = Number(adults) || 1;
-    const safeKids = Number(kids) || 0;
-    const safeAttending = Boolean(attending);
+async function saveRsvp(body: Record<string, unknown>, isUpdate = false) {
+  const { name, email, phone, adults, kids, diet, message, song, attending } = body;
+  const safeName     = String(name    || "").trim();
+  const safeEmail    = String(email   || "").trim();
+  const safePhone    = String(phone   || "").trim();
+  const safeAdults   = Number(adults) || 1;
+  const safeKids     = Number(kids)   || 0;
+  const safeAttending = Boolean(attending);
 
-    if (!safeName || (!safeEmail && !safePhone)) {
-      return NextResponse.json(
-        { error: "Name and at least one contact method (email or phone) is required" },
-        { status: 400 }
-      );
-    }
-
-    await appendRsvpToSheet({
-      name: safeName,
-      email: safeEmail || undefined,
-      phone: safePhone || undefined,
-      adults: safeAdults,
-      kids: safeKids,
-      diet: typeof diet === "string" ? diet : undefined,
-      message: typeof message === "string" ? message : undefined,
-      song: typeof song === "string" ? song : undefined,
-      attending: safeAttending,
-    });
-
-    const confirmations: string[] = [];
-    if (safeEmail) {
-      sendConfirmationEmail(safeEmail, safeName, safeAttending).catch(() => {});
-      confirmations.push("email");
-    }
-    if (safePhone) {
-      sendConfirmationSMS(safePhone, safeName, safeAttending).catch(() => {});
-      confirmations.push("sms");
-    }
-
-    return NextResponse.json({ confirmations }, { status: 201 });
-  } catch (err) {
-    console.error("RSVP save failed:", err);
-    const msg = err instanceof Error ? err.message : "Failed to save RSVP";
-    return NextResponse.json({ error: msg }, { status: 500 });
+  if (!safeName || (!safeEmail && !safePhone)) {
+    return NextResponse.json({ error: "Name and contact required" }, { status: 400 });
   }
+
+  const data = {
+    name: safeName, email: safeEmail||undefined, phone: safePhone||undefined,
+    adults: safeAdults, kids: safeKids,
+    diet:    typeof diet    === "string" ? diet    : undefined,
+    message: typeof message === "string" ? message : undefined,
+    song:    typeof song    === "string" ? song    : undefined,
+    attending: safeAttending,
+  };
+
+  if (isUpdate && safeEmail) {
+    const existing = await findRsvpRowByEmail(safeEmail);
+    if (existing) {
+      await updateRsvpInSheet(existing.rowIndex, data);
+      return NextResponse.json({ updated: true }, { status: 200 });
+    }
+  }
+
+  await appendRsvpToSheet(data);
+
+  const confirmations: string[] = [];
+  if (safeEmail) { sendConfirmationEmail(safeEmail, safeName, safeAttending).catch(() => {}); confirmations.push("email"); }
+  if (safePhone) { sendConfirmationSMS(safePhone, safeName, safeAttending).catch(() => {}); confirmations.push("sms"); }
+
+  return NextResponse.json({ confirmations }, { status: 201 });
+}
+
+export async function POST(req: NextRequest) {
+  try { return await saveRsvp(await req.json()); }
+  catch (err) { return NextResponse.json({ error: err instanceof Error ? err.message : "Failed" }, { status: 500 }); }
+}
+
+export async function PUT(req: NextRequest) {
+  try { return await saveRsvp(await req.json(), true); }
+  catch (err) { return NextResponse.json({ error: err instanceof Error ? err.message : "Failed" }, { status: 500 }); }
 }
