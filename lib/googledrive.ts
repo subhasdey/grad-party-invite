@@ -3,30 +3,39 @@ const DRIVE_BASE = "https://www.googleapis.com/drive/v3";
 const DRIVE_UPLOAD = "https://www.googleapis.com/upload/drive/v3";
 const SHEETS_BASE = "https://sheets.googleapis.com/v4/spreadsheets";
 
-import { createSign } from "crypto";
+function pemToBuffer(pem: string): ArrayBuffer {
+  const b64 = pem.replace(/-----[^-]+-----/g, "").replace(/\s+/g, "");
+  const bin = atob(b64);
+  const buf = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+  return buf.buffer;
+}
+
+function toBase64Url(buf: ArrayBuffer): string {
+  return btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
 
 async function getAccessToken(): Promise<string> {
   const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-  const rawKey = process.env.GOOGLE_PRIVATE_KEY_BASE64
+  const pem = process.env.GOOGLE_PRIVATE_KEY_BASE64
     ? Buffer.from(process.env.GOOGLE_PRIVATE_KEY_BASE64, "base64").toString("utf8")
     : process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n");
-  const key = rawKey;
-  if (!email || !key) throw new Error("Missing GOOGLE_SERVICE_ACCOUNT_EMAIL or GOOGLE_PRIVATE_KEY");
+  if (!email || !pem) throw new Error("Missing GOOGLE_SERVICE_ACCOUNT_EMAIL or GOOGLE_PRIVATE_KEY");
+
+  const cryptoKey = await crypto.subtle.importKey(
+    "pkcs8",
+    pemToBuffer(pem),
+    { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
 
   const now = Math.floor(Date.now() / 1000);
-  const header = Buffer.from(JSON.stringify({ alg: "RS256", typ: "JWT" })).toString("base64url");
-  const payload = Buffer.from(JSON.stringify({
-    iss: email,
-    scope: "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive",
-    aud: TOKEN_URL,
-    exp: now + 3600,
-    iat: now,
-  })).toString("base64url");
-
-  const sign = createSign("RSA-SHA256");
-  sign.update(`${header}.${payload}`);
-  const signature = sign.sign(key, "base64url");
-  const jwt = `${header}.${payload}.${signature}`;
+  const header  = btoa(JSON.stringify({ alg: "RS256", typ: "JWT" })).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+  const payload = btoa(JSON.stringify({ iss: email, scope: "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive", aud: TOKEN_URL, exp: now + 3600, iat: now })).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+  const signingInput = `${header}.${payload}`;
+  const sig = await crypto.subtle.sign("RSASSA-PKCS1-v1_5", cryptoKey, new TextEncoder().encode(signingInput));
+  const jwt = `${signingInput}.${toBase64Url(sig)}`;
 
   const res = await fetch(TOKEN_URL, {
     method: "POST",
