@@ -1,16 +1,14 @@
 import { NextResponse } from "next/server";
-import connectDB from "@/lib/mongodb";
-import { Media } from "@/lib/models";
+import { readMediaFromSheet } from "@/lib/googledrive";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    await connectDB();
-    const media = await Media.find().sort({ createdAt: -1 }).lean();
+    const media = await readMediaFromSheet();
     return NextResponse.json(media);
   } catch (err) {
     console.error("Media fetch error:", err);
-    return NextResponse.json([], { status: 200 });
+    return NextResponse.json([]);
   }
 }

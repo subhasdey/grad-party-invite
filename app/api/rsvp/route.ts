@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import connectDB from "@/lib/mongodb";
-import { RSVP } from "@/lib/models";
+import { appendRsvpToSheet, readRsvpsFromSheet } from "@/lib/googledrive";
 import { sendConfirmationEmail } from "@/lib/email";
 import { sendConfirmationSMS } from "@/lib/sms";
-import { appendRsvpToSheet } from "@/lib/googledrive";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    await connectDB();
-    const rsvps = await RSVP.find().sort({ createdAt: -1 }).lean();
+    const rsvps = await readRsvpsFromSheet();
     return NextResponse.json(rsvps);
   } catch {
     return NextResponse.json([]);
@@ -19,7 +16,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, phone, adults, kids, diet, message, attending } = await req.json();
+    const { name, email, phone, adults, kids, diet, message, song, attending } = await req.json();
     const safeName = String(name || "").trim();
     const safeEmail = String(email || "").trim();
     const safePhone = String(phone || "").trim();
@@ -34,59 +31,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let rsvp;
-    let storage: "mongo" | "sheet_fallback" = "mongo";
-    try {
-      await connectDB();
-      rsvp = await RSVP.create({
-        name: safeName,
-        email: safeEmail || undefined,
-        phone: safePhone || undefined,
-        adults: safeAdults,
-        kids: safeKids,
-        diet,
-        message,
-        attending: safeAttending,
-      });
-    } catch (dbErr) {
-      console.error("RSVP mongo save failed, trying sheet fallback:", dbErr);
-      const canUseSheetFallback =
-        Boolean(process.env.GOOGLE_SHEET_ID) &&
-        Boolean(process.env.GOOGLE_CLIENT_ID) &&
-        Boolean(process.env.GOOGLE_CLIENT_SECRET) &&
-        Boolean(process.env.GOOGLE_REFRESH_TOKEN);
-
-      if (!canUseSheetFallback) {
-        throw dbErr;
-      }
-
-      try {
-        await appendRsvpToSheet({
-          name: safeName,
-          email: safeEmail || undefined,
-          phone: safePhone || undefined,
-          attending: safeAttending,
-          adults: safeAdults,
-          kids: safeKids,
-          diet: typeof diet === "string" ? diet : undefined,
-          message: typeof message === "string" ? message : undefined,
-        });
-        storage = "sheet_fallback";
-        rsvp = {
-          name: safeName,
-          email: safeEmail || undefined,
-          phone: safePhone || undefined,
-          adults: safeAdults,
-          kids: safeKids,
-          diet,
-          message,
-          attending: safeAttending,
-        };
-      } catch (sheetErr) {
-        console.error("RSVP sheet fallback failed:", sheetErr);
-        throw dbErr;
-      }
-    }
+    await appendRsvpToSheet({
+      name: safeName,
+      email: safeEmail || undefined,
+      phone: safePhone || undefined,
+      adults: safeAdults,
+      kids: safeKids,
+      diet: typeof diet === "string" ? diet : undefined,
+      message: typeof message === "string" ? message : undefined,
+      song: typeof song === "string" ? song : undefined,
+      attending: safeAttending,
+    });
 
     const confirmations: string[] = [];
     if (safeEmail) {
@@ -98,10 +53,10 @@ export async function POST(req: NextRequest) {
       confirmations.push("sms");
     }
 
-    return NextResponse.json({ rsvp, confirmations, storage }, { status: 201 });
+    return NextResponse.json({ confirmations }, { status: 201 });
   } catch (err) {
     console.error("RSVP save failed:", err);
-    const message = err instanceof Error ? err.message : "Failed to save RSVP";
-    return NextResponse.json({ error: message }, { status: 500 });
+    const msg = err instanceof Error ? err.message : "Failed to save RSVP";
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

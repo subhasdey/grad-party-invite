@@ -3,32 +3,43 @@ const DRIVE_BASE = "https://www.googleapis.com/drive/v3";
 const DRIVE_UPLOAD = "https://www.googleapis.com/upload/drive/v3";
 const SHEETS_BASE = "https://sheets.googleapis.com/v4/spreadsheets";
 
-function requireGoogleAuthEnv() {
-  if (!process.env.GOOGLE_CLIENT_ID) throw new Error("Missing GOOGLE_CLIENT_ID");
-  if (!process.env.GOOGLE_CLIENT_SECRET) throw new Error("Missing GOOGLE_CLIENT_SECRET");
-  if (!process.env.GOOGLE_REFRESH_TOKEN) throw new Error("Missing GOOGLE_REFRESH_TOKEN");
-}
+import { createSign } from "crypto";
 
 async function getAccessToken(): Promise<string> {
-  requireGoogleAuthEnv();
+  const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+  const key = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n");
+  if (!email || !key) throw new Error("Missing GOOGLE_SERVICE_ACCOUNT_EMAIL or GOOGLE_PRIVATE_KEY");
+
+  const now = Math.floor(Date.now() / 1000);
+  const header = Buffer.from(JSON.stringify({ alg: "RS256", typ: "JWT" })).toString("base64url");
+  const payload = Buffer.from(JSON.stringify({
+    iss: email,
+    scope: "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive",
+    aud: TOKEN_URL,
+    exp: now + 3600,
+    iat: now,
+  })).toString("base64url");
+
+  const sign = createSign("RSA-SHA256");
+  sign.update(`${header}.${payload}`);
+  const signature = sign.sign(key, "base64url");
+  const jwt = `${header}.${payload}.${signature}`;
+
   const res = await fetch(TOKEN_URL, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      client_id: process.env.GOOGLE_CLIENT_ID!,
-      client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-      refresh_token: process.env.GOOGLE_REFRESH_TOKEN!,
-      grant_type: "refresh_token",
-    }),
+    body: new URLSearchParams({ grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer", assertion: jwt }),
   });
   if (!res.ok) {
     const err = await res.text();
-    throw new Error(`Google auth failed (${res.status}): ${err}`);
+    throw new Error(`Google service account auth failed (${res.status}): ${err}`);
   }
   const data = await res.json();
-  if (!data.access_token) throw new Error("Google auth failed: " + JSON.stringify(data));
+  if (!data.access_token) throw new Error("Service account auth failed: " + JSON.stringify(data));
   return data.access_token;
 }
+
+// ── Google Drive Upload ──────────────────────────────────────────────────────
 
 export async function uploadToDrive(
   buffer: Buffer,
@@ -42,7 +53,6 @@ export async function uploadToDrive(
   const metadata: Record<string, unknown> = { name: filename };
   if (folderId) metadata.parents = [folderId];
 
-  // Initiate resumable upload
   const initRes = await fetch(`${DRIVE_UPLOAD}/files?uploadType=resumable`, {
     method: "POST",
     headers: {
@@ -61,8 +71,7 @@ export async function uploadToDrive(
   const uploadUrl = initRes.headers.get("Location");
   if (!uploadUrl) throw new Error("Failed to initiate resumable upload");
 
-  // Upload in chunks (handles large videos)
-  const CHUNK = 10 * 1024 * 1024; // 10MB
+  const CHUNK = 10 * 1024 * 1024;
   let start = 0;
   let fileId = "";
 
@@ -102,29 +111,8 @@ export async function streamFile(fileId: string, rangeHeader?: string | null): P
   return fetch(`${DRIVE_BASE}/files/${fileId}?alt=media`, { headers });
 }
 
-export async function appendMessageToSheet(name: string, text: string): Promise<void> {
-  const sheetId = process.env.GOOGLE_SHEET_ID;
-  if (!sheetId) return;
-
-  const accessToken = await getAccessToken();
-  const now = new Date().toISOString();
-
-  const res = await fetch(
-    `${SHEETS_BASE}/${sheetId}/values/Sheet1!A:C:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ values: [[now, name, text]] }),
-    }
-  );
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Failed to append to sheet (${res.status}): ${err}`);
-  }
-}
+// ── RSVP Sheet ───────────────────────────────────────────────────────────────
+// Columns: timestamp | name | email | phone | attending | adults | kids | diet | message | song
 
 export async function appendRsvpToSheet(input: {
   name: string;
@@ -135,9 +123,10 @@ export async function appendRsvpToSheet(input: {
   kids: number;
   diet?: string;
   message?: string;
+  song?: string;
 }): Promise<void> {
   const sheetId = process.env.GOOGLE_SHEET_ID;
-  if (!sheetId) throw new Error("Missing GOOGLE_SHEET_ID for RSVP fallback");
+  if (!sheetId) throw new Error("Missing GOOGLE_SHEET_ID");
 
   const accessToken = await getAccessToken();
   const now = new Date().toISOString();
@@ -151,22 +140,148 @@ export async function appendRsvpToSheet(input: {
     String(input.kids),
     input.diet || "",
     input.message || "",
+    input.song || "",
   ]];
 
   const res = await fetch(
-    `${SHEETS_BASE}/${sheetId}/values/RSVP!A:I:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
+    `${SHEETS_BASE}/${sheetId}/values/RSVP!A:J:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
     {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
+      headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
       body: JSON.stringify({ values }),
     }
   );
-
   if (!res.ok) {
     const err = await res.text();
-    throw new Error(`Failed to append RSVP to sheet (${res.status}): ${err}`);
+    throw new Error(`Failed to append RSVP (${res.status}): ${err}`);
   }
+}
+
+export async function readRsvpsFromSheet(): Promise<object[]> {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId) return [];
+
+  const accessToken = await getAccessToken();
+  const res = await fetch(
+    `${SHEETS_BASE}/${sheetId}/values/RSVP!A:J`,
+    { headers: { Authorization: `Bearer ${accessToken}` } }
+  );
+  if (!res.ok) return [];
+  const data = await res.json();
+  const rows: string[][] = data.values || [];
+
+  return rows.map((row, i) => ({
+    _id: String(i + 1),
+    createdAt: row[0] || "",
+    name: row[1] || "",
+    email: row[2] || "",
+    phone: row[3] || "",
+    attending: row[4] === "yes",
+    adults: Number(row[5]) || 1,
+    kids: Number(row[6]) || 0,
+    diet: row[7] || "non-veg",
+    message: row[8] || "",
+    song: row[9] || "",
+    reminderSent: false,
+  })).reverse();
+}
+
+// ── Messages Sheet ────────────────────────────────────────────────────────────
+// Columns: timestamp | name | text | avatar
+
+export async function appendMessageToSheet(name: string, text: string, avatar?: string): Promise<void> {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId) return;
+
+  const accessToken = await getAccessToken();
+  const now = new Date().toISOString();
+
+  const res = await fetch(
+    `${SHEETS_BASE}/${sheetId}/values/Messages!A:D:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
+    {
+      method: "POST",
+      headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ values: [[now, name, text, avatar || "#7c3aed"]] }),
+    }
+  );
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Failed to append message (${res.status}): ${err}`);
+  }
+}
+
+export async function readMessagesFromSheet(): Promise<object[]> {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId) return [];
+
+  const accessToken = await getAccessToken();
+  const res = await fetch(
+    `${SHEETS_BASE}/${sheetId}/values/Messages!A:D`,
+    { headers: { Authorization: `Bearer ${accessToken}` } }
+  );
+  if (!res.ok) return [];
+  const data = await res.json();
+  const rows: string[][] = data.values || [];
+
+  return rows.map((row, i) => ({
+    _id: String(i + 1),
+    createdAt: row[0] || "",
+    name: row[1] || "",
+    text: row[2] || "",
+    avatar: row[3] || "#7c3aed",
+  }));
+}
+
+// ── Media Sheet ───────────────────────────────────────────────────────────────
+// Columns: timestamp | name | url | fileId | type | caption
+
+export async function appendMediaToSheet(input: {
+  name: string;
+  url: string;
+  fileId: string;
+  type: "image" | "video";
+  caption?: string;
+}): Promise<void> {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId) throw new Error("Missing GOOGLE_SHEET_ID");
+
+  const accessToken = await getAccessToken();
+  const now = new Date().toISOString();
+
+  const res = await fetch(
+    `${SHEETS_BASE}/${sheetId}/values/Media!A:F:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
+    {
+      method: "POST",
+      headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ values: [[now, input.name, input.url, input.fileId, input.type, input.caption || ""]] }),
+    }
+  );
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Failed to append media (${res.status}): ${err}`);
+  }
+}
+
+export async function readMediaFromSheet(): Promise<object[]> {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId) return [];
+
+  const accessToken = await getAccessToken();
+  const res = await fetch(
+    `${SHEETS_BASE}/${sheetId}/values/Media!A:F`,
+    { headers: { Authorization: `Bearer ${accessToken}` } }
+  );
+  if (!res.ok) return [];
+  const data = await res.json();
+  const rows: string[][] = data.values || [];
+
+  return rows.map((row, i) => ({
+    _id: String(i + 1),
+    createdAt: row[0] || "",
+    name: row[1] || "",
+    url: row[2] || "",
+    publicId: row[3] || "",
+    type: row[4] || "image",
+    caption: row[5] || "",
+  })).reverse();
 }

@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { uploadToDrive } from "@/lib/googledrive";
-import connectDB from "@/lib/mongodb";
-import { Media } from "@/lib/models";
+import { uploadToDrive, appendMediaToSheet } from "@/lib/googledrive";
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,7 +13,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Only image and video uploads are supported" }, { status: 400 });
     }
 
-    const maxBytes = 250 * 1024 * 1024; // 250MB hard limit
+    const maxBytes = 250 * 1024 * 1024;
     if (file.size > maxBytes) {
       return NextResponse.json({ error: "File too large (max 250MB)" }, { status: 400 });
     }
@@ -26,17 +24,12 @@ export async function POST(req: NextRequest) {
     const slug = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
     const result = await uploadToDrive(buffer, slug, file.type || "application/octet-stream");
+    const url = `/api/media/stream/${result.fileId}`;
+    const type = result.isVideo ? "video" : "image";
 
-    await connectDB();
-    const media = await Media.create({
-      name,
-      url:      `/api/media/stream/${result.fileId}`,
-      publicId: result.fileId,
-      type:     result.isVideo ? "video" : "image",
-      caption,
-    });
+    await appendMediaToSheet({ name, url, fileId: result.fileId, type, caption });
 
-    return NextResponse.json(media, { status: 201 });
+    return NextResponse.json({ name, url, publicId: result.fileId, type, caption }, { status: 201 });
   } catch (err) {
     console.error("Upload error:", err);
     const message = err instanceof Error ? err.message : "Upload failed";
