@@ -96,8 +96,8 @@ export default function RSVPPage() {
         <div className="text-center mb-10">
           <Link href="/" className="inline-block text-white/30 hover:text-white/60 text-xs transition-all mb-6">← Back to invite</Link>
           <div className="flex justify-center gap-2 mb-5">
-            <span className="text-xs px-3 py-1 rounded-full font-semibold" style={{ background: "#00274C", color: "#FFCB05", border: "1px solid rgba(255,203,5,0.3)" }}>Go Blue!</span>
-            <span className="text-xs px-3 py-1 rounded-full font-semibold" style={{ background: "#1a1400", color: "#CFB991", border: "1px solid rgba(207,185,145,0.3)" }}>Boiler Up!</span>
+            <span className="text-xs px-3 py-1 rounded-full font-semibold" style={{ background: "#00274C", color: "#FFCB05", border: "1px solid rgba(255,203,5,0.3)" }}>Jain</span>
+            <span className="text-xs px-3 py-1 rounded-full font-semibold" style={{ background: "#1a1400", color: "#CFB991", border: "1px solid rgba(207,185,145,0.3)" }}>Jain</span>
           </div>
           <h1 className="text-4xl font-bold text-white mb-1" style={{ letterSpacing: "-0.03em" }}>
             {isEdit ? "Update RSVP" : "RSVP"}

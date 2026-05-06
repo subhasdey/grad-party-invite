@@ -2,7 +2,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { QRCodeSVG } from "qrcode.react";
 import Fireworks from "@/components/Fireworks";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://grad-party-invite-tan.vercel.app";
@@ -16,7 +15,7 @@ const ITINERARY = [
   { time: "7:00 PM", label: "Dinner",            icon: "🍽️" },
   { time: "8:00 PM", label: "Speeches",          icon: "🎤" },
   { time: "8:30 PM", label: "Cake & Dessert",    icon: "🎂" },
-  { time: "9:00 PM", label: "Dancing & Music",   icon: "🎶" },
+  { time: "9:00 PM", label: "Karaoke & Dance",   icon: "🎤" },
 ];
 
 function useReveal() {
@@ -278,7 +277,23 @@ export default function Home() {
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="p-6 rounded-2xl" style={{ background: "rgba(207,185,145,0.05)", border: "1px solid rgba(207,185,145,0.15)" }}>
               <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#CFB991" }}>👔 Dress Code</p>
-              <p className="text-sm" style={{ color: "rgba(255,255,255,0.7)" }}>Festive semi-formal. School colors welcome — Maize &amp; Blue or Old Gold &amp; Black!</p>
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl flex-shrink-0" style={{ background: "#00274C", border: "2px solid #FFCB05" }} />
+                  <div>
+                    <p className="text-sm font-semibold text-white">Girls — Blue</p>
+                    <p className="text-xs" style={{ color: "rgba(255,255,255,0.45)" }}>University of Michigan · Maize &amp; Blue</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl flex-shrink-0" style={{ background: "#1a1a1a", border: "2px solid #CFB991" }} />
+                  <div>
+                    <p className="text-sm font-semibold text-white">Boys — Black</p>
+                    <p className="text-xs" style={{ color: "rgba(255,255,255,0.45)" }}>Purdue University · Old Gold &amp; Black</p>
+                  </div>
+                </div>
+                <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Festive semi-formal</p>
+              </div>
             </div>
             <div className="p-6 rounded-2xl" style={{ background: "rgba(255,203,5,0.05)", border: "1px solid rgba(255,203,5,0.15)" }}>
               <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#FFCB05" }}>🚗 Parking</p>
@@ -341,12 +356,6 @@ export default function Home() {
               </button>
             </div>
 
-            <div className="flex flex-col items-center gap-3 flex-shrink-0">
-              <div className="p-4 rounded-2xl" style={{ background: "#fff" }}>
-                <QRCodeSVG value={APP_URL} size={140} fgColor="#080c14" bgColor="#ffffff" />
-              </div>
-              <p className="text-xs text-center" style={{ color: "rgba(255,255,255,0.35)" }}>Scan to open on phone</p>
-            </div>
           </div>
         </div>
       </section>
