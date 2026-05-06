@@ -95,10 +95,6 @@ export default function RSVPPage() {
       <div className="relative z-10 max-w-lg mx-auto">
         <div className="text-center mb-10">
           <Link href="/" className="inline-block text-xs transition-all mb-6" style={{ color: "rgba(0,0,0,0.35)" }}>← Back to invite</Link>
-          <div className="flex justify-center gap-2 mb-5">
-            <span className="text-xs px-3 py-1 rounded-full font-semibold" style={{ background: "#00274C", color: "#FFCB05" }}>Jain</span>
-            <span className="text-xs px-3 py-1 rounded-full font-semibold" style={{ background: "#CFB991", color: "#3a2800" }}>Jain</span>
-          </div>
           <h1 className="text-4xl font-bold mb-1" style={{ letterSpacing: "-0.03em", color: "#1d1d1f" }}>
             {isEdit ? "Update RSVP" : "RSVP"}
           </h1>
