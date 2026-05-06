@@ -44,7 +44,7 @@ export default function ChatPage() {
 
   if (!nameSet) {
     return (
-      <main className="min-h-screen flex items-center justify-center px-6 bg-[#f5f5f7]">
+      <main className="min-h-screen flex items-center justify-center px-6 bg-[#FAF6EE]">
         <div className="glass max-w-sm w-full p-8 text-center">
           <div className="text-4xl mb-4">💬</div>
           <h2 className="font-display text-2xl font-bold text-white mb-1">Party Chat</h2>
@@ -64,7 +64,7 @@ export default function ChatPage() {
   }
 
   return (
-    <main className="flex flex-col h-screen bg-[#f5f5f7]">
+    <main className="flex flex-col h-screen bg-[#FAF6EE]">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.07]" style={{ background: "rgba(8,12,20,0.9)", backdropFilter: "blur(16px)" }}>
         <div className="flex items-center gap-3">

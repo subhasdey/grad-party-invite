@@ -68,7 +68,7 @@ export default function Home() {
   const shareUrl  = encodeURIComponent(APP_URL);
 
   return (
-    <div style={{ background: "#f5f5f7", color: "#1d1d1f" }}>
+    <div style={{ background: "#FAF6EE", color: "#1d1d1f" }}>
 
       {/* ── STICKY NAV ── */}
       <nav className="fixed top-0 inset-x-0 z-50 transition-all duration-500"
@@ -89,7 +89,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════
           SECTION 1 — HERO
       ══════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden" style={{ background: "#f5f5f7" }}>
+      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden" style={{ background: "#FAF6EE" }}>
         {/* Decorative background blobs */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-10" style={{ background: "#00274C", transform: "translate(30%,-30%)", filter: "blur(80px)" }} />
@@ -214,7 +214,7 @@ export default function Home() {
               ["📍", "Redmond, WA", "Senior & Community Center"],
             ] as [string,string,string][]).map(([icon, val, sub]) => (
               <div key={val} className="flex flex-col items-center text-center py-10 px-6 rounded-3xl"
-                style={{ background: "#f5f5f7", border: "1px solid rgba(0,0,0,0.07)" }}>
+                style={{ background: "#FAF6EE", border: "1px solid rgba(0,0,0,0.07)" }}>
                 <span className="text-4xl mb-4">{icon}</span>
                 <p className="font-display text-2xl font-bold mb-2" style={{ color: "#1d1d1f" }}>{val}</p>
                 <p className="text-sm" style={{ color: "rgba(0,0,0,0.45)" }}>{sub}</p>
@@ -222,7 +222,7 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="text-center mb-12 py-5 rounded-2xl" style={{ background: "#f5f5f7", border: "1px solid rgba(0,0,0,0.06)" }}>
+          <div className="text-center mb-12 py-5 rounded-2xl" style={{ background: "#FAF6EE", border: "1px solid rgba(0,0,0,0.06)" }}>
             <p className="text-sm font-semibold mb-1" style={{ color: "#1d1d1f" }}>Redmond Senior &amp; Community Center</p>
             <p className="text-sm" style={{ color: "rgba(0,0,0,0.5)" }}>
               Hosted by <span className="font-medium" style={{ color: "#1d1d1f" }}>Subhas &amp; Sanchita Dey</span>
@@ -313,7 +313,7 @@ export default function Home() {
           SECTION 5 — WISH WALL
       ══════════════════════════════════════════ */}
       {wishes.length > 0 && (
-        <section className="py-24 px-6" style={{ background: "#f5f5f7" }}>
+        <section className="py-24 px-6" style={{ background: "#FAF6EE" }}>
           <div ref={wishReveal.ref} className="w-full max-w-4xl mx-auto transition-all duration-1000"
             style={{ opacity: wishReveal.visible ? 1 : 0, transform: wishReveal.visible ? "translateY(0)" : "translateY(60px)" }}>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-4" style={{ color: "rgba(0,0,0,0.4)" }}>Guest Wishes</p>
@@ -356,7 +356,7 @@ export default function Home() {
               </a>
               <button onClick={copyLink}
                 className="flex items-center gap-3 px-6 py-4 rounded-2xl font-semibold text-sm transition-all hover:scale-[1.03]"
-                style={{ background: "#f5f5f7", color: copied ? "#00274C" : "rgba(0,0,0,0.7)", border: "1px solid rgba(0,0,0,0.1)" }}>
+                style={{ background: "#FAF6EE", color: copied ? "#00274C" : "rgba(0,0,0,0.7)", border: "1px solid rgba(0,0,0,0.1)" }}>
                 <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
                 {copied ? "Copied!" : "Copy Link"}
               </button>
