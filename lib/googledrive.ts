@@ -177,7 +177,8 @@ export async function findRsvpRowByEmail(email: string): Promise<{ rowIndex: num
   if (!res.ok) return null;
   const data = await res.json();
   const rows: string[][] = data.values || [];
-  const idx = rows.findIndex(row => row[2]?.toLowerCase() === email.toLowerCase());
+  // match by email; if no email stored on that row, skip it
+  const idx = rows.findIndex(row => row[2]?.trim() && row[2].toLowerCase() === email.toLowerCase());
   if (idx === -1) return null;
   const row = rows[idx];
   return {
@@ -198,9 +199,10 @@ export async function updateRsvpInSheet(rowIndex: number, input: {
     input.attending ? "yes" : "no", String(input.adults), String(input.kids),
     input.diet||"", input.message||"", input.song||"",
   ]];
+  const range = `RSVP!A${rowIndex}:J${rowIndex}`;
   const res = await fetch(
-    `${SHEETS_BASE}/${sheetId}/values/RSVP!A${rowIndex}:J${rowIndex}?valueInputOption=RAW`,
-    { method: "PUT", headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" }, body: JSON.stringify({ values }) }
+    `${SHEETS_BASE}/${sheetId}/values/${encodeURIComponent(range)}?valueInputOption=RAW`,
+    { method: "PUT", headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" }, body: JSON.stringify({ range, majorDimension: "ROWS", values }) }
   );
   if (!res.ok) { const err = await res.text(); throw new Error(`Failed to update RSVP (${res.status}): ${err}`); }
 }

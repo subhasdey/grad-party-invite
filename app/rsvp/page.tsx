@@ -29,8 +29,8 @@ export default function RSVPPage() {
             if (existing) {
               setIsEdit(true);
               setForm({
-                name:      String(existing.name    || ""),
-                email:     String(existing.email   || ""),
+                name:      String(existing.name    || "") || session.user!.name  || "",
+                email:     String(existing.email   || "") || session.user!.email || "",
                 phone:     String(existing.phone   || ""),
                 adults:    Number(existing.adults) || 1,
                 kids:      Number(existing.kids)   || 0,

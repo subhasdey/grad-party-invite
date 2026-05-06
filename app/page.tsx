@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import {
-  GraduationCap, DoorOpen, Wine, Utensils, Mic, CakeSlice, Music,
+  DoorOpen, Wine, Utensils, Mic, CakeSlice, Music,
   Calendar, Clock, MapPin, Shirt, Car, Heart, type LucideIcon,
 } from "lucide-react";
 
@@ -18,7 +18,7 @@ const ITINERARY: { time: string; label: string; Icon: LucideIcon }[] = [
   { time: "7:00 PM", label: "Dinner",            Icon: Utensils   },
   { time: "8:00 PM", label: "Speeches",          Icon: Mic        },
   { time: "8:30 PM", label: "Cake & Dessert",    Icon: CakeSlice  },
-  { time: "9:00 PM", label: "Karaoke & Dance",   Icon: Music      },
+  { time: "9:00 PM", label: "Fun Activities",     Icon: Music      },
 ];
 
 const DETAILS: { Icon: LucideIcon; val: string; sub: string }[] = [
@@ -109,8 +109,9 @@ export default function Home() {
           <p className="text-xs font-semibold uppercase tracking-[0.35em] mb-6" style={{ color: "rgba(0,0,0,0.45)" }}>
             You&rsquo;re Invited · A Twin Celebration
           </p>
-          <div className="mb-6 p-5 rounded-3xl" style={{ background: "rgba(0,39,76,0.08)" }}>
-            <GraduationCap className="w-20 h-20" style={{ color: "#00274C" }} />
+          <div className="mb-6 flex items-end gap-3">
+            <Image src="/cap-purdue.svg" alt="Purdue graduation cap" width={90} height={77} style={{ filter: "drop-shadow(0 4px 12px rgba(207,185,145,0.25))" }} />
+            <Image src="/cap-michigan.svg" alt="Michigan graduation cap" width={90} height={77} style={{ filter: "drop-shadow(0 4px 12px rgba(0,39,76,0.25))" }} />
           </div>
           <h1 className="font-display font-bold leading-[0.95] tracking-tight mb-2"
             style={{ fontSize: "clamp(3.5rem,11vw,8rem)", color: "#1d1d1f" }}>
@@ -177,7 +178,7 @@ export default function Home() {
                 <div className="absolute inset-0" style={{ background: "linear-gradient(to top,#1a1200 20%,transparent 60%)" }} />
                 <div className="absolute bottom-0 inset-x-0 p-8">
                   <p className="font-display text-4xl font-bold text-white mb-1">Iris Dey</p>
-                  <p className="text-sm font-medium mb-4" style={{ color: "#CFB991" }}>Purdue University · BS Computer Science</p>
+                  <p className="text-sm font-medium mb-4" style={{ color: "#CFB991" }}>Purdue University</p>
                   <span className="text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full"
                     style={{ background: "rgba(207,185,145,0.15)", color: "#CFB991", border: "1px solid rgba(207,185,145,0.3)" }}>
                     Boiler Up!
@@ -195,7 +196,7 @@ export default function Home() {
                 <div className="absolute inset-0" style={{ background: "linear-gradient(to top,#00111f 20%,transparent 60%)" }} />
                 <div className="absolute bottom-0 inset-x-0 p-8">
                   <p className="font-display text-4xl font-bold text-white mb-1">Inesh Dey</p>
-                  <p className="text-sm font-medium mb-4" style={{ color: "#FFCB05" }}>University of Michigan · BS Computer Science</p>
+                  <p className="text-sm font-medium mb-4" style={{ color: "#FFCB05" }}>University of Michigan</p>
                   <span className="text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full"
                     style={{ background: "rgba(255,203,5,0.1)", color: "#FFCB05", border: "1px solid rgba(255,203,5,0.3)" }}>
                     Go Blue!

@@ -45,7 +45,7 @@ export default function ChatPage() {
 
   if (!nameSet) {
     return (
-      <main className="min-h-screen flex items-center justify-center px-6 bg-[#FAF6EE]">
+      <main className="min-h-screen flex items-center justify-center px-6" style={{ background: "#080c14" }}>
         <div className="glass max-w-sm w-full p-8 text-center">
           <div className="text-4xl mb-4">💬</div>
           <h2 className="font-display text-2xl font-bold text-white mb-1">Party Chat</h2>
@@ -65,7 +65,7 @@ export default function ChatPage() {
   }
 
   return (
-    <main className="flex flex-col h-screen bg-[#FAF6EE]">
+    <main className="flex flex-col h-screen" style={{ background: "#080c14" }}>
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.07]" style={{ background: "rgba(8,12,20,0.9)", backdropFilter: "blur(16px)" }}>
         <div className="flex items-center gap-3">
@@ -116,7 +116,7 @@ export default function ChatPage() {
       </div>
 
       {/* Input */}
-      <div className="px-4 py-4 border-t border-white/[0.07]">
+      <div className="px-4 py-4 border-t border-white/[0.07]" style={{ background: "rgba(8,12,20,0.95)" }}>
         <form onSubmit={send} className="flex gap-2">
           <input value={text} onChange={e => setText(e.target.value)}
             placeholder="Say something..."

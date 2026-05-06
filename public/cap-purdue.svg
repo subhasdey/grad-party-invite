@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 120" fill="none">
+  <!-- Shadow -->
+  <ellipse cx="70" cy="108" rx="36" ry="6" fill="rgba(0,0,0,0.12)"/>
+  <!-- Hat body (cylinder) -->
+  <rect x="34" y="52" width="72" height="34" rx="4" fill="#1a1a1a"/>
+  <!-- Bottom rim ellipse -->
+  <ellipse cx="70" cy="86" rx="36" ry="8" fill="#111111"/>
+  <!-- Board (mortarboard top) - as a parallelogram/diamond shape -->
+  <polygon points="70,10 122,34 70,58 18,34" fill="#2a2a2a"/>
+  <!-- Board top highlight -->
+  <polygon points="70,10 122,34 70,36 18,34" fill="#333333"/>
+  <!-- Board edge -->
+  <polygon points="70,10 122,34 70,58 18,34" fill="none" stroke="#CFB991" stroke-width="2"/>
+  <!-- Center button on board -->
+  <circle cx="70" cy="34" r="5" fill="#CFB991"/>
+  <!-- Tassel string -->
+  <line x1="70" y1="34" x2="95" y2="34" stroke="#CFB991" stroke-width="2.5"/>
+  <line x1="95" y1="34" x2="95" y2="68" stroke="#CFB991" stroke-width="2.5"/>
+  <!-- Tassel fringe -->
+  <line x1="88" y1="68" x2="84" y2="88" stroke="#CFB991" stroke-width="2"/>
+  <line x1="91" y1="69" x2="89" y2="90" stroke="#CFB991" stroke-width="2"/>
+  <line x1="95" y1="70" x2="95" y2="92" stroke="#CFB991" stroke-width="2"/>
+  <line x1="99" y1="69" x2="101" y2="90" stroke="#CFB991" stroke-width="2"/>
+  <line x1="102" y1="68" x2="106" y2="88" stroke="#CFB991" stroke-width="2"/>
+  <!-- Tassel knot -->
+  <rect x="89" y="65" width="12" height="6" rx="3" fill="#CFB991"/>
+</svg>
