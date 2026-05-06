@@ -312,13 +312,57 @@ export async function appendMediaToSheet(input: {
   }
 }
 
+export async function likeMediaInSheet(rowIndex: number): Promise<number> {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId) throw new Error("Missing GOOGLE_SHEET_ID");
+  const accessToken = await getAccessToken();
+  // Read current likes from column G
+  const readRes = await fetch(`${SHEETS_BASE}/${sheetId}/values/Media!G${rowIndex}`, { headers: { Authorization: `Bearer ${accessToken}` } });
+  const readData = readRes.ok ? await readRes.json() : {};
+  const currentLikes = Number(readData.values?.[0]?.[0]) || 0;
+  const newLikes = currentLikes + 1;
+  const range = `Media!G${rowIndex}`;
+  await fetch(
+    `${SHEETS_BASE}/${sheetId}/values/${encodeURIComponent(range)}?valueInputOption=RAW`,
+    { method: "PUT", headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ range, majorDimension: "ROWS", values: [[String(newLikes)]] }) }
+  );
+  return newLikes;
+}
+
+export async function updateMediaCaptionInSheet(rowIndex: number, caption: string): Promise<void> {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId) throw new Error("Missing GOOGLE_SHEET_ID");
+  const accessToken = await getAccessToken();
+  const range = `Media!F${rowIndex}`;
+  const res = await fetch(
+    `${SHEETS_BASE}/${sheetId}/values/${encodeURIComponent(range)}?valueInputOption=RAW`,
+    { method: "PUT", headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ range, majorDimension: "ROWS", values: [[caption]] }) }
+  );
+  if (!res.ok) { const err = await res.text(); throw new Error(`Failed to update caption (${res.status}): ${err}`); }
+}
+
+export async function updateMediaFileInSheet(rowIndex: number, url: string): Promise<void> {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId) throw new Error("Missing GOOGLE_SHEET_ID");
+  const accessToken = await getAccessToken();
+  const range = `Media!C${rowIndex}:D${rowIndex}`;
+  const res = await fetch(
+    `${SHEETS_BASE}/${sheetId}/values/${encodeURIComponent(range)}?valueInputOption=RAW`,
+    { method: "PUT", headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ range, majorDimension: "ROWS", values: [[url, url]] }) }
+  );
+  if (!res.ok) { const err = await res.text(); throw new Error(`Failed to update file (${res.status}): ${err}`); }
+}
+
 export async function readMediaFromSheet(): Promise<object[]> {
   const sheetId = process.env.GOOGLE_SHEET_ID;
   if (!sheetId) return [];
 
   const accessToken = await getAccessToken();
   const res = await fetch(
-    `${SHEETS_BASE}/${sheetId}/values/Media!A:F`,
+    `${SHEETS_BASE}/${sheetId}/values/Media!A:G`,
     { headers: { Authorization: `Bearer ${accessToken}` } }
   );
   if (!res.ok) return [];
@@ -333,5 +377,6 @@ export async function readMediaFromSheet(): Promise<object[]> {
     publicId: row[3] || "",
     type: row[4] || "image",
     caption: row[5] || "",
+    likes: Number(row[6]) || 0,
   })).reverse();
 }
