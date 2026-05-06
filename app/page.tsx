@@ -2,19 +2,29 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import {
+  GraduationCap, DoorOpen, Wine, Utensils, Mic, CakeSlice, Music,
+  Calendar, Clock, MapPin, Shirt, Car, Heart, type LucideIcon,
+} from "lucide-react";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://grad-party-invite-tan.vercel.app";
 
 interface Countdown { days: number; hours: number; minutes: number; seconds: number; }
 interface Wish { name: string; message: string; attending: boolean; }
 
-const ITINERARY = [
-  { time: "6:00 PM", label: "Doors Open",       icon: "🚪" },
-  { time: "6:30 PM", label: "Welcome & Drinks",  icon: "🥂" },
-  { time: "7:00 PM", label: "Dinner",            icon: "🍽️" },
-  { time: "8:00 PM", label: "Speeches",          icon: "🎤" },
-  { time: "8:30 PM", label: "Cake & Dessert",    icon: "🎂" },
-  { time: "9:00 PM", label: "Karaoke & Dance",   icon: "🎤" },
+const ITINERARY: { time: string; label: string; Icon: LucideIcon }[] = [
+  { time: "6:00 PM", label: "Doors Open",       Icon: DoorOpen   },
+  { time: "6:30 PM", label: "Welcome & Drinks",  Icon: Wine       },
+  { time: "7:00 PM", label: "Dinner",            Icon: Utensils   },
+  { time: "8:00 PM", label: "Speeches",          Icon: Mic        },
+  { time: "8:30 PM", label: "Cake & Dessert",    Icon: CakeSlice  },
+  { time: "9:00 PM", label: "Karaoke & Dance",   Icon: Music      },
+];
+
+const DETAILS: { Icon: LucideIcon; val: string; sub: string }[] = [
+  { Icon: Calendar, val: "June 26, 2026",  sub: "Friday"                        },
+  { Icon: Clock,    val: "6:00 PM",        sub: "Evening"                       },
+  { Icon: MapPin,   val: "Redmond, WA",    sub: "Senior & Community Center"     },
 ];
 
 function useReveal() {
@@ -99,7 +109,9 @@ export default function Home() {
           <p className="text-xs font-semibold uppercase tracking-[0.35em] mb-6" style={{ color: "rgba(0,0,0,0.45)" }}>
             You&rsquo;re Invited · A Twin Celebration
           </p>
-          <div className="text-8xl mb-4" style={{ filter: "drop-shadow(0 4px 12px rgba(0,39,76,0.15))" }}>🎓</div>
+          <div className="mb-6 p-5 rounded-3xl" style={{ background: "rgba(0,39,76,0.08)" }}>
+            <GraduationCap className="w-20 h-20" style={{ color: "#00274C" }} />
+          </div>
           <h1 className="font-display font-bold leading-[0.95] tracking-tight mb-2"
             style={{ fontSize: "clamp(3.5rem,11vw,8rem)", color: "#1d1d1f" }}>
             Graduation
@@ -121,12 +133,12 @@ export default function Home() {
           <div className="flex items-center gap-3 mb-12">
             <span className="text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full"
               style={{ background: "#CFB991", color: "#3a2800", border: "1px solid #b8a070" }}>
-              Boiler Up! 🚂
+              Boiler Up!
             </span>
             <span style={{ color: "rgba(0,0,0,0.25)", fontSize: 20 }}>×</span>
             <span className="text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full"
               style={{ background: "#00274C", color: "#FFCB05", border: "1px solid #003a70" }}>
-              Go Blue! 〽️
+              Go Blue!
             </span>
           </div>
 
@@ -168,7 +180,7 @@ export default function Home() {
                   <p className="text-sm font-medium mb-4" style={{ color: "#CFB991" }}>Purdue University · BS Computer Science</p>
                   <span className="text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full"
                     style={{ background: "rgba(207,185,145,0.15)", color: "#CFB991", border: "1px solid rgba(207,185,145,0.3)" }}>
-                    Boiler Up! 🚂
+                    Boiler Up!
                   </span>
                 </div>
               </div>
@@ -186,7 +198,7 @@ export default function Home() {
                   <p className="text-sm font-medium mb-4" style={{ color: "#FFCB05" }}>University of Michigan · BS Computer Science</p>
                   <span className="text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full"
                     style={{ background: "rgba(255,203,5,0.1)", color: "#FFCB05", border: "1px solid rgba(255,203,5,0.3)" }}>
-                    Go Blue! 〽️
+                    Go Blue!
                   </span>
                 </div>
               </div>
@@ -208,14 +220,12 @@ export default function Home() {
 
           {/* Big detail cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-            {([
-              ["📅", "June 26, 2026", "Friday"],
-              ["🕕", "6:00 PM", "Evening"],
-              ["📍", "Redmond, WA", "Senior & Community Center"],
-            ] as [string,string,string][]).map(([icon, val, sub]) => (
+            {DETAILS.map(({ Icon, val, sub }) => (
               <div key={val} className="flex flex-col items-center text-center py-10 px-6 rounded-3xl"
                 style={{ background: "#FAF6EE", border: "1px solid rgba(0,0,0,0.07)" }}>
-                <span className="text-4xl mb-4">{icon}</span>
+                <div className="mb-4 p-3 rounded-2xl" style={{ background: "rgba(0,39,76,0.08)" }}>
+                  <Icon className="w-8 h-8" style={{ color: "#00274C" }} />
+                </div>
                 <p className="font-display text-2xl font-bold mb-2" style={{ color: "#1d1d1f" }}>{val}</p>
                 <p className="text-sm" style={{ color: "rgba(0,0,0,0.45)" }}>{sub}</p>
               </div>
@@ -268,7 +278,7 @@ export default function Home() {
             {ITINERARY.map((item, i) => (
               <div key={item.time} className="flex items-center gap-6 p-6 rounded-2xl transition-all duration-300 hover:scale-[1.02]"
                 style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)", transitionDelay: `${i * 60}ms`, opacity: itineraryReveal.visible ? 1 : 0, transform: itineraryReveal.visible ? "translateX(0)" : "translateX(-30px)" }}>
-                <span className="text-3xl flex-shrink-0">{item.icon}</span>
+                <item.Icon className="w-6 h-6 flex-shrink-0" style={{ color: i % 2 === 0 ? "#8a6500" : "#00274C" }} />
                 <div className="flex-1">
                   <p className="font-semibold text-lg" style={{ color: "#1d1d1f" }}>{item.label}</p>
                 </div>
@@ -280,7 +290,10 @@ export default function Home() {
           {/* Dress code */}
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="p-6 rounded-2xl" style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)" }}>
-              <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#8a6500" }}>👔 Dress Code</p>
+              <div className="flex items-center gap-2 mb-3">
+                <Shirt className="w-4 h-4" style={{ color: "#8a6500" }} />
+                <p className="text-xs font-bold uppercase tracking-widest" style={{ color: "#8a6500" }}>Dress Code</p>
+              </div>
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-4">
                   <div className="w-16 h-16 rounded-2xl flex-shrink-0 shadow-sm" style={{ background: "#00274C", border: "3px solid #FFCB05" }} />
@@ -302,7 +315,10 @@ export default function Home() {
               </div>
             </div>
             <div className="p-6 rounded-2xl" style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)" }}>
-              <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#00274C" }}>🚗 Parking</p>
+              <div className="flex items-center gap-2 mb-3">
+                <Car className="w-4 h-4" style={{ color: "#00274C" }} />
+                <p className="text-xs font-bold uppercase tracking-widest" style={{ color: "#00274C" }}>Parking</p>
+              </div>
               <p className="text-sm" style={{ color: "rgba(0,0,0,0.6)" }}>Free parking at the Redmond Senior &amp; Community Center lot. Street parking nearby.</p>
             </div>
           </div>
@@ -317,7 +333,9 @@ export default function Home() {
           <div ref={wishReveal.ref} className="w-full max-w-4xl mx-auto transition-all duration-1000"
             style={{ opacity: wishReveal.visible ? 1 : 0, transform: wishReveal.visible ? "translateY(0)" : "translateY(60px)" }}>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-4" style={{ color: "rgba(0,0,0,0.4)" }}>Guest Wishes</p>
-            <h2 className="font-display text-center font-bold mb-16" style={{ fontSize: "clamp(2rem,6vw,4rem)", color: "#1d1d1f" }}>Words of Love 💌</h2>
+            <h2 className="font-display text-center font-bold mb-16 flex items-center justify-center gap-3" style={{ fontSize: "clamp(2rem,6vw,4rem)", color: "#1d1d1f" }}>
+              Words of Love <Heart className="w-8 h-8 inline-block" style={{ color: "#00274C" }} />
+            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {wishes.map((w, i) => (
                 <div key={i} className="p-6 rounded-2xl flex flex-col"

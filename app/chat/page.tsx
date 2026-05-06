@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import type { ChatMessage } from "@/lib/store";
+import { GraduationCap } from "lucide-react";
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime();
@@ -84,7 +85,7 @@ export default function ChatPage() {
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4 chat-scroll">
         {messages.length === 0 && (
           <div className="text-center text-white/20 py-20 text-sm">
-            <div className="text-4xl mb-3">🎓</div>
+            <GraduationCap className="w-10 h-10 mb-3 mx-auto opacity-30" />
             <p>Be the first to send a message!</p>
           </div>
         )}

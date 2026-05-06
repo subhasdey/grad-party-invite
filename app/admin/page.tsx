@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { UserCheck, UserX, Users, Utensils, Music, type LucideIcon } from "lucide-react";
 
 interface RSVP {
   _id: string;
@@ -116,13 +117,13 @@ export default function AdminPage() {
         {/* ── STATS ── */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
           {[
-            { label: "Attending",     value: attending.length,            sub: `${totalAdults} adults · ${totalKids} kids`, color: "#34C759", icon: "✅" },
-            { label: "Declined",      value: declined.length,             sub: "cannot make it",                           color: "#FF453A", icon: "❌" },
-            { label: "Total Guests",  value: totalAdults + totalKids,     sub: `${totalAdults}A + ${totalKids}K`,          color: "#FFCB05", icon: "👥" },
-            { label: "Veg / Non-Veg", value: `${vegCount}/${nonVegCount}`, sub: "dietary split",                          color: "#CFB991", icon: "🍽️" },
+            { label: "Attending",     value: attending.length,             sub: `${totalAdults} adults · ${totalKids} kids`, color: "#34C759", Icon: UserCheck  },
+            { label: "Declined",      value: declined.length,              sub: "cannot make it",                           color: "#FF453A", Icon: UserX     },
+            { label: "Total Guests",  value: totalAdults + totalKids,      sub: `${totalAdults}A + ${totalKids}K`,          color: "#FFCB05", Icon: Users     },
+            { label: "Veg / Non-Veg", value: `${vegCount}/${nonVegCount}`, sub: "dietary split",                           color: "#CFB991", Icon: Utensils  },
           ].map(s => (
             <div key={s.label} className="rounded-2xl p-4" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <div className="text-2xl mb-2">{s.icon}</div>
+              <s.Icon className="w-6 h-6 mb-2" style={{ color: s.color }} />
               <div className="font-display text-2xl font-bold mb-0.5" style={{ color: s.color }}>{s.value}</div>
               <div className="text-white/60 text-xs font-medium">{s.label}</div>
               <div className="text-white/30 text-[11px] mt-0.5">{s.sub}</div>
@@ -133,7 +134,7 @@ export default function AdminPage() {
         {/* ── TABS + SEARCH ── */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
           <div className="flex gap-1 p-1 rounded-xl flex-wrap" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-            {([["all","All","white"],["attending","Attending","#34C759"],["declined","Declined","#FF453A"],["songs","Songs 🎵","#FFCB05"]] as [typeof tab, string, string][]).map(([val, label, color]) => (
+            {([["all","All","white"],["attending","Attending","#34C759"],["declined","Declined","#FF453A"],["songs","Songs","#FFCB05"]] as [typeof tab, string, string][]).map(([val, label, color]) => (
               <button key={val} onClick={() => setTab(val)}
                 className="px-4 py-2 rounded-lg text-xs font-semibold transition-all"
                 style={tab === val
@@ -158,7 +159,10 @@ export default function AdminPage() {
               {filtered.length === 0 && <p className="col-span-3 py-12 text-center text-white/30 text-sm">No song requests yet</p>}
               {filtered.map(r => (
                 <div key={r._id} className="rounded-xl px-4 py-3" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-                  <p className="text-white font-medium text-sm">🎵 {r.song}</p>
+                  <div className="flex items-center gap-2">
+                    <Music className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "#FFCB05" }} />
+                    <p className="text-white font-medium text-sm">{r.song}</p>
+                  </div>
                   <p className="text-white/40 text-xs mt-1">— {r.name}</p>
                 </div>
               ))}

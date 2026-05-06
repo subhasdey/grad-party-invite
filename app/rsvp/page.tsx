@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
+import { GraduationCap, Leaf, Flame, Sprout, Music } from "lucide-react";
 
 type Diet = "veg" | "non-veg" | "both";
 
@@ -68,7 +69,9 @@ export default function RSVPPage() {
     return (
       <main className="min-h-screen flex items-center justify-center px-6" style={{ background: "#FAF6EE" }}>
         <div className="max-w-sm w-full text-center">
-          <div className="text-6xl mb-6">🎓</div>
+          <div className="mb-6 p-4 rounded-3xl inline-block" style={{ background: "rgba(0,39,76,0.08)" }}>
+            <GraduationCap className="w-16 h-16" style={{ color: "#00274C" }} />
+          </div>
           <h2 className="text-3xl font-bold mb-3" style={{ letterSpacing: "-0.03em", color: "#1d1d1f" }}>
             {form.attending ? (isEdit ? "RSVP Updated!" : "You're on the list!") : "Thanks for letting us know"}
           </h2>
@@ -177,19 +180,27 @@ export default function RSVPPage() {
                 <div>
                   <p className="text-xs mb-2 px-1" style={{ color: "rgba(0,0,0,0.45)" }}>Dietary Preference</p>
                   <div className="grid grid-cols-3 gap-2">
-                    {([ ["veg","Vegetarian","🥦"], ["non-veg","Non-Veg","🍗"], ["both","Jain","🥗"] ] as [Diet,string,string][]).map(([val,label,icon]) => (
+                    {([
+                      ["veg",     "Vegetarian", Leaf   ],
+                      ["non-veg", "Non-Veg",    Flame  ],
+                      ["both",    "Jain",       Sprout ],
+                    ] as [Diet, string, typeof Leaf][]).map(([val, label, Icon]) => (
                       <button key={val} type="button" onClick={() => update("diet", val)}
-                        className="py-3.5 rounded-2xl border text-xs font-medium transition-all flex flex-col items-center gap-1"
+                        className="py-3.5 rounded-2xl border text-xs font-medium transition-all flex flex-col items-center gap-1.5"
                         style={form.diet === val
                           ? { borderColor: "#00274C", background: "rgba(0,39,76,0.08)", color: "#00274C" }
                           : { borderColor: "rgba(0,0,0,0.08)", background: "#ffffff", color: "rgba(0,0,0,0.45)" }}>
-                        <span className="text-xl">{icon}</span>{label}
+                        <Icon className="w-5 h-5" />
+                        {label}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                <input value={form.song} onChange={e => update("song", e.target.value)} placeholder="🎵 Song request for the party" className={inputCls} />
+                <div className="relative">
+                  <Music className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "rgba(0,0,0,0.3)" }} />
+                  <input value={form.song} onChange={e => update("song", e.target.value)} placeholder="Song request for the party" className={inputCls} style={{ paddingLeft: "2.5rem" }} />
+                </div>
               </>
             )}
 
