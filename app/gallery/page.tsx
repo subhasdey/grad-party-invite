@@ -160,11 +160,11 @@ export default function GalleryPage() {
                   </>
                 )}
 
-                {/* Hover overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                {/* Always-visible overlay at bottom */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent">
                   <div className="absolute bottom-0 left-0 right-0 p-3 text-left">
-                    <p className="text-white text-xs font-medium truncate">{item.name}</p>
-                    {item.caption && <p className="text-white/60 text-[11px] truncate mt-0.5">{item.caption}</p>}
+                    <p className="text-white text-xs font-semibold truncate">{item.name}</p>
+                    {item.caption && <p className="text-white/70 text-[11px] leading-snug mt-0.5 line-clamp-2">{item.caption}</p>}
                   </div>
                 </div>
               </button>
