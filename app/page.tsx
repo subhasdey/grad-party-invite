@@ -2,7 +2,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import Fireworks from "@/components/Fireworks";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://grad-party-invite-tan.vercel.app";
 
@@ -69,20 +68,20 @@ export default function Home() {
   const shareUrl  = encodeURIComponent(APP_URL);
 
   return (
-    <div style={{ background: "#080c14", color: "#fff" }}>
+    <div style={{ background: "#f5f5f7", color: "#1d1d1f" }}>
 
       {/* ── STICKY NAV ── */}
       <nav className="fixed top-0 inset-x-0 z-50 transition-all duration-500"
-        style={{ background: navBg ? "rgba(8,12,20,0.88)" : "transparent", backdropFilter: navBg ? "blur(20px)" : "none", borderBottom: navBg ? "1px solid rgba(255,255,255,0.07)" : "none" }}>
+        style={{ background: navBg ? "rgba(255,255,255,0.88)" : "transparent", backdropFilter: navBg ? "blur(20px)" : "none", borderBottom: navBg ? "1px solid rgba(0,0,0,0.08)" : "none" }}>
         <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
-          <span className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: "rgba(255,255,255,0.5)" }}>Class of 2026</span>
+          <span className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: "rgba(0,0,0,0.45)" }}>Class of 2026</span>
           <div className="hidden md:flex items-center gap-2">
             {([["Gallery","/gallery"],["Chat","/chat"],["Admin","/admin"]] as [string,string][]).map(([l,h]) => (
-              <Link key={h} href={h} className="px-4 py-1.5 rounded-full text-xs font-medium transition-all hover:text-white"
-                style={{ color: "rgba(255,255,255,0.55)", border: "1px solid rgba(255,255,255,0.1)" }}>{l}</Link>
+              <Link key={h} href={h} className="px-4 py-1.5 rounded-full text-xs font-medium transition-all hover:text-[#1d1d1f]"
+                style={{ color: "rgba(0,0,0,0.5)", border: "1px solid rgba(0,0,0,0.1)" }}>{l}</Link>
             ))}
             <Link href="/rsvp" className="ml-2 px-5 py-1.5 rounded-full text-xs font-bold transition-all hover:scale-105"
-              style={{ background: "#FFCB05", color: "#080c14" }}>RSVP Now</Link>
+              style={{ background: "#00274C", color: "#FFCB05" }}>RSVP Now</Link>
           </div>
         </div>
       </nav>
@@ -90,51 +89,55 @@ export default function Home() {
       {/* ══════════════════════════════════════════
           SECTION 1 — HERO
       ══════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-        <Fireworks />
+      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden" style={{ background: "#f5f5f7" }}>
+        {/* Decorative background blobs */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-10" style={{ background: "#00274C", transform: "translate(30%,-30%)", filter: "blur(80px)" }} />
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full opacity-10" style={{ background: "#CFB991", transform: "translate(-30%,30%)", filter: "blur(80px)" }} />
+        </div>
         <div className="relative z-10 flex flex-col items-center text-center px-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] mb-6" style={{ color: "rgba(255,255,255,0.45)" }}>
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] mb-6" style={{ color: "rgba(0,0,0,0.45)" }}>
             You&rsquo;re Invited · A Twin Celebration
           </p>
           <h1 className="font-display font-bold leading-[0.95] tracking-tight mb-2"
-            style={{ fontSize: "clamp(3.5rem,11vw,8rem)" }}>
+            style={{ fontSize: "clamp(3.5rem,11vw,8rem)", color: "#1d1d1f" }}>
             Graduation
           </h1>
           <h1 className="font-display font-bold leading-[0.95] tracking-tight mb-10"
-            style={{ fontSize: "clamp(3.5rem,11vw,8rem)", color: "rgba(255,255,255,0.22)" }}>
+            style={{ fontSize: "clamp(3.5rem,11vw,8rem)", color: "rgba(0,0,0,0.18)" }}>
             Party
           </h1>
 
-          <div className="flex items-center gap-4 mb-10 text-sm font-medium" style={{ color: "rgba(255,255,255,0.5)" }}>
+          <div className="flex items-center gap-4 mb-10 text-sm font-medium" style={{ color: "rgba(0,0,0,0.5)" }}>
             <span>June 26, 2026</span>
-            <span style={{ color: "rgba(255,255,255,0.2)" }}>·</span>
+            <span style={{ color: "rgba(0,0,0,0.2)" }}>·</span>
             <span>6:00 PM</span>
-            <span style={{ color: "rgba(255,255,255,0.2)" }}>·</span>
+            <span style={{ color: "rgba(0,0,0,0.2)" }}>·</span>
             <span>Redmond, WA</span>
           </div>
 
           {/* School badges */}
           <div className="flex items-center gap-3 mb-12">
             <span className="text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full"
-              style={{ background: "rgba(207,185,145,0.12)", color: "#CFB991", border: "1px solid rgba(207,185,145,0.25)" }}>
+              style={{ background: "#CFB991", color: "#3a2800", border: "1px solid #b8a070" }}>
               Boiler Up! 🚂
             </span>
-            <span style={{ color: "rgba(255,255,255,0.2)", fontSize: 20 }}>×</span>
+            <span style={{ color: "rgba(0,0,0,0.25)", fontSize: 20 }}>×</span>
             <span className="text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full"
-              style={{ background: "rgba(255,203,5,0.1)", color: "#FFCB05", border: "1px solid rgba(255,203,5,0.25)" }}>
+              style={{ background: "#00274C", color: "#FFCB05", border: "1px solid #003a70" }}>
               Go Blue! 〽️
             </span>
           </div>
 
           <Link href="/rsvp"
             className="px-10 py-4 rounded-full text-sm font-bold transition-all hover:scale-105 active:scale-95"
-            style={{ background: "#FFCB05", color: "#080c14" }}>
+            style={{ background: "#00274C", color: "#FFCB05" }}>
             RSVP Now
           </Link>
         </div>
 
         {/* Scroll cue */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40 animate-bounce">
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce" style={{ color: "rgba(0,0,0,0.35)" }}>
           <span className="text-[10px] uppercase tracking-widest">Scroll</span>
           <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -148,8 +151,8 @@ export default function Home() {
       <section className="min-h-screen flex flex-col items-center justify-center py-24 px-6">
         <div ref={graduatesReveal.ref} className="w-full max-w-5xl transition-all duration-1000"
           style={{ opacity: graduatesReveal.visible ? 1 : 0, transform: graduatesReveal.visible ? "translateY(0)" : "translateY(60px)" }}>
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-4" style={{ color: "rgba(255,255,255,0.35)" }}>The Graduates</p>
-          <h2 className="font-display text-center font-bold mb-16" style={{ fontSize: "clamp(2rem,6vw,4rem)" }}>Celebrating Two Milestones</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-4" style={{ color: "rgba(0,0,0,0.4)" }}>The Graduates</p>
+          <h2 className="font-display text-center font-bold mb-16" style={{ fontSize: "clamp(2rem,6vw,4rem)", color: "#1d1d1f" }}>Celebrating Two Milestones</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* IRIS */}
@@ -195,12 +198,12 @@ export default function Home() {
           SECTION 3 — EVENT DETAILS + COUNTDOWN
       ══════════════════════════════════════════ */}
       <section className="min-h-screen flex flex-col items-center justify-center py-24 px-6"
-        style={{ background: "rgba(255,255,255,0.015)" }}>
+        style={{ background: "#ffffff" }}>
         <div ref={detailsReveal.ref} className="w-full max-w-4xl transition-all duration-1000"
           style={{ opacity: detailsReveal.visible ? 1 : 0, transform: detailsReveal.visible ? "translateY(0)" : "translateY(60px)" }}>
 
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-4" style={{ color: "rgba(255,255,255,0.35)" }}>The Details</p>
-          <h2 className="font-display text-center font-bold mb-16" style={{ fontSize: "clamp(2rem,6vw,4rem)" }}>Mark Your Calendar</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-4" style={{ color: "rgba(0,0,0,0.4)" }}>The Details</p>
+          <h2 className="font-display text-center font-bold mb-16" style={{ fontSize: "clamp(2rem,6vw,4rem)", color: "#1d1d1f" }}>Mark Your Calendar</h2>
 
           {/* Big detail cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
@@ -210,32 +213,32 @@ export default function Home() {
               ["📍", "Redmond, WA", "Senior & Community Center"],
             ] as [string,string,string][]).map(([icon, val, sub]) => (
               <div key={val} className="flex flex-col items-center text-center py-10 px-6 rounded-3xl"
-                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                style={{ background: "#f5f5f7", border: "1px solid rgba(0,0,0,0.07)" }}>
                 <span className="text-4xl mb-4">{icon}</span>
-                <p className="font-display text-2xl font-bold text-white mb-2">{val}</p>
-                <p className="text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>{sub}</p>
+                <p className="font-display text-2xl font-bold mb-2" style={{ color: "#1d1d1f" }}>{val}</p>
+                <p className="text-sm" style={{ color: "rgba(0,0,0,0.45)" }}>{sub}</p>
               </div>
             ))}
           </div>
 
-          <div className="text-center mb-12 py-5 rounded-2xl" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
-            <p className="text-sm font-semibold text-white mb-1">Redmond Senior &amp; Community Center</p>
-            <p className="text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
-              Hosted by <span className="text-white font-medium">Subhas &amp; Sanchita Dey</span>
-              &nbsp;·&nbsp; RSVP by <span style={{ color: "#FFCB05" }}>June 12, 2026</span>
+          <div className="text-center mb-12 py-5 rounded-2xl" style={{ background: "#f5f5f7", border: "1px solid rgba(0,0,0,0.06)" }}>
+            <p className="text-sm font-semibold mb-1" style={{ color: "#1d1d1f" }}>Redmond Senior &amp; Community Center</p>
+            <p className="text-sm" style={{ color: "rgba(0,0,0,0.5)" }}>
+              Hosted by <span className="font-medium" style={{ color: "#1d1d1f" }}>Subhas &amp; Sanchita Dey</span>
+              &nbsp;·&nbsp; RSVP by <span style={{ color: "#00274C", fontWeight: 600 }}>June 12, 2026</span>
             </p>
           </div>
 
           {/* Countdown */}
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-8" style={{ color: "rgba(255,255,255,0.35)" }}>Counting Down</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-8" style={{ color: "rgba(0,0,0,0.4)" }}>Counting Down</p>
           <div className="grid grid-cols-4 gap-4">
             {Object.entries(count).map(([unit, val]) => (
               <div key={unit} className="flex flex-col items-center py-8 rounded-3xl"
-                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-                <span className="font-display font-bold tabular-nums text-white" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>
+                style={{ background: "#00274C" }}>
+                <span className="font-display font-bold tabular-nums" style={{ fontSize: "clamp(2rem,5vw,3.5rem)", color: "#FFCB05" }}>
                   {String(val).padStart(2, "0")}
                 </span>
-                <span className="text-xs font-semibold uppercase tracking-widest mt-2" style={{ color: "rgba(255,255,255,0.4)" }}>{unit}</span>
+                <span className="text-xs font-semibold uppercase tracking-widest mt-2" style={{ color: "rgba(255,203,5,0.6)" }}>{unit}</span>
               </div>
             ))}
           </div>
@@ -243,7 +246,7 @@ export default function Home() {
           <div className="flex justify-center mt-12">
             <Link href="/rsvp"
               className="px-12 py-4 rounded-full text-sm font-bold transition-all hover:scale-105 active:scale-95"
-              style={{ background: "#FFCB05", color: "#080c14" }}>
+              style={{ background: "#00274C", color: "#FFCB05" }}>
               Confirm Your Spot
             </Link>
           </div>
@@ -257,47 +260,49 @@ export default function Home() {
         <div ref={itineraryReveal.ref} className="w-full max-w-3xl transition-all duration-1000"
           style={{ opacity: itineraryReveal.visible ? 1 : 0, transform: itineraryReveal.visible ? "translateY(0)" : "translateY(60px)" }}>
 
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-4" style={{ color: "rgba(255,255,255,0.35)" }}>The Program</p>
-          <h2 className="font-display text-center font-bold mb-16" style={{ fontSize: "clamp(2rem,6vw,4rem)" }}>Evening Schedule</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-4" style={{ color: "rgba(0,0,0,0.4)" }}>The Program</p>
+          <h2 className="font-display text-center font-bold mb-16" style={{ fontSize: "clamp(2rem,6vw,4rem)", color: "#1d1d1f" }}>Evening Schedule</h2>
 
           <div className="space-y-4">
             {ITINERARY.map((item, i) => (
               <div key={item.time} className="flex items-center gap-6 p-6 rounded-2xl transition-all duration-300 hover:scale-[1.02]"
-                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", transitionDelay: `${i * 60}ms`, opacity: itineraryReveal.visible ? 1 : 0, transform: itineraryReveal.visible ? "translateX(0)" : "translateX(-30px)" }}>
+                style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)", transitionDelay: `${i * 60}ms`, opacity: itineraryReveal.visible ? 1 : 0, transform: itineraryReveal.visible ? "translateX(0)" : "translateX(-30px)" }}>
                 <span className="text-3xl flex-shrink-0">{item.icon}</span>
                 <div className="flex-1">
-                  <p className="font-semibold text-white text-lg">{item.label}</p>
+                  <p className="font-semibold text-lg" style={{ color: "#1d1d1f" }}>{item.label}</p>
                 </div>
-                <span className="text-sm font-semibold tabular-nums" style={{ color: i % 2 === 0 ? "#CFB991" : "#FFCB05" }}>{item.time}</span>
+                <span className="text-sm font-semibold tabular-nums" style={{ color: i % 2 === 0 ? "#8a6500" : "#00274C" }}>{item.time}</span>
               </div>
             ))}
           </div>
 
           {/* Dress code */}
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="p-6 rounded-2xl" style={{ background: "rgba(207,185,145,0.05)", border: "1px solid rgba(207,185,145,0.15)" }}>
-              <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#CFB991" }}>👔 Dress Code</p>
+            <div className="p-6 rounded-2xl" style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)" }}>
+              <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#8a6500" }}>👔 Dress Code</p>
               <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-xl flex-shrink-0" style={{ background: "#00274C", border: "2px solid #FFCB05" }} />
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-2xl flex-shrink-0 shadow-sm" style={{ background: "#00274C", border: "3px solid #FFCB05" }} />
                   <div>
-                    <p className="text-sm font-semibold text-white">Girls — Blue</p>
-                    <p className="text-xs" style={{ color: "rgba(255,255,255,0.45)" }}>University of Michigan · Maize &amp; Blue</p>
+                    <p className="text-base font-bold" style={{ color: "#1d1d1f" }}>Girls — Blue</p>
+                    <p className="text-xs mt-0.5" style={{ color: "rgba(0,0,0,0.5)" }}>University of Michigan</p>
+                    <p className="text-xs" style={{ color: "rgba(0,0,0,0.4)" }}>Maize &amp; Blue</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-xl flex-shrink-0" style={{ background: "#1a1a1a", border: "2px solid #CFB991" }} />
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-2xl flex-shrink-0 shadow-sm" style={{ background: "#1a1a1a", border: "3px solid #CFB991" }} />
                   <div>
-                    <p className="text-sm font-semibold text-white">Boys — Black</p>
-                    <p className="text-xs" style={{ color: "rgba(255,255,255,0.45)" }}>Purdue University · Old Gold &amp; Black</p>
+                    <p className="text-base font-bold" style={{ color: "#1d1d1f" }}>Boys — Black</p>
+                    <p className="text-xs mt-0.5" style={{ color: "rgba(0,0,0,0.5)" }}>Purdue University</p>
+                    <p className="text-xs" style={{ color: "rgba(0,0,0,0.4)" }}>Old Gold &amp; Black</p>
                   </div>
                 </div>
-                <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Festive semi-formal</p>
+                <p className="text-xs" style={{ color: "rgba(0,0,0,0.4)" }}>Festive semi-formal</p>
               </div>
             </div>
-            <div className="p-6 rounded-2xl" style={{ background: "rgba(255,203,5,0.05)", border: "1px solid rgba(255,203,5,0.15)" }}>
-              <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#FFCB05" }}>🚗 Parking</p>
-              <p className="text-sm" style={{ color: "rgba(255,255,255,0.7)" }}>Free parking at the Redmond Senior &amp; Community Center lot. Street parking nearby.</p>
+            <div className="p-6 rounded-2xl" style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)" }}>
+              <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#00274C" }}>🚗 Parking</p>
+              <p className="text-sm" style={{ color: "rgba(0,0,0,0.6)" }}>Free parking at the Redmond Senior &amp; Community Center lot. Street parking nearby.</p>
             </div>
           </div>
         </div>
@@ -307,17 +312,17 @@ export default function Home() {
           SECTION 5 — WISH WALL
       ══════════════════════════════════════════ */}
       {wishes.length > 0 && (
-        <section className="py-24 px-6" style={{ background: "rgba(255,255,255,0.015)" }}>
+        <section className="py-24 px-6" style={{ background: "#f5f5f7" }}>
           <div ref={wishReveal.ref} className="w-full max-w-4xl mx-auto transition-all duration-1000"
             style={{ opacity: wishReveal.visible ? 1 : 0, transform: wishReveal.visible ? "translateY(0)" : "translateY(60px)" }}>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-4" style={{ color: "rgba(255,255,255,0.35)" }}>Guest Wishes</p>
-            <h2 className="font-display text-center font-bold mb-16" style={{ fontSize: "clamp(2rem,6vw,4rem)" }}>Words of Love 💌</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-4" style={{ color: "rgba(0,0,0,0.4)" }}>Guest Wishes</p>
+            <h2 className="font-display text-center font-bold mb-16" style={{ fontSize: "clamp(2rem,6vw,4rem)", color: "#1d1d1f" }}>Words of Love 💌</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {wishes.map((w, i) => (
                 <div key={i} className="p-6 rounded-2xl flex flex-col"
-                  style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
-                  <p className="text-white/75 text-sm leading-relaxed flex-1 mb-4">&ldquo;{w.message}&rdquo;</p>
-                  <p className="text-xs font-bold uppercase tracking-widest" style={{ color: i % 2 === 0 ? "#CFB991" : "#FFCB05" }}>— {w.name}</p>
+                  style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)" }}>
+                  <p className="text-sm leading-relaxed flex-1 mb-4" style={{ color: "rgba(0,0,0,0.65)" }}>&ldquo;{w.message}&rdquo;</p>
+                  <p className="text-xs font-bold uppercase tracking-widest" style={{ color: i % 2 === 0 ? "#8a6500" : "#00274C" }}>— {w.name}</p>
                 </div>
               ))}
             </div>
@@ -331,8 +336,8 @@ export default function Home() {
       <section className="py-24 px-6">
         <div ref={shareReveal.ref} className="w-full max-w-3xl mx-auto transition-all duration-1000"
           style={{ opacity: shareReveal.visible ? 1 : 0, transform: shareReveal.visible ? "translateY(0)" : "translateY(60px)" }}>
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-4" style={{ color: "rgba(255,255,255,0.35)" }}>Spread the Word</p>
-          <h2 className="font-display text-center font-bold mb-16" style={{ fontSize: "clamp(2rem,6vw,4rem)" }}>Share the Invite</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-4" style={{ color: "rgba(0,0,0,0.4)" }}>Spread the Word</p>
+          <h2 className="font-display text-center font-bold mb-16" style={{ fontSize: "clamp(2rem,6vw,4rem)", color: "#1d1d1f" }}>Share the Invite</h2>
 
           <div className="flex flex-col sm:flex-row gap-8 items-center justify-center">
             <div className="flex flex-col gap-3 flex-1 w-full max-w-xs">
@@ -350,7 +355,7 @@ export default function Home() {
               </a>
               <button onClick={copyLink}
                 className="flex items-center gap-3 px-6 py-4 rounded-2xl font-semibold text-sm transition-all hover:scale-[1.03]"
-                style={{ background: "rgba(255,255,255,0.07)", color: copied ? "#FFCB05" : "rgba(255,255,255,0.8)", border: "1px solid rgba(255,255,255,0.12)" }}>
+                style={{ background: "#f5f5f7", color: copied ? "#00274C" : "rgba(0,0,0,0.7)", border: "1px solid rgba(0,0,0,0.1)" }}>
                 <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
                 {copied ? "Copied!" : "Copy Link"}
               </button>
@@ -363,14 +368,14 @@ export default function Home() {
       {/* ══════════════════════════════════════════
           FOOTER
       ══════════════════════════════════════════ */}
-      <footer className="py-10 px-6" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <footer className="py-10 px-6" style={{ borderTop: "1px solid rgba(0,0,0,0.08)", background: "#ffffff" }}>
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3 text-xs font-medium">
-            <span style={{ color: "rgba(207,185,145,0.6)" }}>Purdue Boilermakers</span>
-            <span style={{ color: "rgba(255,255,255,0.2)" }}>×</span>
-            <span style={{ color: "rgba(255,203,5,0.6)" }}>Michigan Wolverines</span>
+            <span style={{ color: "#8a6500" }}>Purdue Boilermakers</span>
+            <span style={{ color: "rgba(0,0,0,0.2)" }}>×</span>
+            <span style={{ color: "#00274C" }}>Michigan Wolverines</span>
           </div>
-          <div className="flex items-center gap-4 text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>
+          <div className="flex items-center gap-4 text-xs" style={{ color: "rgba(0,0,0,0.35)" }}>
             {rsvps !== null && rsvps > 0 && <span>{rsvps} guests attending</span>}
             <Link href="/admin" className="hover:text-white transition-all">Admin</Link>
           </div>
