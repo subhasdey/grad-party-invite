@@ -300,16 +300,12 @@ export default function Home() {
                   <div className="w-16 h-16 rounded-2xl flex-shrink-0 shadow-sm" style={{ background: "#00274C", border: "3px solid #FFCB05" }} />
                   <div>
                     <p className="text-base font-bold" style={{ color: "#1d1d1f" }}>Girls — Blue</p>
-                    <p className="text-xs mt-0.5" style={{ color: "rgba(0,0,0,0.5)" }}>University of Michigan</p>
-                    <p className="text-xs" style={{ color: "rgba(0,0,0,0.4)" }}>Maize &amp; Blue</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="w-16 h-16 rounded-2xl flex-shrink-0 shadow-sm" style={{ background: "#1a1a1a", border: "3px solid #CFB991" }} />
                   <div>
                     <p className="text-base font-bold" style={{ color: "#1d1d1f" }}>Boys — Black</p>
-                    <p className="text-xs mt-0.5" style={{ color: "rgba(0,0,0,0.5)" }}>Purdue University</p>
-                    <p className="text-xs" style={{ color: "rgba(0,0,0,0.4)" }}>Old Gold &amp; Black</p>
                   </div>
                 </div>
                 <p className="text-xs" style={{ color: "rgba(0,0,0,0.4)" }}>Festive semi-formal</p>
