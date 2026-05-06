@@ -99,6 +99,7 @@ export default function Home() {
           <p className="text-xs font-semibold uppercase tracking-[0.35em] mb-6" style={{ color: "rgba(0,0,0,0.45)" }}>
             You&rsquo;re Invited · A Twin Celebration
           </p>
+          <div className="text-8xl mb-4" style={{ filter: "drop-shadow(0 4px 12px rgba(0,39,76,0.15))" }}>🎓</div>
           <h1 className="font-display font-bold leading-[0.95] tracking-tight mb-2"
             style={{ fontSize: "clamp(3.5rem,11vw,8rem)", color: "#1d1d1f" }}>
             Graduation
