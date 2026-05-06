@@ -39,6 +39,9 @@ export default function GalleryPage() {
   // Likes
   const [liking, setLiking] = useState<string | null>(null);
 
+  // Video error
+  const [videoError, setVideoError] = useState(false);
+
   const fileRef = useRef<HTMLInputElement>(null);
 
   const load = () =>
@@ -306,29 +309,59 @@ export default function GalleryPage() {
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
           style={{ background: "rgba(0,0,0,0.95)" }}
-          onClick={() => setSelected(null)}
+          onClick={() => { setSelected(null); setVideoError(false); }}
         >
           <div className="relative max-w-5xl w-full max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
             <div className="flex-1 flex items-center justify-center overflow-hidden rounded-2xl">
-              {selected.type === "image"
+              {selected.type === "image" ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                ? <img src={selected.url} alt="" className="max-w-full max-h-[80vh] object-contain rounded-2xl" />
-                : <video src={selected.url} controls autoPlay playsInline className="max-w-full max-h-[80vh] rounded-2xl" />
-              }
+                <img src={selected.url} alt="" className="max-w-full max-h-[80vh] object-contain rounded-2xl" />
+              ) : videoError ? (
+                <div className="flex flex-col items-center gap-4 py-16 px-6 text-center rounded-2xl" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                  <svg className="w-12 h-12 opacity-30" fill="none" stroke="white" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+                  <p className="text-white/60 text-sm">This video format may not be supported by your browser.</p>
+                  <a href={selected.url} download target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold"
+                    style={{ background: "#FFCB05", color: "#070a10" }}>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Download to watch
+                  </a>
+                </div>
+              ) : (
+                <video
+                  key={selected._id}
+                  src={selected.url}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="max-w-full max-h-[80vh] rounded-2xl"
+                  onError={() => setVideoError(true)}
+                />
+              )}
             </div>
             <div className="flex items-center justify-between mt-4 px-1">
               <div>
                 <p className="text-white text-sm font-medium">{selected.name}</p>
                 {selected.caption && <p className="text-white/40 text-xs mt-0.5">{selected.caption}</p>}
               </div>
-              <button
-                onClick={() => setSelected(null)}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs text-white/50 hover:text-white transition-all"
-                style={{ border: "1px solid rgba(255,255,255,0.1)" }}
-              >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
-                Close
-              </button>
+              <div className="flex items-center gap-2">
+                {selected.type === "video" && !videoError && (
+                  <a href={selected.url} download target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs text-white/50 hover:text-white transition-all"
+                    style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Download
+                  </a>
+                )}
+                <button
+                  onClick={() => { setSelected(null); setVideoError(false); }}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs text-white/50 hover:text-white transition-all"
+                  style={{ border: "1px solid rgba(255,255,255,0.1)" }}
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         </div>
