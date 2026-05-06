@@ -135,7 +135,7 @@ export default function GalleryPage() {
                 key={item._id}
                 onClick={() => setSelected(item)}
                 className="group relative rounded-2xl overflow-hidden bg-white/5 focus:outline-none"
-                style={{ aspectRatio: "4/3", border: "1px solid rgba(255,255,255,0.06)" }}
+                style={{ aspectRatio: "3/4", border: "1px solid rgba(255,255,255,0.06)" }}
               >
                 {item.type === "image" ? (
                   // eslint-disable-next-line @next/next/no-img-element
