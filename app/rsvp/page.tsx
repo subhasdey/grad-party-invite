@@ -177,7 +177,7 @@ export default function RSVPPage() {
                 <div>
                   <p className="text-xs mb-2 px-1" style={{ color: "rgba(0,0,0,0.45)" }}>Dietary Preference</p>
                   <div className="grid grid-cols-3 gap-2">
-                    {([ ["veg","Vegetarian","🥦"], ["non-veg","Non-Veg","🍗"], ["both","Both","🍽️"] ] as [Diet,string,string][]).map(([val,label,icon]) => (
+                    {([ ["veg","Vegetarian","🥦"], ["non-veg","Non-Veg","🍗"], ["both","Jain","🥗"] ] as [Diet,string,string][]).map(([val,label,icon]) => (
                       <button key={val} type="button" onClick={() => update("diet", val)}
                         className="py-3.5 rounded-2xl border text-xs font-medium transition-all flex flex-col items-center gap-1"
                         style={form.diet === val
