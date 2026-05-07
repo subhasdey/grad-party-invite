@@ -105,7 +105,7 @@ export default function Home() {
           <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-10" style={{ background: "#00274C", transform: "translate(30%,-30%)", filter: "blur(80px)" }} />
           <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full opacity-10" style={{ background: "#CFB991", transform: "translate(-30%,30%)", filter: "blur(80px)" }} />
         </div>
-        <div className="relative z-10 flex flex-col items-center text-center px-6">
+        <div className="relative z-10 flex flex-col items-center text-center px-6 pt-24">
           <p className="text-xs font-semibold uppercase tracking-[0.35em] mb-6" style={{ color: "rgba(0,0,0,0.45)" }}>
             You&rsquo;re Invited · A Twin Celebration
           </p>
