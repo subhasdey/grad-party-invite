@@ -148,6 +148,14 @@ export default function Home() {
             style={{ background: "#00274C", color: "#FFCB05" }}>
             RSVP Now
           </Link>
+
+          {/* Parent message */}
+          <div className="mt-12 max-w-xl px-6 py-6 rounded-2xl text-center" style={{ background: "rgba(0,39,76,0.05)", border: "1px solid rgba(0,39,76,0.1)" }}>
+            <p className="text-sm leading-relaxed mb-3" style={{ color: "rgba(0,0,0,0.65)", fontStyle: "italic" }}>
+              &ldquo;With great pride and joy, we announce the graduation of Iris and Inesh Dey from Tesla STEAM High School. Please join us in celebrating their remarkable achievements as they prepare to embark on their next chapter at university.&rdquo;
+            </p>
+            <p className="text-xs font-semibold" style={{ color: "#00274C" }}>— Sanchita and Subhas</p>
+          </div>
         </div>
 
         {/* Scroll cue */}
