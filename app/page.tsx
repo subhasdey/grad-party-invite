@@ -109,14 +109,14 @@ export default function Home() {
           <p className="text-xs font-semibold uppercase tracking-[0.35em] mb-6" style={{ color: "rgba(0,0,0,0.45)" }}>
             You&rsquo;re Invited · A Twin Celebration
           </p>
-          <div className="mb-6 flex items-end gap-2">
-            <Image src="/cap-purdue.svg" alt="Purdue graduation cap" width={100} height={86} style={{ filter: "drop-shadow(0 4px 12px rgba(207,185,145,0.3))", transform: "rotate(-18deg) translateY(6px)" }} />
-            <Image src="/cap-michigan.svg" alt="Michigan graduation cap" width={100} height={86} style={{ filter: "drop-shadow(0 4px 12px rgba(0,39,76,0.3))", transform: "rotate(18deg) translateY(6px)" }} />
+          <div className="flex items-center gap-3 mb-2">
+            <Image src="/cap-purdue.svg" alt="Purdue graduation cap" width={140} height={120} style={{ filter: "drop-shadow(0 4px 16px rgba(207,185,145,0.35))", transform: "rotate(-20deg)" }} />
+            <h1 className="font-display font-bold leading-[0.95] tracking-tight"
+              style={{ fontSize: "clamp(3.5rem,11vw,8rem)", color: "#1d1d1f" }}>
+              Graduation
+            </h1>
+            <Image src="/cap-michigan.svg" alt="Michigan graduation cap" width={140} height={120} style={{ filter: "drop-shadow(0 4px 16px rgba(0,39,76,0.35))", transform: "rotate(20deg)" }} />
           </div>
-          <h1 className="font-display font-bold leading-[0.95] tracking-tight mb-2"
-            style={{ fontSize: "clamp(3.5rem,11vw,8rem)", color: "#1d1d1f" }}>
-            Graduation
-          </h1>
           <h1 className="font-display font-bold leading-[0.95] tracking-tight mb-10"
             style={{ fontSize: "clamp(3.5rem,11vw,8rem)", color: "rgba(0,0,0,0.18)" }}>
             Party
