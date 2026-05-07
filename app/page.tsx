@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import {
-  DoorOpen, Wine, Utensils, Mic, CakeSlice, Music,
+  DoorOpen, Wine, Utensils, Mic, CakeSlice, Music, Gift,
   Calendar, Clock, MapPin, Shirt, Car, Heart, type LucideIcon,
 } from "lucide-react";
 
@@ -212,6 +212,23 @@ export default function Home() {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Quick links below photos */}
+          <div className="flex items-center justify-center gap-3 mt-6 flex-wrap">
+            <Link href="/wishlist"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:scale-105"
+              style={{ background: "#00274C", color: "#FFCB05" }}>
+              <Gift className="w-4 h-4" />
+              Gift Ideas
+            </Link>
+            <a href="https://zellepay.com/pay-with-zelle"
+              target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:scale-105"
+              style={{ background: "#6D1ED4", color: "#ffffff" }}>
+              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M13.5 2L3 13.5h7.5L9 22l12-12h-7.5L13.5 2z"/></svg>
+              Send via Zelle
+            </a>
           </div>
         </div>
       </section>
