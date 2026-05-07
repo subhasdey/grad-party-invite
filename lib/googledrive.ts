@@ -236,6 +236,71 @@ export async function readRsvpsFromSheet(): Promise<object[]> {
   })).reverse();
 }
 
+// ── Wishlist Sheet ────────────────────────────────────────────────────────────
+// Columns: createdAt | person | name | description | price | url | category | claimedBy
+
+export async function readWishlistFromSheet(): Promise<object[]> {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId) return [];
+  const accessToken = await getAccessToken();
+  const res = await fetch(`${SHEETS_BASE}/${sheetId}/values/Wishlist!A:H`, { headers: { Authorization: `Bearer ${accessToken}` } });
+  if (!res.ok) return [];
+  const data = await res.json();
+  const rows: string[][] = data.values || [];
+  return rows.map((row, i) => ({
+    _id: String(i + 1),
+    createdAt: row[0] || "",
+    person: row[1] || "both",
+    name: row[2] || "",
+    description: row[3] || "",
+    price: row[4] || "",
+    url: row[5] || "",
+    category: row[6] || "",
+    claimedBy: row[7] || "",
+  }));
+}
+
+export async function appendWishlistItem(input: {
+  person: string; name: string; description: string;
+  price: string; url: string; category: string;
+}): Promise<void> {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId) throw new Error("Missing GOOGLE_SHEET_ID");
+  const accessToken = await getAccessToken();
+  const res = await fetch(
+    `${SHEETS_BASE}/${sheetId}/values/Wishlist!A:H:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
+    { method: "POST", headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ values: [[new Date().toISOString(), input.person, input.name, input.description, input.price, input.url, input.category, ""]] }) }
+  );
+  if (!res.ok) { const err = await res.text(); throw new Error(`Failed to add wishlist item (${res.status}): ${err}`); }
+}
+
+export async function claimWishlistItem(rowIndex: number, claimedBy: string): Promise<void> {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId) throw new Error("Missing GOOGLE_SHEET_ID");
+  const accessToken = await getAccessToken();
+  const range = `Wishlist!H${rowIndex}`;
+  const res = await fetch(
+    `${SHEETS_BASE}/${sheetId}/values/${encodeURIComponent(range)}?valueInputOption=RAW`,
+    { method: "PUT", headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ range, majorDimension: "ROWS", values: [[claimedBy]] }) }
+  );
+  if (!res.ok) { const err = await res.text(); throw new Error(`Failed to claim item (${res.status}): ${err}`); }
+}
+
+export async function deleteWishlistItem(rowIndex: number): Promise<void> {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId) throw new Error("Missing GOOGLE_SHEET_ID");
+  const accessToken = await getAccessToken();
+  // Clear the row
+  const range = `Wishlist!A${rowIndex}:H${rowIndex}`;
+  const res = await fetch(
+    `${SHEETS_BASE}/${sheetId}/values/${encodeURIComponent(range)}:clear`,
+    { method: "POST", headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" } }
+  );
+  if (!res.ok) { const err = await res.text(); throw new Error(`Failed to delete item (${res.status}): ${err}`); }
+}
+
 // ── Messages Sheet ────────────────────────────────────────────────────────────
 // Columns: timestamp | name | text | avatar
 

@@ -86,7 +86,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
           <span className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: "rgba(0,0,0,0.45)" }}>Class of 2026</span>
           <div className="hidden md:flex items-center gap-2">
-            {([["Gallery","/gallery"],["Chat","/chat"],["Admin","/admin"]] as [string,string][]).map(([l,h]) => (
+            {([["Gallery","/gallery"],["Gifts","/wishlist"],["Chat","/chat"],["Admin","/admin"]] as [string,string][]).map(([l,h]) => (
               <Link key={h} href={h} className="px-4 py-1.5 rounded-full text-xs font-medium transition-all hover:text-[#1d1d1f]"
                 style={{ color: "rgba(0,0,0,0.5)", border: "1px solid rgba(0,0,0,0.1)" }}>{l}</Link>
             ))}
