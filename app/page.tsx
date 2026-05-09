@@ -46,6 +46,7 @@ export default function Home() {
   const ADMINS = ["subhascdey@gmail.com", "monjoy.dey@gmail.com"];
   const isAdmin = ADMINS.includes(session?.user?.email ?? "");
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [copiedZelle, setCopiedZelle] = useState<string | null>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const [count, setCount]   = useState<Countdown>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [wishes, setWishes] = useState<Wish[]>([]);
@@ -361,13 +362,52 @@ export default function Home() {
               <Gift className="w-4 h-4" />
               Gift Ideas
             </Link>
-            <a href="https://zellepay.com/pay-with-zelle"
-              target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:scale-105"
-              style={{ background: "#6D1ED4", color: "#ffffff" }}>
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M13.5 2L3 13.5h7.5L9 22l12-12h-7.5L13.5 2z"/></svg>
-              Send via Zelle
-            </a>
+          </div>
+
+          {/* Zelle card */}
+          <div className="mt-6 rounded-2xl overflow-hidden" style={{ background: "rgba(109,30,212,0.1)", border: "1px solid rgba(109,30,212,0.3)" }}>
+            <div className="flex items-center gap-2 px-5 pt-4 pb-3" style={{ borderBottom: "1px solid rgba(109,30,212,0.2)" }}>
+              <svg className="w-4 h-4 flex-shrink-0" style={{ fill: "#9b59ff" }} viewBox="0 0 24 24"><path d="M13.5 2L3 13.5h7.5L9 22l12-12h-7.5L13.5 2z"/></svg>
+              <p className="text-sm font-bold" style={{ color: "#9b59ff" }}>Send via Zelle</p>
+              {!session?.user && (
+                <span className="ml-auto text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.35)" }}>
+                  Sign in to reveal
+                </span>
+              )}
+            </div>
+            <div className="px-5 py-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {([
+                { name: "Inesh Dey", number: "+14252999168", color: "#FFCB05", hint: "•••• •••• 9168" },
+                { name: "Iris Dey",  number: "+14255153937", color: "#CFB991", hint: "•••• •••• 3937" },
+              ] as { name: string; number: string; color: string; hint: string }[]).map(({ name: n, number, color, hint }) => (
+                <div key={n} className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl"
+                  style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
+                  <div>
+                    <p className="text-xs font-bold mb-0.5" style={{ color }}>{n}</p>
+                    <p className="text-sm font-mono font-semibold" style={{ color: session?.user ? "#ffffff" : "rgba(255,255,255,0.25)", letterSpacing: "0.05em", filter: session?.user ? "none" : "blur(4px)" }}>
+                      {session?.user ? number : hint}
+                    </p>
+                  </div>
+                  {session?.user ? (
+                    <button
+                      onClick={() => { navigator.clipboard?.writeText(number); setCopiedZelle(n); setTimeout(() => setCopiedZelle(null), 2000); }}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:scale-105 active:scale-95 flex-shrink-0"
+                      style={{ background: copiedZelle === n ? "rgba(52,199,89,0.15)" : "rgba(109,30,212,0.3)", color: copiedZelle === n ? "#34C759" : "#9b59ff", border: `1px solid ${copiedZelle === n ? "rgba(52,199,89,0.3)" : "rgba(109,30,212,0.4)"}` }}>
+                      {copiedZelle === n
+                        ? <><svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/></svg>Copied</>
+                        : <><svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Copy</>
+                      }
+                    </button>
+                  ) : (
+                    <button onClick={() => signIn("google")}
+                      className="text-xs px-3 py-1.5 rounded-lg font-semibold flex-shrink-0 transition-all hover:scale-105"
+                      style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.4)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                      Sign in
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
