@@ -189,7 +189,7 @@ export default function Home() {
             </Link>
             <Link href="/gallery"
               className="px-8 py-4 rounded-full text-sm font-semibold transition-all hover:scale-105 active:scale-95 text-center flex items-center justify-center gap-2"
-              style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.8)", border: "1px solid rgba(255,255,255,0.15)" }}>
+              style={{ background: "linear-gradient(135deg, #00274C, #003d7a)", color: "#FFCB05", border: "1px solid rgba(255,203,5,0.3)", boxShadow: "0 8px 32px rgba(0,39,76,0.5)" }}>
               <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.069A1 1 0 0121 8.845v6.31a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
               </svg>
