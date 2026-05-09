@@ -42,9 +42,11 @@ function useReveal() {
 }
 
 export default function Home() {
-  const { data: session } = useSession();
+  const { data: session, status: authStatus } = useSession();
   const ADMINS = ["subhascdey@gmail.com", "monjoy.dey@gmail.com"];
   const isAdmin = ADMINS.includes(session?.user?.email ?? "");
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
   const [count, setCount]   = useState<Countdown>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [rsvps, setRsvps]   = useState<number | null>(null);
@@ -74,7 +76,11 @@ export default function Home() {
 
     const onScroll = () => setNavBg(window.scrollY > 60);
     window.addEventListener("scroll", onScroll);
-    return () => { clearInterval(id); window.removeEventListener("scroll", onScroll); };
+    const onClickOutside = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) setUserMenuOpen(false);
+    };
+    document.addEventListener("mousedown", onClickOutside);
+    return () => { clearInterval(id); window.removeEventListener("scroll", onScroll); document.removeEventListener("mousedown", onClickOutside); };
   }, []);
 
   const copyLink = () => { navigator.clipboard?.writeText(APP_URL); setCopied(true); setTimeout(() => setCopied(false), 2000); };
@@ -99,23 +105,69 @@ export default function Home() {
               <Link href="/rsvp" className="ml-2 px-5 py-1.5 rounded-full text-xs font-bold transition-all hover:scale-105"
                 style={{ background: "#FFCB05", color: "#06090f" }}>RSVP Now</Link>
             </div>
-            {/* User avatar — shown on all screen sizes */}
-            {session?.user ? (
-              <div className="flex items-center gap-2 ml-2">
-                {session.user.image && (
-                  <Image src={session.user.image} alt="" width={32} height={32} className="rounded-full ring-2" style={{ ringColor: "rgba(255,203,5,0.4)" }} />
-                )}
-                <button onClick={() => signOut()}
-                  className="text-xs px-3 py-1.5 rounded-full transition-all hover:text-white"
-                  style={{ color: "rgba(255,255,255,0.4)", border: "1px solid rgba(255,255,255,0.1)" }}>
-                  Sign out
+            {/* Auth — all screen sizes */}
+            {authStatus === "loading" ? (
+              <div className="ml-2 w-8 h-8 rounded-full animate-pulse" style={{ background: "rgba(255,255,255,0.08)" }} />
+            ) : session?.user ? (
+              <div ref={userMenuRef} className="relative ml-2">
+                <button onClick={() => setUserMenuOpen(v => !v)}
+                  className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full transition-all hover:scale-105 focus:outline-none"
+                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,203,5,0.25)" }}>
+                  {session.user.image
+                    ? <Image src={session.user.image} alt="" width={30} height={30} className="rounded-full" style={{ boxShadow: "0 0 0 2px #FFCB05" }} />
+                    : <div className="w-[30px] h-[30px] rounded-full flex items-center justify-center text-xs font-bold" style={{ background: "#FFCB05", color: "#06090f" }}>{session.user.name?.[0]}</div>
+                  }
+                  <span className="hidden sm:block text-xs font-medium max-w-[100px] truncate" style={{ color: "rgba(255,255,255,0.75)" }}>
+                    {session.user.name?.split(" ")[0]}
+                  </span>
+                  <svg className="w-3 h-3 flex-shrink-0 transition-transform" style={{ color: "rgba(255,255,255,0.4)", transform: userMenuOpen ? "rotate(180deg)" : "rotate(0deg)" }} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/>
+                  </svg>
                 </button>
+
+                {/* Dropdown */}
+                {userMenuOpen && (
+                  <div className="absolute top-full right-0 mt-2 w-60 rounded-2xl overflow-hidden z-50"
+                    style={{ background: "rgba(14,17,23,0.97)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(24px)", boxShadow: "0 20px 60px rgba(0,0,0,0.6)" }}>
+                    {/* Profile */}
+                    <div className="flex items-center gap-3 px-4 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+                      {session.user.image
+                        ? <Image src={session.user.image} alt="" width={44} height={44} className="rounded-full flex-shrink-0" style={{ boxShadow: "0 0 0 2px #FFCB05" }} />
+                        : <div className="w-11 h-11 rounded-full flex items-center justify-center font-bold flex-shrink-0" style={{ background: "#FFCB05", color: "#06090f" }}>{session.user.name?.[0]}</div>
+                      }
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-white truncate">{session.user.name}</p>
+                        <p className="text-xs truncate" style={{ color: "rgba(255,255,255,0.4)" }}>{session.user.email}</p>
+                        {isAdmin && <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "#FFCB05" }}>Admin</span>}
+                      </div>
+                    </div>
+                    {/* Links */}
+                    <div className="px-2 py-2" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+                      {([["RSVP","/rsvp"],["Gallery","/gallery"],["Chat","/chat"],["Gifts","/wishlist"]] as [string,string][]).map(([l,h]) => (
+                        <Link key={h} href={h} onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center px-3 py-2 rounded-xl text-sm transition-all hover:bg-white/[0.06]"
+                          style={{ color: "rgba(255,255,255,0.6)" }}>{l}</Link>
+                      ))}
+                    </div>
+                    {/* Sign out */}
+                    <div className="px-2 py-2">
+                      <button onClick={() => { signOut(); setUserMenuOpen(false); }}
+                        className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all hover:bg-red-500/10 text-left"
+                        style={{ color: "#FF453A" }}>
+                        <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                        Sign out
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <button onClick={() => signIn("google")}
-                className="ml-2 flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-all hover:scale-105"
-                style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.1)" }}>
-                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24">
+                className="ml-2 flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all hover:scale-105"
+                style={{ background: "rgba(255,255,255,0.06)", color: "#fff", border: "1px solid rgba(255,255,255,0.15)" }}>
+                <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
