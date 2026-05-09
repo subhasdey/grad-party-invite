@@ -211,8 +211,11 @@ export default function Home() {
 
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <Link href="/rsvp"
-              className="px-10 py-4 rounded-full text-sm font-bold transition-all hover:scale-105 active:scale-95 text-center"
+              className="px-10 py-4 rounded-full text-sm font-bold transition-all hover:scale-105 active:scale-95 text-center flex items-center justify-center gap-2"
               style={{ background: "linear-gradient(135deg, #FFCB05, #f5c400)", color: "#06090f", boxShadow: "0 8px 40px rgba(255,203,5,0.35)" }}>
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
               RSVP Now
             </Link>
             <Link href="/gallery"
