@@ -106,6 +106,12 @@ export default function Home() {
           <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full opacity-10" style={{ background: "#CFB991", transform: "translate(-30%,30%)", filter: "blur(80px)" }} />
         </div>
         <div className="relative z-10 flex flex-col items-center text-center px-6 pt-24">
+          {/* Ganesha blessing at top */}
+          <div className="mb-5">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/ganesha.png" alt="Shree Ganesha" width={80}
+              style={{ mixBlendMode: "multiply", opacity: 0.7 }} />
+          </div>
           <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.35em] mb-6 px-4 text-center" style={{ color: "rgba(0,0,0,0.45)" }}>
             You&rsquo;re Invited · A Twin Celebration
           </p>
