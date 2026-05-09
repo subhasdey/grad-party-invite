@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readMediaFromSheet, updateMediaCaptionInSheet, likeMediaInSheet } from "@/lib/googledrive";
+import { readMediaFromSheet, appendMediaToSheet, updateMediaCaptionInSheet, likeMediaInSheet } from "@/lib/googledrive";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +10,27 @@ export async function GET() {
   } catch (err) {
     console.error("Media fetch error:", err);
     return NextResponse.json([]);
+  }
+}
+
+// Record metadata after a client-side blob upload completes
+export async function POST(req: NextRequest) {
+  try {
+    const { name, url, caption, type } = await req.json();
+    if (!url) return NextResponse.json({ error: "Missing url" }, { status: 400 });
+    await appendMediaToSheet({
+      name: name || "Guest",
+      url,
+      fileId: url,
+      type: type || "image",
+      caption: caption || "",
+    });
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : "Failed" },
+      { status: 500 }
+    );
   }
 }
 

@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useSession, signIn } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
+import { upload as blobUpload } from "@vercel/blob/client";
 
 interface MediaItem {
   _id: string;
@@ -59,18 +60,29 @@ export default function GalleryPage() {
     if (!userName) { setError("Please sign in to upload"); return; }
     setError("");
     setUploading(true);
-    setProgress(10);
-
-    const fd = new FormData();
-    fd.append("file", file);
-    fd.append("name", userName);
-    fd.append("caption", caption.trim());
+    setProgress(15);
 
     try {
-      setProgress(40);
-      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      // Upload file directly to Vercel Blob CDN from the browser —
+      // bypasses the 4.5 MB serverless body limit, so large iPhone photos/videos work.
+      const blob = await blobUpload(file.name, file, {
+        access: "public",
+        handleUploadUrl: "/api/upload",
+        clientPayload: JSON.stringify({ name: userName, caption: caption.trim() }),
+        onUploadProgress: ({ percentage }) => {
+          setProgress(Math.min(85, Math.round(percentage * 0.85)));
+        },
+      });
       setProgress(90);
-      if (!res.ok) throw new Error(await res.text());
+
+      // Record the metadata in Google Sheets
+      const type = file.type.startsWith("video/") ? "video" : "image";
+      await fetch("/api/media", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: userName, url: blob.url, caption: caption.trim(), type }),
+      });
+
       await load();
       setCaption("");
       setProgress(100);
