@@ -83,10 +83,23 @@ export default function GalleryPage() {
         body: JSON.stringify({ name: userName, url: blob.url, caption: caption.trim(), type }),
       });
 
-      await load();
+      // Optimistically add the new item so it appears instantly
+      const newItem: MediaItem = {
+        _id: String(Date.now()),
+        name: userName,
+        url: blob.url,
+        type,
+        caption: caption.trim(),
+        createdAt: new Date().toISOString(),
+        likes: 0,
+      };
+      setMedia(prev => [newItem, ...prev]);
+
       setCaption("");
       setProgress(100);
       setTimeout(() => setProgress(0), 800);
+      // Sync from sheet after a brief delay to get the real row id
+      setTimeout(load, 2000);
     } catch (err) {
       setError("Upload failed — please try again");
       console.error(err);
@@ -244,15 +257,14 @@ export default function GalleryPage() {
                       <img src={item.url} alt={item.caption || item.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
                     ) : (
                       <>
-                        {item.thumbnail
-                          // eslint-disable-next-line @next/next/no-img-element
-                          ? <img src={item.thumbnail} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
-                          : <video src={item.url} className="w-full h-full object-cover" muted preload="metadata" />
-                        }
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-10 h-10 rounded-full bg-black/60 flex items-center justify-center backdrop-blur-sm">
-                            <svg className="w-4 h-4 fill-white ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        {/* Dark gradient background for video tiles — works for all formats */}
+                        <div className="w-full h-full" style={{ background: "linear-gradient(160deg,#1a1f2e,#0b0e17)" }} />
+                        {/* Centered play button */}
+                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                          <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "rgba(255,203,5,0.15)", border: "2px solid rgba(255,203,5,0.4)" }}>
+                            <svg className="w-6 h-6 ml-1" viewBox="0 0 24 24" fill="#FFCB05"><path d="M8 5v14l11-7z"/></svg>
                           </div>
+                          <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.35)" }}>Video</span>
                         </div>
                       </>
                     )}
@@ -332,15 +344,27 @@ export default function GalleryPage() {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={selected.url} alt="" className="max-w-full max-h-[80vh] object-contain rounded-2xl" />
               ) : videoError ? (
-                <div className="flex flex-col items-center gap-4 py-16 px-6 text-center rounded-2xl" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-                  <svg className="w-12 h-12 opacity-30" fill="none" stroke="white" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
-                  <p className="text-white/60 text-sm">This video format may not be supported by your browser.</p>
-                  <a href={selected.url} download target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold"
-                    style={{ background: "#FFCB05", color: "#070a10" }}>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                    Download to watch
-                  </a>
+                <div className="flex flex-col items-center gap-4 py-12 px-6 text-center rounded-2xl w-full max-w-sm mx-auto" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: "rgba(255,203,5,0.1)", border: "2px solid rgba(255,203,5,0.3)" }}>
+                    <svg className="w-7 h-7 ml-0.5" viewBox="0 0 24 24" fill="#FFCB05"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                  <div>
+                    <p className="text-white font-semibold text-sm mb-1">iPhone video</p>
+                    <p className="text-white/50 text-xs leading-relaxed">This video was recorded on iPhone.<br/>Open in Safari to play it directly, or download to watch.</p>
+                  </div>
+                  <div className="flex gap-2 w-full">
+                    <a href={selected.url} target="_blank" rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold"
+                      style={{ background: "rgba(255,255,255,0.08)", color: "#fff", border: "1px solid rgba(255,255,255,0.12)" }}>
+                      Open in Safari
+                    </a>
+                    <a href={selected.url} download target="_blank" rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold"
+                      style={{ background: "#FFCB05", color: "#070a10" }}>
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                      Download
+                    </a>
+                  </div>
                 </div>
               ) : (
                 <video
