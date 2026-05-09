@@ -421,6 +421,44 @@ export async function updateMediaFileInSheet(rowIndex: number, url: string): Pro
   if (!res.ok) { const err = await res.text(); throw new Error(`Failed to update file (${res.status}): ${err}`); }
 }
 
+export async function deleteMediaFromSheet(rowIndex: number): Promise<void> {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId) throw new Error("Missing GOOGLE_SHEET_ID");
+  const accessToken = await getAccessToken();
+
+  // Look up the numeric sheet id for "Media"
+  const metaRes = await fetch(
+    `${SHEETS_BASE}/${sheetId}?fields=sheets.properties`,
+    { headers: { Authorization: `Bearer ${accessToken}` } }
+  );
+  const meta = await metaRes.json();
+  const mediaSheet = meta.sheets?.find(
+    (s: { properties: { title: string } }) => s.properties.title === "Media"
+  );
+  if (!mediaSheet) throw new Error("Media sheet not found");
+
+  const res = await fetch(`${SHEETS_BASE}/${sheetId}:batchUpdate`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      requests: [{
+        deleteDimension: {
+          range: {
+            sheetId: mediaSheet.properties.sheetId,
+            dimension: "ROWS",
+            startIndex: rowIndex - 1, // 0-based
+            endIndex: rowIndex,
+          },
+        },
+      }],
+    }),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Failed to delete media row (${res.status}): ${err}`);
+  }
+}
+
 export async function readMediaFromSheet(): Promise<object[]> {
   const sheetId = process.env.GOOGLE_SHEET_ID;
   if (!sheetId) return [];

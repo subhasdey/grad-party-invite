@@ -32,10 +32,8 @@ export default function GalleryPage() {
   const [editCaption, setEditCaption]   = useState("");
   const [savingCaption, setSavingCaption] = useState(false);
 
-  // Replace file state
-  const replaceRef  = useRef<HTMLInputElement>(null);
-  const [replacingId, setReplacingId]   = useState<string | null>(null);
-  const [replacing, setReplacing]       = useState(false);
+  // Delete state
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   // Likes
   const [liking, setLiking] = useState<string | null>(null);
@@ -133,21 +131,21 @@ export default function GalleryPage() {
     setSavingCaption(false);
   };
 
-  const replaceFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !replacingId) return;
-    setReplacing(true);
-    const fd = new FormData();
-    fd.append("file", file);
-    fd.append("id", replacingId);
+  const deleteItem = async (item: MediaItem) => {
+    if (!confirm("Delete this photo/video? This cannot be undone.")) return;
+    setDeletingId(item._id);
+    // Optimistically remove from UI
+    setMedia(prev => prev.filter(m => m._id !== item._id));
+    if (selected?._id === item._id) { setSelected(null); setVideoError(false); }
     try {
-      const res = await fetch("/api/upload", { method: "PUT", body: fd });
-      if (!res.ok) throw new Error(await res.text());
-      await load();
+      await fetch("/api/media", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: item._id, url: item.url }),
+      });
     } catch (err) { console.error(err); }
-    setReplacing(false);
-    setReplacingId(null);
-    if (replaceRef.current) replaceRef.current.value = "";
+    setDeletingId(null);
+    setTimeout(load, 1500);
   };
 
   const inputCls = "bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 text-sm w-full";
@@ -226,9 +224,6 @@ export default function GalleryPage() {
           )}
         </div>
 
-        {/* Hidden replace file input */}
-        <input ref={replaceRef} type="file" accept="image/*,video/*" className="hidden"
-          onChange={replaceFile} />
 
         {/* Grid */}
         {media.length === 0 ? (
@@ -315,11 +310,11 @@ export default function GalleryPage() {
                           Edit message
                         </button>
                         <button
-                          onClick={() => { setReplacingId(item._id); replaceRef.current?.click(); }}
-                          disabled={replacing && replacingId === item._id}
-                          className="flex-1 py-2 rounded-xl text-xs font-medium text-white/50 hover:text-white transition-all disabled:opacity-50"
-                          style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
-                          {replacing && replacingId === item._id ? "Replacing..." : "Replace photo/video"}
+                          onClick={() => deleteItem(item)}
+                          disabled={deletingId === item._id}
+                          className="py-2 px-3 rounded-xl text-xs font-medium transition-all disabled:opacity-50 hover:bg-red-500/20"
+                          style={{ border: "1px solid rgba(255,69,58,0.3)", color: "#FF453A" }}>
+                          {deletingId === item._id ? "..." : "Delete"}
                         </button>
                       </div>
                     )

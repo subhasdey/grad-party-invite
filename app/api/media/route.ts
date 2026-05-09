@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readMediaFromSheet, appendMediaToSheet, updateMediaCaptionInSheet, likeMediaInSheet } from "@/lib/googledrive";
+import { readMediaFromSheet, appendMediaToSheet, updateMediaCaptionInSheet, likeMediaInSheet, deleteMediaFromSheet } from "@/lib/googledrive";
+import { del } from "@vercel/blob";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +44,24 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ ok: true });
   } catch (err) {
     return NextResponse.json({ error: err instanceof Error ? err.message : "Failed" }, { status: 500 });
+  }
+}
+
+// Delete media (removes row from sheet + blob from storage)
+export async function DELETE(req: NextRequest) {
+  try {
+    const { id, url } = await req.json();
+    if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
+    await deleteMediaFromSheet(Number(id));
+    if (url) {
+      try { await del(url); } catch { /* blob delete is best-effort */ }
+    }
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : "Failed" },
+      { status: 500 }
+    );
   }
 }
 
