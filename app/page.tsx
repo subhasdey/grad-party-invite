@@ -83,7 +83,7 @@ export default function Home() {
     return () => { clearInterval(id); window.removeEventListener("scroll", onScroll); document.removeEventListener("mousedown", onClickOutside); };
   }, []);
 
-  const appUrl    = typeof window !== "undefined" ? window.location.origin : "";
+  const appUrl    = "https://iris-and-inesh-2026.vercel.app";
   const copyLink = () => { navigator.clipboard?.writeText(appUrl); setCopied(true); setTimeout(() => setCopied(false), 2000); };
   const shareText = encodeURIComponent("You're invited to Iris & Inesh Dey's Graduation Party! June 26, 2026 · Redmond, WA 🎓");
   const shareUrl  = encodeURIComponent(appUrl);

@@ -6,7 +6,7 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
-const URL = process.env.NEXT_PUBLIC_APP_URL || "https://grad-party-invite-tan.vercel.app";
+const URL = process.env.NEXT_PUBLIC_APP_URL || "https://iris-and-inesh-2026.vercel.app";
 
 export const viewport: Viewport = {
   width: "device-width",
