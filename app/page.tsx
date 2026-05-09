@@ -444,16 +444,33 @@ export default function Home() {
           FOOTER
       ══════════════════════════════════════════ */}
       <footer className="py-10 px-6" style={{ borderTop: "1px solid rgba(0,0,0,0.08)", background: "#ffffff" }}>
-        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-4xl mx-auto flex flex-col items-center gap-6">
+          {/* School badges */}
           <div className="flex items-center gap-3 text-xs font-medium">
             <span style={{ color: "#8a6500" }}>Purdue Boilermakers</span>
             <span style={{ color: "rgba(0,0,0,0.2)" }}>×</span>
             <span style={{ color: "#00274C" }}>Michigan Wolverines</span>
           </div>
-          <div className="flex items-center gap-4 text-xs" style={{ color: "rgba(0,0,0,0.35)" }}>
-            {rsvps !== null && rsvps > 0 && <span>{rsvps} guests attending</span>}
-            <Link href="/admin" className="hover:text-white transition-all">Admin</Link>
+
+          {/* Links row */}
+          <div className="flex items-center gap-5 text-xs flex-wrap justify-center" style={{ color: "rgba(0,0,0,0.4)" }}>
+            <Link href="/contact" className="hover:text-[#00274C] transition-all">Contact Us</Link>
+            <span style={{ color: "rgba(0,0,0,0.15)" }}>·</span>
+            <Link href="/privacy" className="hover:text-[#00274C] transition-all">Privacy Policy</Link>
+            <span style={{ color: "rgba(0,0,0,0.15)" }}>·</span>
+            {rsvps !== null && rsvps > 0 && (
+              <>
+                <span>{rsvps} guests attending</span>
+                <span style={{ color: "rgba(0,0,0,0.15)" }}>·</span>
+              </>
+            )}
+            <Link href="/admin" className="hover:text-[#00274C] transition-all">Admin</Link>
           </div>
+
+          {/* Trademark / copyright */}
+          <p className="text-[11px] text-center" style={{ color: "rgba(0,0,0,0.3)" }}>
+            © 2026 Iris &amp; Inesh Dey Graduation Celebration™ · All rights reserved.
+          </p>
         </div>
       </footer>
     </div>
