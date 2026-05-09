@@ -185,7 +185,7 @@ export default function Home() {
           <div className="mt-12 max-w-xl px-6 py-6 rounded-2xl text-center"
             style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,203,5,0.12)", backdropFilter: "blur(20px)" }}>
             <p className="text-sm leading-relaxed mb-3" style={{ color: "rgba(255,255,255,0.55)", fontStyle: "italic" }}>
-              &ldquo;Today, our family has double the reason to celebrate the class of 2030. Our twins have officially made their college commitments. And I couldn&rsquo;t be more proud of the paths they have each chosen. As they prepare to embark on their next chapter at university, we would like to celebrate their hard work. Please join us with your family to bless them as we cheer Inesh and Iris on to their next big adventure.&rdquo;
+              &ldquo;Today, our family has double the reason to celebrate the Class of 2026 for all of their hard work and sleepless nights. Our twins have officially made their college commitments, and we couldn&rsquo;t be more proud of the paths they have each chosen. As they prepare to embark on this exciting next chapter, we would love to celebrate their achievements with the people who matter most. Please join us with your family to bless, cheer, and send Inesh and Iris off on their next great adventure!&rdquo;
             </p>
             <p className="text-xs font-semibold" style={{ color: "#FFCB05" }}>— Sanchita and Subhas</p>
           </div>
