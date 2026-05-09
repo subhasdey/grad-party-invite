@@ -43,7 +43,8 @@ function useReveal() {
 
 export default function Home() {
   const { data: session } = useSession();
-  const isAdmin = session?.user?.email === "subhascdey@gmail.com";
+  const ADMINS = ["subhascdey@gmail.com", "monjoy.dey@gmail.com"];
+  const isAdmin = ADMINS.includes(session?.user?.email ?? "");
   const [count, setCount]   = useState<Countdown>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [rsvps, setRsvps]   = useState<number | null>(null);
