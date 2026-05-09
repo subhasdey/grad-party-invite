@@ -1,19 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 120" fill="none">
-  <!-- Shadow -->
-  <ellipse cx="70" cy="108" rx="36" ry="6" fill="rgba(0,0,0,0.12)"/>
   <!-- Hat body (cylinder) -->
-  <rect x="34" y="52" width="72" height="34" rx="4" fill="#001f3e"/>
+  <rect x="34" y="52" width="72" height="34" rx="4" fill="rgba(255,203,5,0.08)" stroke="#FFCB05" stroke-width="1.5"/>
   <!-- Bottom rim ellipse -->
-  <ellipse cx="70" cy="86" rx="36" ry="8" fill="#00162d"/>
+  <ellipse cx="70" cy="86" rx="36" ry="8" fill="rgba(255,203,5,0.12)" stroke="#FFCB05" stroke-width="1.5"/>
   <!-- Board (mortarboard top) -->
-  <polygon points="70,10 122,34 70,58 18,34" fill="#00274C"/>
+  <polygon points="70,10 122,34 70,58 18,34" fill="rgba(255,203,5,0.12)" stroke="#FFCB05" stroke-width="2"/>
   <!-- Board top highlight -->
-  <polygon points="70,10 122,34 70,36 18,34" fill="#003570"/>
-  <!-- Board edge -->
-  <polygon points="70,10 122,34 70,58 18,34" fill="none" stroke="#FFCB05" stroke-width="2"/>
+  <polygon points="70,10 122,34 70,36 18,34" fill="rgba(255,203,5,0.06)"/>
   <!-- Center button on board -->
   <circle cx="70" cy="34" r="5" fill="#FFCB05"/>
-  <!-- Tassel string -->
+  <!-- Tassel string (Michigan tassel goes left) -->
   <line x1="70" y1="34" x2="45" y2="34" stroke="#FFCB05" stroke-width="2.5"/>
   <line x1="45" y1="34" x2="45" y2="68" stroke="#FFCB05" stroke-width="2.5"/>
   <!-- Tassel fringe -->

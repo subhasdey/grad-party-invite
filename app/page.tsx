@@ -110,10 +110,12 @@ export default function Home() {
 
         <div className="relative z-10 flex flex-col items-center text-center px-6 pt-24">
           {/* Ganesha blessing at top */}
-          <div className="mb-5">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/ganesha.png" alt="Shree Ganesha" width={80}
-              style={{ filter: "brightness(0) invert(1)", opacity: 0.55 }} />
+          <div className="mb-5 flex justify-center">
+            <div style={{ width: 80, height: 80, borderRadius: "50%", overflow: "hidden", border: "1px solid rgba(255,203,5,0.35)", boxShadow: "0 0 24px rgba(255,203,5,0.2)" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/ganesha.png" alt="Shree Ganesha"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            </div>
           </div>
           <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.35em] mb-6 px-4 text-center" style={{ color: "rgba(255,203,5,0.6)" }}>
             You&rsquo;re Invited · A Twin Celebration
@@ -122,11 +124,11 @@ export default function Home() {
           <div className="flex sm:hidden justify-center items-end gap-6 mb-1">
             <div className="w-20">
               <Image src="/cap-purdue.svg" alt="Purdue graduation cap" width={140} height={120}
-                style={{ width: "100%", height: "auto", filter: "brightness(0) invert(1) drop-shadow(0 4px 16px rgba(255,203,5,0.4))", transform: "rotate(-20deg)" }} />
+                style={{ width: "100%", height: "auto", filter: "drop-shadow(0 4px 16px rgba(207,185,145,0.5))", transform: "rotate(-20deg)" }} />
             </div>
             <div className="w-20">
               <Image src="/cap-michigan.svg" alt="Michigan graduation cap" width={140} height={120}
-                style={{ width: "100%", height: "auto", filter: "brightness(0) invert(1) drop-shadow(0 4px 16px rgba(255,203,5,0.4))", transform: "rotate(20deg)" }} />
+                style={{ width: "100%", height: "auto", filter: "drop-shadow(0 4px 16px rgba(255,203,5,0.5))", transform: "rotate(20deg)" }} />
             </div>
           </div>
           <h1 className="sm:hidden font-display font-bold leading-[0.95] tracking-tight mb-2 text-center"
@@ -138,7 +140,7 @@ export default function Home() {
           <div className="hidden sm:flex items-center gap-3 mb-2">
             <div className="w-[110px] flex-shrink-0">
               <Image src="/cap-purdue.svg" alt="Purdue graduation cap" width={140} height={120}
-                style={{ width: "100%", height: "auto", filter: "brightness(0) invert(1) drop-shadow(0 4px 24px rgba(255,203,5,0.5))", transform: "rotate(-20deg)" }} />
+                style={{ width: "100%", height: "auto", filter: "drop-shadow(0 4px 24px rgba(207,185,145,0.6))", transform: "rotate(-20deg)" }} />
             </div>
             <h1 className="font-display font-bold leading-[0.95] tracking-tight"
               style={{ fontSize: "clamp(2.2rem,10vw,8rem)", background: "linear-gradient(135deg, #FFCB05 0%, #ffffff 50%, #FFCB05 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
@@ -146,11 +148,11 @@ export default function Home() {
             </h1>
             <div className="w-[110px] flex-shrink-0">
               <Image src="/cap-michigan.svg" alt="Michigan graduation cap" width={140} height={120}
-                style={{ width: "100%", height: "auto", filter: "brightness(0) invert(1) drop-shadow(0 4px 24px rgba(255,203,5,0.5))", transform: "rotate(20deg)" }} />
+                style={{ width: "100%", height: "auto", filter: "drop-shadow(0 4px 24px rgba(255,203,5,0.6))", transform: "rotate(20deg)" }} />
             </div>
           </div>
           <h1 className="font-display font-bold leading-[0.95] tracking-tight mb-10"
-            style={{ fontSize: "clamp(2.2rem,10vw,8rem)", color: "rgba(255,255,255,0.12)" }}>
+            style={{ fontSize: "clamp(2.2rem,10vw,8rem)", color: "rgba(255,255,255,0.18)" }}>
             Party
           </h1>
 
@@ -319,7 +321,7 @@ export default function Home() {
 
           {/* Countdown */}
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-8" style={{ color: "rgba(255,203,5,0.6)" }}>Counting Down</p>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-4 gap-2 sm:gap-4">
             {Object.entries(count).map(([unit, val]) => (
               <div key={unit} className="flex flex-col items-center py-8 rounded-3xl relative overflow-hidden"
                 style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,203,5,0.15)", backdropFilter: "blur(20px)" }}>

@@ -62,25 +62,25 @@ export default function RSVPPage() {
     }
   };
 
-  const inputCls = "w-full rounded-2xl px-4 py-3.5 text-[#1d1d1f] placeholder-black/30 text-sm transition-all bg-white border border-black/10";
+  const inputCls = "w-full rounded-2xl px-4 py-3.5 text-[#1d1d1f] placeholder-black/30 text-sm transition-all bg-white border border-black/10 text-base";
 
   if (pageStatus === "success") {
     return (
-      <main className="min-h-screen flex items-center justify-center px-6" style={{ background: "#FAF6EE" }}>
+      <main className="min-h-screen flex items-center justify-center px-6 pb-24" style={{ background: "#06090f" }}>
         <div className="max-w-sm w-full text-center">
-          <div className="mb-6 p-4 rounded-3xl inline-block" style={{ background: "rgba(0,39,76,0.08)" }}>
-            <GraduationCap className="w-16 h-16" style={{ color: "#00274C" }} />
+          <div className="mb-6 p-4 rounded-3xl inline-block" style={{ background: "rgba(255,203,5,0.12)" }}>
+            <GraduationCap className="w-16 h-16" style={{ color: "#FFCB05" }} />
           </div>
-          <h2 className="text-3xl font-bold mb-3" style={{ letterSpacing: "-0.03em", color: "#1d1d1f" }}>
+          <h2 className="text-3xl font-bold mb-3 text-white" style={{ letterSpacing: "-0.03em" }}>
             {form.attending ? (isEdit ? "RSVP Updated!" : "You're on the list!") : "Thanks for letting us know"}
           </h2>
-          <p className="text-sm mb-10 leading-relaxed" style={{ color: "rgba(0,0,0,0.5)" }}>
+          <p className="text-sm mb-10 leading-relaxed" style={{ color: "rgba(255,255,255,0.5)" }}>
             {form.attending ? `We can't wait to celebrate with you, ${form.name}!` : `We'll miss you, ${form.name}. Your kind wishes mean a lot.`}
           </p>
           <div className="flex flex-col gap-3">
-            <Link href="/gallery" className="py-3.5 rounded-2xl text-sm font-semibold text-center" style={{ background: "#00274C", color: "#FFCB05" }}>View Gallery</Link>
-            <Link href="/chat" className="py-3.5 rounded-2xl text-sm font-medium transition-all text-center" style={{ background: "#FAF6EE", color: "rgba(0,0,0,0.6)", border: "1px solid rgba(0,0,0,0.08)" }}>Join Party Chat</Link>
-            <Link href="/" className="text-xs transition-all mt-2 text-center block" style={{ color: "rgba(0,0,0,0.35)" }}>← Back to invite</Link>
+            <Link href="/gallery" className="py-3.5 rounded-2xl text-sm font-semibold text-center" style={{ background: "linear-gradient(135deg,#FFCB05,#f5c400)", color: "#06090f" }}>View Gallery</Link>
+            <Link href="/chat" className="py-3.5 rounded-2xl text-sm font-medium transition-all text-center" style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.1)" }}>Join Party Chat</Link>
+            <Link href="/" className="text-xs transition-all mt-2 text-center block" style={{ color: "rgba(255,255,255,0.3)" }}>← Back to invite</Link>
           </div>
         </div>
       </main>
@@ -88,28 +88,28 @@ export default function RSVPPage() {
   }
 
   return (
-    <main className="min-h-screen px-4 py-12 pb-24" style={{ background: "#FAF6EE" }}>
+    <main className="min-h-screen px-4 py-12 pb-24 relative" style={{ background: "#06090f" }}>
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 left-0 w-96 h-96 rounded-full blur-3xl opacity-20" style={{ background: "#00274C", transform: "translate(-40%,-40%)" }} />
-        <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full blur-3xl opacity-20" style={{ background: "#3a2800", transform: "translate(40%,40%)" }} />
+        <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full blur-3xl opacity-10" style={{ background: "#FFCB05", transform: "translate(40%,40%)" }} />
       </div>
 
       <div className="relative z-10 max-w-lg mx-auto">
         <div className="text-center mb-10">
-          <Link href="/" className="inline-block text-xs transition-all mb-6" style={{ color: "rgba(0,0,0,0.35)" }}>← Back to invite</Link>
-          <h1 className="text-4xl font-bold mb-1" style={{ letterSpacing: "-0.03em", color: "#1d1d1f" }}>
+          <Link href="/" className="inline-block text-xs transition-all mb-6" style={{ color: "rgba(255,255,255,0.35)" }}>← Back to invite</Link>
+          <h1 className="text-4xl font-bold mb-1 text-white" style={{ letterSpacing: "-0.03em" }}>
             {isEdit ? "Update RSVP" : "RSVP"}
           </h1>
-          <p className="text-sm" style={{ color: "rgba(0,0,0,0.45)" }}>Inesh &amp; Iris Dey · June 26, 2026</p>
+          <p className="text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>Inesh &amp; Iris Dey · June 26, 2026</p>
         </div>
 
         {/* Google Sign-In prompt */}
         {status === "unauthenticated" && (
-          <div className="mb-6 p-5 rounded-2xl text-center" style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.08)" }}>
-            <p className="text-sm mb-4" style={{ color: "rgba(0,0,0,0.55)" }}>Sign in to save your RSVP and edit it anytime</p>
+          <div className="mb-6 p-5 rounded-2xl text-center" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <p className="text-sm mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>Sign in to save your RSVP and edit it anytime</p>
             <button onClick={() => signIn("google")}
               className="flex items-center gap-3 mx-auto px-6 py-3 rounded-2xl font-semibold text-sm transition-all hover:scale-[1.02]"
-              style={{ background: "#FAF6EE", color: "#1d1d1f", border: "1px solid rgba(0,0,0,0.1)" }}>
+              style={{ background: "rgba(255,255,255,0.06)", color: "#fff", border: "1px solid rgba(255,255,255,0.1)" }}>
               <svg className="w-4 h-4" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -118,35 +118,35 @@ export default function RSVPPage() {
               </svg>
               Continue with Google
             </button>
-            <p className="text-xs mt-4" style={{ color: "rgba(0,0,0,0.3)" }}>Or fill in your details below without signing in</p>
+            <p className="text-xs mt-4" style={{ color: "rgba(255,255,255,0.25)" }}>Or fill in your details below without signing in</p>
           </div>
         )}
 
         {/* Signed-in banner */}
         {status === "authenticated" && session?.user && (
-          <div className="mb-6 flex items-center justify-between px-4 py-3 rounded-2xl" style={{ background: "#fff", border: "1px solid rgba(0,39,76,0.2)" }}>
+          <div className="mb-6 flex items-center justify-between px-4 py-3 rounded-2xl" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,203,5,0.2)" }}>
             <div className="flex items-center gap-3">
               {session.user.image && <Image src={session.user.image} alt="" width={32} height={32} className="rounded-full" />}
               <div>
-                <p className="text-sm font-semibold" style={{ color: "#1d1d1f" }}>{session.user.name}</p>
-                <p className="text-xs" style={{ color: "rgba(0,0,0,0.45)" }}>{isEdit ? "Editing your RSVP" : "New RSVP"}</p>
+                <p className="text-sm font-semibold text-white">{session.user.name}</p>
+                <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{isEdit ? "Editing your RSVP" : "New RSVP"}</p>
               </div>
             </div>
-            <button onClick={() => signOut()} className="text-xs transition-all" style={{ color: "rgba(0,0,0,0.4)" }}>Sign out</button>
+            <button onClick={() => signOut()} className="text-xs transition-all" style={{ color: "rgba(255,255,255,0.4)" }}>Sign out</button>
           </div>
         )}
 
         {pageStatus === "checking" ? (
-          <div className="text-center py-10 text-sm" style={{ color: "rgba(0,0,0,0.4)" }}>Checking your RSVP...</div>
+          <div className="text-center py-10 text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>Checking your RSVP...</div>
         ) : (
           <form onSubmit={submit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-2 p-1 rounded-2xl" style={{ background: "rgba(0,0,0,0.05)", border: "1px solid rgba(0,0,0,0.08)" }}>
+            <div className="grid grid-cols-2 gap-2 p-1 rounded-2xl" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
               {([true, false] as const).map(v => (
                 <button key={String(v)} type="button" onClick={() => update("attending", v)}
-                  className="py-3.5 rounded-xl text-sm font-semibold transition-all"
+                  className="py-4 rounded-xl text-sm font-semibold transition-all"
                   style={form.attending === v
-                    ? { background: v ? "#00274C" : "rgba(0,0,0,0.08)", color: v ? "#FFCB05" : "#1d1d1f" }
-                    : { color: "rgba(0,0,0,0.35)" }}>
+                    ? { background: v ? "linear-gradient(135deg,#FFCB05,#f5c400)" : "rgba(255,255,255,0.1)", color: v ? "#06090f" : "#fff" }
+                    : { color: "rgba(255,255,255,0.35)" }}>
                   {v ? "Yes, I'll be there!" : "Can't make it"}
                 </button>
               ))}
@@ -164,20 +164,20 @@ export default function RSVPPage() {
                 <div className="grid grid-cols-2 gap-3">
                   {([ ["Adults","adults",1], ["Kids","kids",0] ] as [string,string,number][]).map(([label,key,min]) => (
                     <div key={key}>
-                      <p className="text-xs mb-2 px-1" style={{ color: "rgba(0,0,0,0.45)" }}>{label}</p>
-                      <div className="flex items-center justify-between rounded-2xl px-4 py-3" style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.1)" }}>
+                      <p className="text-xs mb-2 px-1" style={{ color: "rgba(255,255,255,0.45)" }}>{label}</p>
+                      <div className="flex items-center justify-between rounded-2xl px-4 py-3" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
                         <button type="button" onClick={() => update(key, Math.max(min, (form[key as keyof typeof form] as number) - 1))}
-                          className="text-xl font-light w-8 h-8 rounded-xl flex items-center justify-center transition-all" style={{ color: "#00274C" }}>−</button>
-                        <span className="font-semibold tabular-nums" style={{ color: "#1d1d1f" }}>{form[key as keyof typeof form] as number}</span>
+                          className="text-xl font-light w-10 h-10 rounded-xl flex items-center justify-center transition-all" style={{ color: "#FFCB05" }}>−</button>
+                        <span className="font-semibold tabular-nums text-white">{form[key as keyof typeof form] as number}</span>
                         <button type="button" onClick={() => update(key, (form[key as keyof typeof form] as number) + 1)}
-                          className="text-xl font-light w-8 h-8 rounded-xl flex items-center justify-center transition-all" style={{ color: "#00274C" }}>+</button>
+                          className="text-xl font-light w-10 h-10 rounded-xl flex items-center justify-center transition-all" style={{ color: "#FFCB05" }}>+</button>
                       </div>
                     </div>
                   ))}
                 </div>
 
                 <div>
-                  <p className="text-xs mb-2 px-1" style={{ color: "rgba(0,0,0,0.45)" }}>Dietary Preference</p>
+                  <p className="text-xs mb-2 px-1" style={{ color: "rgba(255,255,255,0.45)" }}>Dietary Preference</p>
                   <div className="grid grid-cols-3 gap-2">
                     {([
                       ["veg",     "Vegetarian", Leaf   ],
@@ -185,10 +185,10 @@ export default function RSVPPage() {
                       ["both",    "Jain",       Sprout ],
                     ] as [Diet, string, typeof Leaf][]).map(([val, label, Icon]) => (
                       <button key={val} type="button" onClick={() => update("diet", val)}
-                        className="py-3.5 rounded-2xl border text-xs font-medium transition-all flex flex-col items-center gap-1.5"
+                        className="py-4 rounded-2xl border text-xs font-medium transition-all flex flex-col items-center gap-1.5"
                         style={form.diet === val
-                          ? { borderColor: "#00274C", background: "rgba(0,39,76,0.08)", color: "#00274C" }
-                          : { borderColor: "rgba(0,0,0,0.08)", background: "#ffffff", color: "rgba(0,0,0,0.45)" }}>
+                          ? { borderColor: "#FFCB05", background: "rgba(255,203,5,0.12)", color: "#FFCB05" }
+                          : { borderColor: "rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)", color: "rgba(255,255,255,0.45)" }}>
                         <Icon className="w-5 h-5" />
                         {label}
                       </button>
@@ -207,7 +207,7 @@ export default function RSVPPage() {
 
             <button type="submit" disabled={pageStatus === "loading"}
               className="w-full py-4 rounded-2xl font-semibold text-sm transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50"
-              style={{ background: "#00274C", color: "#FFCB05" }}>
+              style={{ background: "linear-gradient(135deg,#FFCB05,#f5c400)", color: "#06090f" }}>
               {pageStatus === "loading" ? "Saving..." : isEdit ? "Update My RSVP" : form.attending ? "Confirm My Spot" : "Send RSVP"}
             </button>
           </form>

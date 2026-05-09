@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import BottomNav from "@/components/BottomNav";
 import AuthProvider from "@/components/AuthProvider";
@@ -7,6 +7,12 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
 const URL = process.env.NEXT_PUBLIC_APP_URL || "https://grad-party-invite-tan.vercel.app";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   title: "Iris & Inesh Dey – Graduation Party · June 26, 2026",
@@ -28,7 +34,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="antialiased min-h-screen pb-16 md:pb-0" style={{ background: "#FAF6EE", color: "#1d1d1f", fontFamily: "-apple-system, BlinkMacSystemFont, var(--font-inter), 'Helvetica Neue', Arial, sans-serif" }}>
+      <body className="antialiased min-h-screen pb-16 md:pb-0" style={{ background: "#06090f", color: "#ffffff", fontFamily: "-apple-system, BlinkMacSystemFont, var(--font-inter), 'Helvetica Neue', Arial, sans-serif" }}>
         <AuthProvider>
           {children}
           <BottomNav />

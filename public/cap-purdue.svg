@@ -1,16 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 120" fill="none">
-  <!-- Shadow -->
-  <ellipse cx="70" cy="108" rx="36" ry="6" fill="rgba(0,0,0,0.12)"/>
   <!-- Hat body (cylinder) -->
-  <rect x="34" y="52" width="72" height="34" rx="4" fill="#1a1a1a"/>
+  <rect x="34" y="52" width="72" height="34" rx="4" fill="rgba(207,185,145,0.08)" stroke="#CFB991" stroke-width="1.5"/>
   <!-- Bottom rim ellipse -->
-  <ellipse cx="70" cy="86" rx="36" ry="8" fill="#111111"/>
-  <!-- Board (mortarboard top) - as a parallelogram/diamond shape -->
-  <polygon points="70,10 122,34 70,58 18,34" fill="#2a2a2a"/>
+  <ellipse cx="70" cy="86" rx="36" ry="8" fill="rgba(207,185,145,0.12)" stroke="#CFB991" stroke-width="1.5"/>
+  <!-- Board (mortarboard top) -->
+  <polygon points="70,10 122,34 70,58 18,34" fill="rgba(207,185,145,0.12)" stroke="#CFB991" stroke-width="2"/>
   <!-- Board top highlight -->
-  <polygon points="70,10 122,34 70,36 18,34" fill="#333333"/>
-  <!-- Board edge -->
-  <polygon points="70,10 122,34 70,58 18,34" fill="none" stroke="#CFB991" stroke-width="2"/>
+  <polygon points="70,10 122,34 70,36 18,34" fill="rgba(207,185,145,0.06)"/>
   <!-- Center button on board -->
   <circle cx="70" cy="34" r="5" fill="#CFB991"/>
   <!-- Tassel string -->

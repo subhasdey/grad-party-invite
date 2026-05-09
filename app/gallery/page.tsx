@@ -237,7 +237,7 @@ export default function GalleryPage() {
             <p className="text-sm">No photos yet — be the first to share!</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {media.map(item => {
               const isOwn = userName && item.name === userName;
               return (
