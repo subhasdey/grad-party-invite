@@ -202,12 +202,6 @@ export default function Home() {
       <section className="min-h-screen flex flex-col items-center justify-center py-24 px-6">
         <div ref={graduatesReveal.ref} className="w-full max-w-5xl transition-all duration-1000"
           style={{ opacity: graduatesReveal.visible ? 1 : 0, transform: graduatesReveal.visible ? "translateY(0)" : "translateY(60px)" }}>
-          {/* Ganesha blessing */}
-          <div className="flex justify-center mb-8">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/ganesha.png" alt="Shree Ganesha" width={110}
-              style={{ mixBlendMode: "multiply", opacity: 0.75 }} />
-          </div>
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-4" style={{ color: "rgba(0,0,0,0.4)" }}>The Graduates</p>
           <h2 className="font-display text-center font-bold mb-16" style={{ fontSize: "clamp(2rem,6vw,4rem)", color: "#1d1d1f" }}>Celebrating Two Milestones</h2>
 
