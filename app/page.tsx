@@ -8,7 +8,6 @@ import {
   Calendar, Clock, MapPin, Shirt, Car, Heart, type LucideIcon,
 } from "lucide-react";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://grad-party-invite-tan.vercel.app";
 
 interface Countdown { days: number; hours: number; minutes: number; seconds: number; }
 interface Wish { name: string; message: string; attending: boolean; }
@@ -84,9 +83,10 @@ export default function Home() {
     return () => { clearInterval(id); window.removeEventListener("scroll", onScroll); document.removeEventListener("mousedown", onClickOutside); };
   }, []);
 
-  const copyLink = () => { navigator.clipboard?.writeText(APP_URL); setCopied(true); setTimeout(() => setCopied(false), 2000); };
+  const appUrl    = typeof window !== "undefined" ? window.location.origin : "";
+  const copyLink = () => { navigator.clipboard?.writeText(appUrl); setCopied(true); setTimeout(() => setCopied(false), 2000); };
   const shareText = encodeURIComponent("You're invited to Iris & Inesh Dey's Graduation Party! June 26, 2026 · Redmond, WA 🎓");
-  const shareUrl  = encodeURIComponent(APP_URL);
+  const shareUrl  = encodeURIComponent(appUrl);
 
   return (
     <div style={{ background: "#06090f", color: "#ffffff" }}>
