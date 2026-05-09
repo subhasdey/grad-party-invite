@@ -14,10 +14,10 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, text } = await req.json();
+    const { name, text, photoUrl } = await req.json();
     if (!name || !text?.trim()) return NextResponse.json({ error: "Name and text required" }, { status: 400 });
     const colors = ["#FFCB05", "#CFB991", "#0891b2", "#10b981", "#f472b6"];
-    const avatar = colors[name.charCodeAt(0) % colors.length];
+    const avatar = photoUrl || colors[name.charCodeAt(0) % colors.length];
     await appendMessageToSheet(name, text.trim(), avatar);
     return NextResponse.json({ name, text: text.trim(), avatar, createdAt: new Date().toISOString() }, { status: 201 });
   } catch (err) {
