@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { useSession } from "next-auth/react";
 import {
   DoorOpen, Wine, Utensils, Mic, CakeSlice, Music, Gift,
   Calendar, Clock, MapPin, Shirt, Car, Heart, type LucideIcon,
@@ -41,6 +42,8 @@ function useReveal() {
 }
 
 export default function Home() {
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.email === "subhascdey@gmail.com";
   const [count, setCount]   = useState<Countdown>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [rsvps, setRsvps]   = useState<number | null>(null);
@@ -177,11 +180,21 @@ export default function Home() {
             </span>
           </div>
 
-          <Link href="/rsvp"
-            className="px-10 py-4 rounded-full text-sm font-bold transition-all hover:scale-105 active:scale-95 w-full sm:w-auto text-center"
-            style={{ background: "linear-gradient(135deg, #FFCB05, #f5c400)", color: "#06090f", boxShadow: "0 8px 40px rgba(255,203,5,0.35)" }}>
-            RSVP Now
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+            <Link href="/rsvp"
+              className="px-10 py-4 rounded-full text-sm font-bold transition-all hover:scale-105 active:scale-95 text-center"
+              style={{ background: "linear-gradient(135deg, #FFCB05, #f5c400)", color: "#06090f", boxShadow: "0 8px 40px rgba(255,203,5,0.35)" }}>
+              RSVP Now
+            </Link>
+            <Link href="/gallery"
+              className="px-8 py-4 rounded-full text-sm font-semibold transition-all hover:scale-105 active:scale-95 text-center flex items-center justify-center gap-2"
+              style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.8)", border: "1px solid rgba(255,255,255,0.15)" }}>
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.069A1 1 0 0121 8.845v6.31a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
+              </svg>
+              Video Message
+            </Link>
+          </div>
 
           {/* Parent message */}
           <div className="mt-12 max-w-xl px-6 py-6 rounded-2xl text-center"
@@ -427,9 +440,9 @@ export default function Home() {
       )}
 
       {/* ══════════════════════════════════════════
-          SECTION 6 — SHARE
+          SECTION 6 — SHARE (admin only)
       ══════════════════════════════════════════ */}
-      <section className="py-24 px-6" style={{ background: "linear-gradient(180deg, #06090f 0%, #080c14 100%)" }}>
+      {isAdmin && <section className="py-24 px-6" style={{ background: "linear-gradient(180deg, #06090f 0%, #080c14 100%)" }}>
         <div ref={shareReveal.ref} className="w-full max-w-3xl mx-auto transition-all duration-1000"
           style={{ opacity: shareReveal.visible ? 1 : 0, transform: shareReveal.visible ? "translateY(0)" : "translateY(60px)" }}>
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-4" style={{ color: "rgba(255,203,5,0.6)" }}>Spread the Word</p>
@@ -462,7 +475,7 @@ export default function Home() {
 
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* ══════════════════════════════════════════
           FOOTER
