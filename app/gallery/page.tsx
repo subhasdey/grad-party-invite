@@ -173,6 +173,9 @@ export default function GalleryPage() {
         {/* Upload card */}
         <div className="mb-8 p-5 rounded-2xl" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
           <p className="text-xs uppercase tracking-widest text-white/30 mb-1">Share a Memory</p>
+          <p className="text-xs mb-3" style={{ color: "rgba(255,203,5,0.6)" }}>
+            📸 Photos up to <span className="font-semibold">25 MB</span> · 🎥 Videos up to <span className="font-semibold">20 seconds</span> or <span className="font-semibold">100 MB</span>
+          </p>
 
           {status === "unauthenticated" ? (
             <div className="py-4">
