@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { appendRsvpToSheet, readRsvpsFromSheet, findRsvpRowByEmail, updateRsvpInSheet } from "@/lib/googledrive";
-import { sendConfirmationEmail } from "@/lib/email";
+import { sendConfirmationEmail, sendHostNotification } from "@/lib/email";
 import { sendConfirmationSMS } from "@/lib/sms";
 
 export const dynamic = "force-dynamic";
@@ -49,6 +49,7 @@ async function saveRsvp(body: Record<string, unknown>, isUpdate = false) {
   const confirmations: string[] = [];
   if (safeEmail) { sendConfirmationEmail(safeEmail, safeName, safeAttending).catch(() => {}); confirmations.push("email"); }
   if (safePhone) { sendConfirmationSMS(safePhone, safeName, safeAttending).catch(() => {}); confirmations.push("sms"); }
+  sendHostNotification(safeName, safeAttending, { email: safeEmail||undefined, phone: safePhone||undefined, adults: safeAdults, kids: safeKids, diet: data.diet, message: data.message }).catch(() => {});
 
   return NextResponse.json({ confirmations }, { status: 201 });
 }
