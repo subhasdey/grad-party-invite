@@ -106,23 +106,27 @@ export default function Home() {
           <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full opacity-10" style={{ background: "#CFB991", transform: "translate(-30%,30%)", filter: "blur(80px)" }} />
         </div>
         <div className="relative z-10 flex flex-col items-center text-center px-6 pt-24">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] mb-6" style={{ color: "rgba(0,0,0,0.45)" }}>
+          <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.35em] mb-6 px-4 text-center" style={{ color: "rgba(0,0,0,0.45)" }}>
             You&rsquo;re Invited · A Twin Celebration
           </p>
-          <div className="flex items-center gap-3 mb-2">
-            <Image src="/cap-purdue.svg" alt="Purdue graduation cap" width={140} height={120} style={{ filter: "drop-shadow(0 4px 16px rgba(207,185,145,0.35))", transform: "rotate(-20deg)" }} />
+          <div className="flex items-center gap-2 sm:gap-3 mb-2">
+            <div className="w-12 sm:w-[110px] flex-shrink-0">
+              <Image src="/cap-purdue.svg" alt="Purdue graduation cap" width={140} height={120} style={{ width: "100%", height: "auto", filter: "drop-shadow(0 4px 16px rgba(207,185,145,0.35))", transform: "rotate(-20deg)" }} />
+            </div>
             <h1 className="font-display font-bold leading-[0.95] tracking-tight"
-              style={{ fontSize: "clamp(3.5rem,11vw,8rem)", color: "#1d1d1f" }}>
+              style={{ fontSize: "clamp(2.2rem,10vw,8rem)", color: "#1d1d1f" }}>
               Graduation
             </h1>
-            <Image src="/cap-michigan.svg" alt="Michigan graduation cap" width={140} height={120} style={{ filter: "drop-shadow(0 4px 16px rgba(0,39,76,0.35))", transform: "rotate(20deg)" }} />
+            <div className="w-12 sm:w-[110px] flex-shrink-0">
+              <Image src="/cap-michigan.svg" alt="Michigan graduation cap" width={140} height={120} style={{ width: "100%", height: "auto", filter: "drop-shadow(0 4px 16px rgba(0,39,76,0.35))", transform: "rotate(20deg)" }} />
+            </div>
           </div>
           <h1 className="font-display font-bold leading-[0.95] tracking-tight mb-10"
-            style={{ fontSize: "clamp(3.5rem,11vw,8rem)", color: "rgba(0,0,0,0.18)" }}>
+            style={{ fontSize: "clamp(2.2rem,10vw,8rem)", color: "rgba(0,0,0,0.18)" }}>
             Party
           </h1>
 
-          <div className="flex items-center gap-4 mb-10 text-sm font-medium" style={{ color: "rgba(0,0,0,0.5)" }}>
+          <div className="flex items-center justify-center gap-2 sm:gap-4 mb-10 text-xs sm:text-sm font-medium flex-wrap" style={{ color: "rgba(0,0,0,0.5)" }}>
             <span>June 26, 2026</span>
             <span style={{ color: "rgba(0,0,0,0.2)" }}>·</span>
             <span>6:00 PM</span>
@@ -144,7 +148,7 @@ export default function Home() {
           </div>
 
           <Link href="/rsvp"
-            className="px-10 py-4 rounded-full text-sm font-bold transition-all hover:scale-105 active:scale-95"
+            className="px-10 py-4 rounded-full text-sm font-bold transition-all hover:scale-105 active:scale-95 w-full sm:w-auto text-center"
             style={{ background: "#00274C", color: "#FFCB05" }}>
             RSVP Now
           </Link>
@@ -173,6 +177,12 @@ export default function Home() {
       <section className="min-h-screen flex flex-col items-center justify-center py-24 px-6">
         <div ref={graduatesReveal.ref} className="w-full max-w-5xl transition-all duration-1000"
           style={{ opacity: graduatesReveal.visible ? 1 : 0, transform: graduatesReveal.visible ? "translateY(0)" : "translateY(60px)" }}>
+          {/* Ganesha blessing */}
+          <div className="flex justify-center mb-8">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/ganesha.png" alt="Shree Ganesha" width={110}
+              style={{ mixBlendMode: "multiply", opacity: 0.75 }} />
+          </div>
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-4" style={{ color: "rgba(0,0,0,0.4)" }}>The Graduates</p>
           <h2 className="font-display text-center font-bold mb-16" style={{ fontSize: "clamp(2rem,6vw,4rem)", color: "#1d1d1f" }}>Celebrating Two Milestones</h2>
 
@@ -258,12 +268,15 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="text-center mb-12 py-5 rounded-2xl" style={{ background: "#FAF6EE", border: "1px solid rgba(0,0,0,0.06)" }}>
+          <div className="text-center mb-12 py-5 px-4 rounded-2xl" style={{ background: "#FAF6EE", border: "1px solid rgba(0,0,0,0.06)" }}>
             <p className="text-sm font-semibold mb-1" style={{ color: "#1d1d1f" }}>Redmond Senior &amp; Community Center</p>
-            <p className="text-sm" style={{ color: "rgba(0,0,0,0.5)" }}>
+            <p className="text-sm mb-1" style={{ color: "rgba(0,0,0,0.5)" }}>
               Hosted by <span className="font-medium" style={{ color: "#1d1d1f" }}>Subhas &amp; Sanchita Dey</span>
               &nbsp;·&nbsp; RSVP by <span style={{ color: "#00274C", fontWeight: 600 }}>June 12, 2026</span>
             </p>
+            <a href="tel:4252896422" className="text-sm font-medium transition-all hover:underline" style={{ color: "#00274C" }}>
+              (425) 289-6422
+            </a>
           </div>
 
           {/* Countdown */}
@@ -322,16 +335,12 @@ export default function Home() {
               </div>
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-2xl flex-shrink-0 shadow-sm" style={{ background: "#00274C", border: "3px solid #FFCB05" }} />
-                  <div>
-                    <p className="text-base font-bold" style={{ color: "#1d1d1f" }}>Girls — Blue</p>
-                  </div>
+                  <div className="w-16 h-16 rounded-2xl flex-shrink-0 shadow-sm" style={{ background: "#00274C" }} />
+                  <p className="text-base font-bold" style={{ color: "#1d1d1f" }}>Navy Blue</p>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-2xl flex-shrink-0 shadow-sm" style={{ background: "#1a1a1a", border: "3px solid #CFB991" }} />
-                  <div>
-                    <p className="text-base font-bold" style={{ color: "#1d1d1f" }}>Boys — Black</p>
-                  </div>
+                  <div className="w-16 h-16 rounded-2xl flex-shrink-0 shadow-sm" style={{ background: "#1a1a1a" }} />
+                  <p className="text-base font-bold" style={{ color: "#1d1d1f" }}>Black</p>
                 </div>
                 <p className="text-xs" style={{ color: "rgba(0,0,0,0.4)" }}>Festive semi-formal</p>
               </div>

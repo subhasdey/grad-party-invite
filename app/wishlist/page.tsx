@@ -113,7 +113,7 @@ export default function WishlistPage() {
   const inputCls = "w-full rounded-2xl px-4 py-3 text-sm text-[#1d1d1f] placeholder-black/30 bg-white border border-black/10";
 
   return (
-    <main className="min-h-screen px-4 py-10" style={{ background: "#FAF6EE" }}>
+    <main className="min-h-screen px-4 py-10 pb-24" style={{ background: "#FAF6EE" }}>
       {/* Blobs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-10" style={{ background: "#00274C", transform: "translate(30%,-30%)", filter: "blur(80px)" }} />
@@ -177,23 +177,28 @@ export default function WishlistPage() {
             {filtered.map(item => {
               const claimed = !!item.claimedBy;
               return (
-                <div key={item._id} className="p-5 rounded-2xl transition-all"
+                <div key={item._id} className="p-4 sm:p-5 rounded-2xl transition-all"
                   style={{ background: "#ffffff", border: `1px solid ${claimed ? "rgba(0,0,0,0.06)" : "rgba(0,39,76,0.12)"}`, opacity: claimed ? 0.75 : 1 }}>
-                  <div className="flex items-start gap-4">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap mb-1">
-                        {item.category && (
-                          <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
-                            style={{ background: "rgba(0,39,76,0.07)", color: "#00274C" }}>{item.category}</span>
-                        )}
-                        {(item.person === "iris" || item.person === "inesh") && (
-                          <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
-                            style={PERSON_COLORS[item.person as "iris" | "inesh"].badge}>{PERSON_COLORS[item.person as "iris" | "inesh"].label}</span>
-                        )}
-                      </div>
+                  <div className="flex flex-col gap-3">
+                    {/* Top: badges */}
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {item.category && (
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
+                          style={{ background: "rgba(0,39,76,0.07)", color: "#00274C" }}>{item.category}</span>
+                      )}
+                      {(item.person === "iris" || item.person === "inesh") && (
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
+                          style={PERSON_COLORS[item.person as "iris" | "inesh"].badge}>{PERSON_COLORS[item.person as "iris" | "inesh"].label}</span>
+                      )}
+                    </div>
+                    {/* Middle: name + description */}
+                    <div>
                       <p className="font-semibold text-base mb-0.5" style={{ color: "#1d1d1f" }}>{item.name}</p>
                       {item.description && <p className="text-sm leading-relaxed" style={{ color: "rgba(0,0,0,0.5)" }}>{item.description}</p>}
-                      <div className="flex items-center gap-3 mt-2 flex-wrap">
+                    </div>
+                    {/* Bottom: price + link + action */}
+                    <div className="flex items-center justify-between gap-3 flex-wrap">
+                      <div className="flex items-center gap-3 flex-wrap">
                         {item.price && <span className="text-sm font-semibold" style={{ color: "#00274C" }}>{item.price}</span>}
                         {item.url && (
                           <a href={item.url} target="_blank" rel="noopener noreferrer"
@@ -203,29 +208,28 @@ export default function WishlistPage() {
                           </a>
                         )}
                       </div>
-                    </div>
-
-                    <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                      {claimed ? (
-                        <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold"
-                          style={{ background: "rgba(52,199,89,0.1)", color: "#34C759", border: "1px solid rgba(52,199,89,0.2)" }}>
-                          <CheckCircle className="w-3.5 h-3.5" />
-                          {maskName(item.claimedBy)}
-                        </div>
-                      ) : (
-                        <button onClick={() => openClaim(item)}
-                          className="px-4 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105 active:scale-95"
-                          style={{ background: "#00274C", color: "#FFCB05" }}>
-                          I&apos;ll get this!
-                        </button>
-                      )}
-                      {authed && (
-                        <button onClick={() => deleteItem(item._id)} disabled={deleting === item._id}
-                          className="p-1.5 rounded-lg transition-all opacity-30 hover:opacity-80 disabled:opacity-20"
-                          style={{ color: "#FF453A" }}>
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      )}
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        {claimed ? (
+                          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold"
+                            style={{ background: "rgba(52,199,89,0.1)", color: "#34C759", border: "1px solid rgba(52,199,89,0.2)" }}>
+                            <CheckCircle className="w-3.5 h-3.5" />
+                            {maskName(item.claimedBy)}
+                          </div>
+                        ) : (
+                          <button onClick={() => openClaim(item)}
+                            className="px-4 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105 active:scale-95"
+                            style={{ background: "#00274C", color: "#FFCB05" }}>
+                            I&apos;ll get this!
+                          </button>
+                        )}
+                        {authed && (
+                          <button onClick={() => deleteItem(item._id)} disabled={deleting === item._id}
+                            className="p-1.5 rounded-lg transition-all opacity-30 hover:opacity-80 disabled:opacity-20"
+                            style={{ color: "#FF453A" }}>
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -282,7 +286,7 @@ export default function WishlistPage() {
                 <label className="block text-xs mb-1" style={{ color: "rgba(0,0,0,0.4)" }}>Description</label>
                 <input value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder="Short description..." className={inputCls} />
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
                   <label className="block text-xs mb-1" style={{ color: "rgba(0,0,0,0.4)" }}>Price range</label>
                   <input value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} placeholder="e.g. ~$50" className={inputCls} />

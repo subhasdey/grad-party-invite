@@ -83,29 +83,29 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen" style={{ background: "#0b0e17" }}>
       {/* Header */}
-      <div className="sticky top-0 z-20 px-4 md:px-8 py-4 flex items-center justify-between"
+      <div className="sticky top-0 z-20 px-4 md:px-8 py-3 flex flex-wrap items-center justify-between gap-2"
         style={{ background: "rgba(11,14,23,0.95)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
         <div className="flex items-center gap-3">
           <Link href="/" className="text-white/40 hover:text-white/70 text-sm transition-all">←</Link>
           <div>
-            <h1 className="font-display text-lg md:text-xl font-bold text-white">Admin Dashboard</h1>
-            <p className="text-white/40 text-xs">Iris &amp; Inesh · June 26, 2026</p>
+            <h1 className="font-display text-base md:text-xl font-bold text-white">Admin</h1>
+            <p className="text-white/40 text-xs hidden sm:block">Iris &amp; Inesh · June 26, 2026</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={load} className="px-4 py-2 rounded-xl text-xs font-semibold text-white/60 hover:text-white transition-all"
+          <button onClick={load} className="px-3 py-2 rounded-xl text-xs font-semibold text-white/60 hover:text-white transition-all"
             style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
             Refresh
           </button>
           <button onClick={sendReminders} disabled={sending}
-            className="px-4 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105 disabled:opacity-50"
+            className="px-3 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105 disabled:opacity-50 whitespace-nowrap"
             style={{ background: "#FFCB05", color: "#0b0e17" }}>
             {sending ? "Sending…" : "Send Reminders"}
           </button>
         </div>
       </div>
 
-      <div className="px-4 md:px-8 py-6 max-w-7xl mx-auto">
+      <div className="px-4 md:px-8 py-6 pb-24 max-w-7xl mx-auto">
 
         {reminderMsg && (
           <div className="mb-5 px-4 py-3 rounded-xl text-sm text-center font-medium"

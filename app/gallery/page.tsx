@@ -142,7 +142,7 @@ export default function GalleryPage() {
         </div>
       </nav>
 
-      <main className="flex-1 px-4 md:px-8 py-8 max-w-6xl mx-auto w-full">
+      <main className="flex-1 px-4 md:px-8 py-8 pb-24 max-w-6xl mx-auto w-full">
 
         {/* Upload card */}
         <div className="mb-8 p-5 rounded-2xl" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
@@ -219,9 +219,12 @@ export default function GalleryPage() {
               const isOwn = userName && item.name === userName;
               return (
                 <div key={item._id} className="flex flex-col gap-2">
-                  <button
+                  <div
+                    role="button"
+                    tabIndex={0}
                     onClick={() => setSelected(item)}
-                    className="group relative rounded-2xl overflow-hidden bg-white/5 focus:outline-none w-full"
+                    onKeyDown={e => e.key === "Enter" && setSelected(item)}
+                    className="group relative rounded-2xl overflow-hidden bg-white/5 cursor-pointer w-full"
                     style={{ aspectRatio: "3/4", border: "1px solid rgba(255,255,255,0.06)" }}
                   >
                     {item.type === "image" ? (
@@ -256,7 +259,7 @@ export default function GalleryPage() {
                         {item.caption && <p className="text-white/70 text-[11px] leading-snug mt-0.5 line-clamp-2">{item.caption}</p>}
                       </div>
                     </div>
-                  </button>
+                  </div>
 
                   {/* Edit / Replace controls for own items */}
                   {isOwn && (
@@ -339,12 +342,12 @@ export default function GalleryPage() {
                 />
               )}
             </div>
-            <div className="flex items-center justify-between mt-4 px-1">
-              <div>
-                <p className="text-white text-sm font-medium">{selected.name}</p>
-                {selected.caption && <p className="text-white/40 text-xs mt-0.5">{selected.caption}</p>}
+            <div className="flex items-start justify-between mt-4 px-1 gap-3 flex-wrap">
+              <div className="min-w-0">
+                <p className="text-white text-sm font-medium truncate">{selected.name}</p>
+                {selected.caption && <p className="text-white/40 text-xs mt-0.5 line-clamp-2">{selected.caption}</p>}
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-shrink-0">
                 {selected.type === "video" && !videoError && (
                   <a href={selected.url} download target="_blank" rel="noopener noreferrer"
                     className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs text-white/50 hover:text-white transition-all"

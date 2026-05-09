@@ -3,11 +3,11 @@ import { useState, useEffect } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
-import { GraduationCap, Leaf, Flame, Sprout, Music } from "lucide-react";
+import { GraduationCap, Leaf, Flame, Sprout } from "lucide-react";
 
 type Diet = "veg" | "non-veg" | "both";
 
-const defaultForm = { name: "", email: "", phone: "", adults: 1, kids: 0, diet: "non-veg" as Diet, message: "", song: "", attending: true };
+const defaultForm = { name: "", email: "", phone: "", adults: 1, kids: 0, diet: "non-veg" as Diet, message: "", attending: true };
 
 export default function RSVPPage() {
   const { data: session, status } = useSession();
@@ -36,7 +36,6 @@ export default function RSVPPage() {
                 kids:      Number(existing.kids)   || 0,
                 diet:      (existing.diet as Diet) || "non-veg",
                 message:   String(existing.message || ""),
-                song:      String(existing.song    || ""),
                 attending: Boolean(existing.attending),
               });
             }
@@ -89,7 +88,7 @@ export default function RSVPPage() {
   }
 
   return (
-    <main className="min-h-screen px-4 py-12" style={{ background: "#FAF6EE" }}>
+    <main className="min-h-screen px-4 py-12 pb-24" style={{ background: "#FAF6EE" }}>
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 left-0 w-96 h-96 rounded-full blur-3xl opacity-20" style={{ background: "#00274C", transform: "translate(-40%,-40%)" }} />
         <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full blur-3xl opacity-20" style={{ background: "#3a2800", transform: "translate(40%,40%)" }} />
@@ -197,10 +196,6 @@ export default function RSVPPage() {
                   </div>
                 </div>
 
-                <div className="relative">
-                  <Music className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "rgba(0,0,0,0.3)" }} />
-                  <input value={form.song} onChange={e => update("song", e.target.value)} placeholder="Song request for the party" className={inputCls} style={{ paddingLeft: "2.5rem" }} />
-                </div>
               </>
             )}
 

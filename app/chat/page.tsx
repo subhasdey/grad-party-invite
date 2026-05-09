@@ -147,8 +147,8 @@ export default function ChatPage() {
         <div ref={bottomRef} />
       </div>
 
-      {/* Input */}
-      <div className="px-4 py-4 border-t border-white/[0.07]" style={{ background: "rgba(8,12,20,0.95)" }}>
+      {/* Input — pb-20 on mobile so the form clears the fixed bottom nav */}
+      <div className="px-4 pt-4 pb-20 md:pb-4 border-t border-white/[0.07]" style={{ background: "rgba(8,12,20,0.95)" }}>
         <form onSubmit={send} className="flex gap-2">
           <input value={text} onChange={e => setText(e.target.value)}
             placeholder="Say something..."
