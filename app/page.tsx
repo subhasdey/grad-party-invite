@@ -109,16 +109,35 @@ export default function Home() {
           <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.35em] mb-6 px-4 text-center" style={{ color: "rgba(0,0,0,0.45)" }}>
             You&rsquo;re Invited · A Twin Celebration
           </p>
-          <div className="flex items-center gap-2 sm:gap-3 mb-2">
-            <div className="w-12 sm:w-[110px] flex-shrink-0">
-              <Image src="/cap-purdue.svg" alt="Purdue graduation cap" width={140} height={120} style={{ width: "100%", height: "auto", filter: "drop-shadow(0 4px 16px rgba(207,185,145,0.35))", transform: "rotate(-20deg)" }} />
+          {/* Mobile: caps side-by-side above text */}
+          <div className="flex sm:hidden justify-center items-end gap-6 mb-1">
+            <div className="w-20">
+              <Image src="/cap-purdue.svg" alt="Purdue graduation cap" width={140} height={120}
+                style={{ width: "100%", height: "auto", filter: "drop-shadow(0 4px 16px rgba(207,185,145,0.35))", transform: "rotate(-20deg)" }} />
+            </div>
+            <div className="w-20">
+              <Image src="/cap-michigan.svg" alt="Michigan graduation cap" width={140} height={120}
+                style={{ width: "100%", height: "auto", filter: "drop-shadow(0 4px 16px rgba(0,39,76,0.35))", transform: "rotate(20deg)" }} />
+            </div>
+          </div>
+          <h1 className="sm:hidden font-display font-bold leading-[0.95] tracking-tight mb-2 text-center"
+            style={{ fontSize: "clamp(2.6rem,12vw,4rem)", color: "#1d1d1f" }}>
+            Graduation
+          </h1>
+
+          {/* Desktop: caps flanking text */}
+          <div className="hidden sm:flex items-center gap-3 mb-2">
+            <div className="w-[110px] flex-shrink-0">
+              <Image src="/cap-purdue.svg" alt="Purdue graduation cap" width={140} height={120}
+                style={{ width: "100%", height: "auto", filter: "drop-shadow(0 4px 16px rgba(207,185,145,0.35))", transform: "rotate(-20deg)" }} />
             </div>
             <h1 className="font-display font-bold leading-[0.95] tracking-tight"
               style={{ fontSize: "clamp(2.2rem,10vw,8rem)", color: "#1d1d1f" }}>
               Graduation
             </h1>
-            <div className="w-12 sm:w-[110px] flex-shrink-0">
-              <Image src="/cap-michigan.svg" alt="Michigan graduation cap" width={140} height={120} style={{ width: "100%", height: "auto", filter: "drop-shadow(0 4px 16px rgba(0,39,76,0.35))", transform: "rotate(20deg)" }} />
+            <div className="w-[110px] flex-shrink-0">
+              <Image src="/cap-michigan.svg" alt="Michigan graduation cap" width={140} height={120}
+                style={{ width: "100%", height: "auto", filter: "drop-shadow(0 4px 16px rgba(0,39,76,0.35))", transform: "rotate(20deg)" }} />
             </div>
           </div>
           <h1 className="font-display font-bold leading-[0.95] tracking-tight mb-10"
