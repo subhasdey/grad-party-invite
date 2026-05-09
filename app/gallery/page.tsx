@@ -38,8 +38,11 @@ export default function GalleryPage() {
   // Likes
   const [liking, setLiking] = useState<string | null>(null);
 
-  // Video error
+  // Lightbox video error
   const [videoError, setVideoError] = useState(false);
+  // Per-tile video errors (format not supported by browser, e.g. MOV on Chrome)
+  const [videoErrors, setVideoErrors] = useState<Set<string>>(new Set());
+  const addVideoError = (id: string) => setVideoErrors(prev => new Set([...prev, id]));
 
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -250,18 +253,29 @@ export default function GalleryPage() {
                     {item.type === "image" ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={item.url} alt={item.caption || item.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
-                    ) : (
+                    ) : videoErrors.has(item._id) ? (
+                      // Fallback for unsupported formats (e.g. MOV on Chrome)
                       <>
-                        {/* Dark gradient background for video tiles — works for all formats */}
                         <div className="w-full h-full" style={{ background: "linear-gradient(160deg,#1a1f2e,#0b0e17)" }} />
-                        {/* Centered play button */}
-                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 pointer-events-none">
                           <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "rgba(255,203,5,0.15)", border: "2px solid rgba(255,203,5,0.4)" }}>
                             <svg className="w-6 h-6 ml-1" viewBox="0 0 24 24" fill="#FFCB05"><path d="M8 5v14l11-7z"/></svg>
                           </div>
                           <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.35)" }}>Video</span>
                         </div>
                       </>
+                    ) : (
+                      // Autoplay muted loop preview
+                      <video
+                        src={item.url}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="auto"
+                        className="w-full h-full object-cover"
+                        onError={() => addVideoError(item._id)}
+                      />
                     )}
                     {/* Always-visible overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent">
