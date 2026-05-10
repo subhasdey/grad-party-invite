@@ -56,9 +56,9 @@ export default function AdminPage() {
   const totalAdults  = attending.reduce((s, r) => s + (Number(r.adults) || 0), 0);
   const totalKids    = attending.reduce((s, r) => s + (Number(r.kids)   || 0), 0);
   const totalHeads   = totalAdults + totalKids;
-  const vegCount     = attending.filter(r => r.diet === "veg").length;
-  const nonVegCount  = attending.filter(r => r.diet === "non-veg").length;
-  const jainCount    = attending.filter(r => r.diet === "both").length;
+  const vegCount     = attending.filter(r => r.diet === "veg").reduce((s, r) => s + (Number(r.adults) || 0) + (Number(r.kids) || 0), 0);
+  const nonVegCount  = attending.filter(r => r.diet === "non-veg").reduce((s, r) => s + (Number(r.adults) || 0) + (Number(r.kids) || 0), 0);
+  const jainCount    = attending.filter(r => r.diet === "both").reduce((s, r) => s + (Number(r.adults) || 0) + (Number(r.kids) || 0), 0);
   const songs        = rsvps.filter(r => r.song?.trim());
 
   // Wishlist derived stats
