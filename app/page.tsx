@@ -394,7 +394,7 @@ export default function Home() {
                   ) : (
                     <button onClick={() => signIn("google")}
                       className="text-xs px-3 py-1.5 rounded-lg font-semibold flex-shrink-0 transition-all hover:scale-105"
-                      style={{ background: "rgba(0,0,0,0.05)", color: "rgba(0,0,0,0.4)", border: "1px solid rgba(0,0,0,0.1)" }}>
+                      style={{ background: "#00274C", color: "#FFCB05", border: "none" }}>
                       Sign in
                     </button>
                   )}
