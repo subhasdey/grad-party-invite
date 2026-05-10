@@ -607,16 +607,11 @@ export default function Home() {
             <span style={{ color: "rgba(255,255,255,0.1)" }}>·</span>
             <Link href="/privacy" className="hover:text-[#FFCB05] transition-all">Privacy Policy</Link>
             <span style={{ color: "rgba(255,255,255,0.1)" }}>·</span>
-            {rsvps !== null && rsvps > 0 && (
-              <>
-                <span>{rsvps} guests attending</span>
-                <span style={{ color: "rgba(255,255,255,0.1)" }}>·</span>
-              </>
-            )}
+
             <Link href="/admin" className="hover:text-[#FFCB05] transition-all">Admin</Link>
           </div>
           <p className="text-[11px] text-center" style={{ color: "rgba(255,255,255,0.2)" }}>
-            © 2026 Iris &amp; Inesh Dey Graduation Celebration™ · All rights reserved.
+            © 2026 Iris &amp; Inesh Dey Graduation Celebration™ · All rights reserved. · Powered by Nuvensa
           </p>
         </div>
       </footer>
