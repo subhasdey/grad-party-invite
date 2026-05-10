@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="antialiased min-h-screen pb-16 md:pb-0" style={{ background: "#0d1525", color: "#ffffff", fontFamily: "-apple-system, BlinkMacSystemFont, var(--font-inter), 'Helvetica Neue', Arial, sans-serif" }}>
+      <body className="antialiased min-h-screen pb-16 md:pb-0" style={{ background: "#f8f6ff", color: "#0d1525", fontFamily: "-apple-system, BlinkMacSystemFont, var(--font-inter), 'Helvetica Neue', Arial, sans-serif" }}>
         <AuthProvider>
           {children}
           <BottomNav />
