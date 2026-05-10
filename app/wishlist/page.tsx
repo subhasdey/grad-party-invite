@@ -36,6 +36,7 @@ export default function WishlistPage() {
   const [claimName, setClaimName] = useState("");
   const [claiming, setClaiming]   = useState(false);
   const [claimError, setClaimError] = useState("");
+  const [keyboardOffset, setKeyboardOffset] = useState(0);
 
   const [adminOpen, setAdminOpen] = useState(false);
   const [adminPwd, setAdminPwd]   = useState("");
@@ -52,6 +53,21 @@ export default function WishlistPage() {
 
   useEffect(() => { load(); }, []);
   useEffect(() => { if (session?.user?.name) setClaimName(session.user.name); }, [session]);
+
+  // Track keyboard height via Visual Viewport API (fixes iPhone hidden buttons)
+  useEffect(() => {
+    if (!claimItem) { setKeyboardOffset(0); return; }
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const update = () => {
+      const offset = window.innerHeight - vv.height - vv.offsetTop;
+      setKeyboardOffset(Math.max(0, offset));
+    };
+    vv.addEventListener("resize", update);
+    vv.addEventListener("scroll", update);
+    update();
+    return () => { vv.removeEventListener("resize", update); vv.removeEventListener("scroll", update); };
+  }, [claimItem]);
 
   const filtered = items.filter(i => i.person === tab || i.person === "both");
   const available = filtered.filter(i => !i.claimedBy).length;
@@ -310,7 +326,7 @@ export default function WishlistPage() {
           style={{ background: "rgba(0,0,0,0.5)" }}
           onClick={() => setClaimItem(null)}>
           <div className="w-full sm:max-w-sm rounded-t-3xl sm:rounded-3xl flex flex-col"
-            style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 -8px 40px rgba(0,0,0,0.15)", maxHeight: "85dvh" }}
+            style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 -8px 40px rgba(0,0,0,0.15)", maxHeight: "85dvh", marginBottom: keyboardOffset }}
             onClick={e => e.stopPropagation()}>
             {/* Scrollable content */}
             <div className="overflow-y-auto px-6 pt-5 pb-2 flex-1">
