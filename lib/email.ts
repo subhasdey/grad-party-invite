@@ -23,6 +23,10 @@ function confirmationHtml(guestName: string, attending: boolean): string {
     <h2 style="color:#1d1d1f;margin:0 0 12px;font-size:20px">Thanks for letting us know, ${guestName}.</h2>
     <p style="color:rgba(0,0,0,0.6);line-height:1.7;margin:0 0 20px">We're sorry you can't make it, but we appreciate you responding. You can still leave a message and follow along on our party page.</p>
     <a href="${APP_URL}" style="display:inline-block;background:#00274C;color:#FFCB05;padding:12px 24px;border-radius:50px;text-decoration:none;font-size:13px;font-weight:700">Visit Party Page</a>
+    <div style="margin-top:16px;padding:12px 16px;background:#f0f4ff;border-radius:12px;text-align:center">
+      <p style="margin:0 0 4px;font-size:11px;color:rgba(0,0,0,0.4);letter-spacing:0.05em;text-transform:uppercase">Party Website</p>
+      <a href="${APP_URL}" style="font-size:13px;font-weight:700;color:#00274C;text-decoration:none">${APP_URL}</a>
+    </div>
   </div>
 </div>`;
   }
@@ -49,6 +53,10 @@ function confirmationHtml(guestName: string, attending: boolean): string {
     <div style="text-align:center">
       <a href="${APP_URL}/gallery" style="display:inline-block;background:#00274C;color:#FFCB05;padding:14px 28px;border-radius:50px;text-decoration:none;font-size:13px;font-weight:700;margin-right:8px">Share Photos &amp; Videos</a>
       <a href="${APP_URL}" style="display:inline-block;background:rgba(0,39,76,0.08);color:#00274C;padding:14px 28px;border-radius:50px;text-decoration:none;font-size:13px;font-weight:700">View Invite</a>
+    </div>
+    <div style="margin-top:20px;padding:14px 16px;background:#f0f4ff;border-radius:12px;text-align:center">
+      <p style="margin:0 0 4px;font-size:11px;color:rgba(0,0,0,0.4);letter-spacing:0.05em;text-transform:uppercase">Party Website</p>
+      <a href="${APP_URL}" style="font-size:13px;font-weight:700;color:#00274C;text-decoration:none">${APP_URL}</a>
     </div>
   </div>
   <div style="padding:20px 32px;text-align:center;border-top:1px solid rgba(0,0,0,0.06)">
@@ -139,6 +147,10 @@ export async function sendReminderEmail(to: string, guestName: string) {
       <p style="margin:0;color:#1d1d1f"><strong>Venue:</strong> ${VENUE}</p>
     </div>
     <a href="${APP_URL}" style="display:inline-block;background:#00274C;color:#FFCB05;padding:14px 28px;border-radius:50px;text-decoration:none;font-size:13px;font-weight:700">View Party Details</a>
+    <div style="margin-top:20px;padding:14px 16px;background:#f0f4ff;border-radius:12px;text-align:center">
+      <p style="margin:0 0 4px;font-size:11px;color:rgba(0,0,0,0.4);letter-spacing:0.05em;text-transform:uppercase">Party Website</p>
+      <a href="${APP_URL}" style="font-size:13px;font-weight:700;color:#00274C;text-decoration:none">${APP_URL}</a>
+    </div>
   </div>
 </div>`,
     });
