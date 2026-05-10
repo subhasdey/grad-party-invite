@@ -439,13 +439,23 @@ export default function Home() {
           <div className="text-center mb-12 py-5 px-4 rounded-2xl"
             style={{ background: "rgba(255,255,255,0.85)", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 4px 16px rgba(0,0,0,0.05)" }}>
             <p className="text-sm font-semibold mb-1" style={{ color: "#0d1525" }}>Redmond Senior &amp; Community Center</p>
-            <p className="text-sm mb-1" style={{ color: "rgba(0,0,0,0.5)" }}>
+            <p className="text-sm mb-2" style={{ color: "rgba(0,0,0,0.5)" }}>
               Hosted by <span className="font-medium" style={{ color: "#0d1525" }}>Subhas &amp; Sanchita Dey</span>
               &nbsp;·&nbsp; RSVP by <span style={{ color: "#8A6E00", fontWeight: 600 }}>June 12, 2026</span>
             </p>
-            <a href="tel:4252896422" className="text-sm font-medium transition-all hover:underline" style={{ color: "#8A6E00" }}>
-              (425) 289-6422
-            </a>
+            <div className="flex items-center justify-center gap-4">
+              <a href="tel:4252896422" className="text-sm font-medium transition-all hover:underline" style={{ color: "#8A6E00" }}>
+                (425) 289-6422
+              </a>
+              <span style={{ color: "rgba(0,0,0,0.2)" }}>·</span>
+              <a href="https://maps.google.com/?q=Redmond+Senior+and+Community+Center,+Redmond,+WA"
+                target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold transition-all hover:underline"
+                style={{ color: "#00274C" }}>
+                <MapPin className="w-3.5 h-3.5" />
+                Open in Maps
+              </a>
+            </div>
           </div>
 
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-8" style={{ color: "#8A6E00" }}>Counting Down</p>

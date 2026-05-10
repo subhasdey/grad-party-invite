@@ -7,6 +7,7 @@ interface RSVP {
   _id: string; name: string; email: string; phone?: string;
   adults: number; kids: number; diet: string; message?: string;
   song?: string; attending: boolean; reminderSent: boolean; createdAt: string;
+  glutenFree?: boolean; nutAllergy?: boolean;
 }
 
 interface WishItem {
@@ -59,6 +60,8 @@ export default function AdminPage() {
   const vegCount     = attending.filter(r => r.diet === "veg").reduce((s, r) => s + (Number(r.adults) || 0) + (Number(r.kids) || 0), 0);
   const nonVegCount  = attending.filter(r => r.diet === "non-veg").reduce((s, r) => s + (Number(r.adults) || 0) + (Number(r.kids) || 0), 0);
   const jainCount    = attending.filter(r => r.diet === "both").reduce((s, r) => s + (Number(r.adults) || 0) + (Number(r.kids) || 0), 0);
+  const glutenFreeCount = attending.filter(r => r.glutenFree).length;
+  const nutAllergyCount = attending.filter(r => r.nutAllergy).length;
   const songs        = rsvps.filter(r => r.song?.trim());
 
   // Wishlist derived stats
@@ -132,6 +135,21 @@ export default function AdminPage() {
           ] as { label: string; value: string|number; sub: string; color: string; Icon: LucideIcon }[]).map(s => (
             <div key={s.label} className="rounded-2xl p-4" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
               <s.Icon className="w-5 h-5 mb-2" style={{ color: s.color }} />
+              <div className="font-display text-2xl font-bold mb-0.5" style={{ color: s.color }}>{s.value}</div>
+              <div className="text-white/60 text-xs font-medium">{s.label}</div>
+              <div className="text-white/30 text-[11px] mt-0.5">{s.sub}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Allergy / special dietary stats */}
+        <div className="grid grid-cols-2 gap-3 mb-3">
+          {([
+            { label: "Gluten Free", value: glutenFreeCount, sub: "attending guests", color: "#FF9F0A", emoji: "🌾" },
+            { label: "Nut Allergy", value: nutAllergyCount, sub: "attending guests", color: "#FF453A", emoji: "🥜" },
+          ]).map(s => (
+            <div key={s.label} className="rounded-2xl p-4" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <span className="text-xl mb-2 block">{s.emoji}</span>
               <div className="font-display text-2xl font-bold mb-0.5" style={{ color: s.color }}>{s.value}</div>
               <div className="text-white/60 text-xs font-medium">{s.label}</div>
               <div className="text-white/30 text-[11px] mt-0.5">{s.sub}</div>

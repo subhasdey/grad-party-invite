@@ -173,7 +173,21 @@ export default function WishlistPage() {
 
         {/* Items */}
         {loading ? (
-          <div className="text-center py-20 text-sm" style={{ color: "rgba(0,0,0,0.35)" }}>Loading...</div>
+          <div className="grid grid-cols-1 gap-3">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="rounded-3xl p-5 animate-pulse" style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(0,0,0,0.06)" }}>
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-2xl flex-shrink-0" style={{ background: "rgba(0,0,0,0.07)" }} />
+                  <div className="flex-1 space-y-2 pt-1">
+                    <div className="h-4 rounded-full w-3/4" style={{ background: "rgba(0,0,0,0.07)" }} />
+                    <div className="h-3 rounded-full w-1/2" style={{ background: "rgba(0,0,0,0.05)" }} />
+                    <div className="h-3 rounded-full w-1/3" style={{ background: "rgba(0,0,0,0.05)" }} />
+                  </div>
+                  <div className="h-8 w-20 rounded-xl" style={{ background: "rgba(0,0,0,0.07)" }} />
+                </div>
+              </div>
+            ))}
+          </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-20">
             <Gift className="w-12 h-12 mx-auto mb-4 opacity-20" style={{ color: "#0d1525" }} />

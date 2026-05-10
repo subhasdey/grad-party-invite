@@ -79,6 +79,25 @@ export default function RSVPPage() {
           <p className="text-sm mb-10 leading-relaxed" style={{ color: "rgba(0,0,0,0.5)" }}>
             {form.attending ? `We can't wait to celebrate with you, ${form.name}!` : `We'll miss you, ${form.name}. Your kind wishes mean a lot.`}
           </p>
+          {form.attending && (
+            <div className="mb-6 p-4 rounded-2xl" style={{ background: "rgba(255,255,255,0.8)", border: "1px solid rgba(0,0,0,0.08)" }}>
+              <p className="text-xs font-semibold mb-3 text-center" style={{ color: "rgba(0,0,0,0.4)" }}>Add to Calendar</p>
+              <div className="flex gap-2">
+                <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Iris+%26+Inesh+Dey+Graduation+Party&dates=20260626T180000/20260626T230000&details=Graduation+celebration+for+Iris+(Purdue)+%26+Inesh+(Michigan)&location=Redmond+Senior+%26+Community+Center,+Redmond,+WA&sf=true"
+                  target="_blank" rel="noopener noreferrer"
+                  className="flex-1 py-3 rounded-xl text-xs font-semibold text-center transition-all hover:scale-[1.02]"
+                  style={{ background: "rgba(66,133,244,0.1)", color: "#4285F4", border: "1px solid rgba(66,133,244,0.2)" }}>
+                  Google Calendar
+                </a>
+                <a href="data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ADTSTART:20260626T180000%0ADTEND:20260626T230000%0ASUMMARY:Iris%20%26%20Inesh%20Dey%20Graduation%20Party%0ALOCATION:Redmond%20Senior%20%26%20Community%20Center%2C%20Redmond%2C%20WA%0ADESCRIPTION:Graduation%20party%20for%20Iris%20(Purdue)%20%26%20Inesh%20(Michigan)%0AEND:VEVENT%0AEND:VCALENDAR"
+                  download="grad-party-2026.ics"
+                  className="flex-1 py-3 rounded-xl text-xs font-semibold text-center transition-all hover:scale-[1.02]"
+                  style={{ background: "rgba(0,0,0,0.05)", color: "rgba(0,0,0,0.6)", border: "1px solid rgba(0,0,0,0.1)" }}>
+                  Apple / iCal
+                </a>
+              </div>
+            </div>
+          )}
           <div className="flex flex-col gap-3">
             <Link href="/gallery" className="py-3.5 rounded-2xl text-sm font-semibold text-center" style={{ background: "linear-gradient(135deg,#FFCB05,#f5c400)", color: "#0d1525" }}>View Gallery</Link>
             <Link href="/chat" className="py-3.5 rounded-2xl text-sm font-medium transition-all text-center" style={{ background: "rgba(0,0,0,0.05)", color: "rgba(0,0,0,0.6)", border: "1px solid rgba(0,0,0,0.1)" }}>Join Party Chat</Link>

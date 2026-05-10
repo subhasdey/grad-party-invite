@@ -54,20 +54,45 @@ export default function ChatPage() {
     e.preventDefault();
     if (!text.trim() || !name) return;
     setSending(true);
+    const optimistic: ChatMessage = {
+      id: `optimistic-${Date.now()}`,
+      name,
+      text: text.trim(),
+      avatar: photoUrl || "#FFCB05",
+      createdAt: new Date().toISOString(),
+    };
+    setMessages(prev => [...prev, optimistic]);
+    const sent = text.trim();
+    setText("");
     await fetch("/api/messages", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, text, photoUrl }),
+      body: JSON.stringify({ name, text: sent, photoUrl }),
     });
-    setText("");
     await load();
     setSending(false);
   };
 
   if (status === "loading") {
     return (
-      <main className="min-h-screen flex items-center justify-center" style={{ background: "#f4f7ff" }}>
-        <p className="text-sm" style={{ color: "rgba(0,0,0,0.35)" }}>Loading...</p>
+      <main className="flex flex-col h-screen" style={{ background: "#f4f7ff" }}>
+        <div className="flex items-center gap-3 px-5 py-4 border-b" style={{ borderColor: "rgba(0,0,0,0.08)", background: "rgba(244,247,255,0.96)" }}>
+          <div className="w-7 h-7 rounded-full animate-pulse" style={{ background: "rgba(0,0,0,0.08)" }} />
+          <div className="space-y-1.5">
+            <div className="h-4 w-24 rounded-full animate-pulse" style={{ background: "rgba(0,0,0,0.08)" }} />
+            <div className="h-2.5 w-16 rounded-full animate-pulse" style={{ background: "rgba(0,0,0,0.05)" }} />
+          </div>
+        </div>
+        <div className="flex-1 px-4 py-6 space-y-4">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className={`flex gap-3 ${i % 2 === 1 ? "flex-row-reverse" : ""}`}>
+              <div className="w-8 h-8 rounded-full flex-shrink-0 animate-pulse" style={{ background: "rgba(0,0,0,0.08)" }} />
+              <div className={`max-w-[60%] space-y-1 ${i % 2 === 1 ? "items-end flex flex-col" : ""}`}>
+                <div className="h-10 rounded-2xl animate-pulse" style={{ width: `${120 + i * 20}px`, background: "rgba(0,0,0,0.07)" }} />
+              </div>
+            </div>
+          ))}
+        </div>
       </main>
     );
   }

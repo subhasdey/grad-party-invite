@@ -21,6 +21,7 @@ export default function GalleryPage() {
   const userName = session?.user?.name || "";
 
   const [media, setMedia]         = useState<MediaItem[]>([]);
+  const [loadingMedia, setLoadingMedia] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress]   = useState(0);
   const [caption, setCaption]     = useState("");
@@ -39,7 +40,7 @@ export default function GalleryPage() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const load = () =>
-    fetch("/api/media", { cache: "no-store" }).then(r => r.json()).then(setMedia).catch(console.error);
+    fetch("/api/media", { cache: "no-store" }).then(r => r.json()).then(d => { setMedia(d); setLoadingMedia(false); }).catch(() => setLoadingMedia(false));
 
   useEffect(() => {
     load();
@@ -237,6 +238,12 @@ export default function GalleryPage() {
               </svg>
               Sign in with Google
             </button>
+          </div>
+        ) : loadingMedia ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="rounded-2xl overflow-hidden animate-pulse aspect-square" style={{ background: "rgba(0,0,0,0.07)" }} />
+            ))}
           </div>
         ) : media.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-32" style={{ color: "rgba(0,0,0,0.25)" }}>

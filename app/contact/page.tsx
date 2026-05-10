@@ -47,12 +47,22 @@ export default function ContactPage() {
           {/* Event details */}
           <div className="p-6 rounded-3xl" style={{ background: "rgba(255,255,255,0.85)", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 4px 20px rgba(0,0,0,0.06)" }}>
             <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "rgba(0,0,0,0.35)" }}>Event Details</p>
-            <div className="space-y-1.5 text-sm" style={{ color: "rgba(0,0,0,0.55)" }}>
+            <div className="space-y-1.5 text-sm mb-4" style={{ color: "rgba(0,0,0,0.55)" }}>
               <p><span className="font-semibold" style={{ color: "#0d1525" }}>Date:</span> Friday, June 26, 2026</p>
               <p><span className="font-semibold" style={{ color: "#0d1525" }}>Time:</span> 6:00 PM</p>
               <p><span className="font-semibold" style={{ color: "#0d1525" }}>Venue:</span> Redmond Senior &amp; Community Center</p>
               <p><span className="font-semibold" style={{ color: "#0d1525" }}>City:</span> Redmond, WA</p>
             </div>
+            <a href="https://maps.google.com/?q=Redmond+Senior+and+Community+Center,+Redmond,+WA"
+              target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-2 w-full px-5 py-3 rounded-2xl text-sm font-semibold transition-all hover:scale-[1.01] active:scale-[0.99]"
+              style={{ background: "rgba(0,39,76,0.07)", color: "#00274C", border: "1px solid rgba(0,39,76,0.15)" }}>
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              Open in Google Maps
+            </a>
           </div>
 
           <Link href="/rsvp"
