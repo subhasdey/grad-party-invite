@@ -322,7 +322,7 @@ export default function WishlistPage() {
 
       {/* Claim modal */}
       {claimItem && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:px-4"
+        <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center sm:px-4"
           style={{ background: "rgba(0,0,0,0.5)" }}
           onClick={() => setClaimItem(null)}>
           <div className="w-full sm:max-w-sm rounded-t-3xl sm:rounded-3xl flex flex-col"
