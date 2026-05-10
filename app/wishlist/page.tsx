@@ -128,9 +128,9 @@ export default function WishlistPage() {
 
       <div className="relative z-10 max-w-2xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-10">
-          <Link href="/" className="inline-block text-xs mb-6 transition-all" style={{ color: "rgba(0,0,0,0.35)" }}>← Back to invite</Link>
-          <div className="mb-4 p-4 rounded-3xl inline-block" style={{ background: "rgba(255,203,5,0.15)" }}>
+        <div className="flex flex-col items-center text-center mb-10">
+          <Link href="/" className="text-xs mb-6 transition-all self-start" style={{ color: "rgba(0,0,0,0.35)" }}>← Back to invite</Link>
+          <div className="mb-4 p-4 rounded-3xl" style={{ background: "rgba(255,203,5,0.15)" }}>
             <Gift className="w-12 h-12" style={{ color: "#8A6E00" }} />
           </div>
           <h1 className="text-3xl font-bold mb-1" style={{ letterSpacing: "-0.03em", color: "#0d1525" }}>Gift Ideas</h1>
