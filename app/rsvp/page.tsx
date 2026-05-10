@@ -7,7 +7,7 @@ import { GraduationCap, Leaf, Flame, Sprout } from "lucide-react";
 
 type Diet = "veg" | "non-veg" | "both";
 
-const defaultForm = { name: "", email: "", phone: "", adults: 1, kids: 0, diet: "non-veg" as Diet, message: "", attending: true };
+const defaultForm = { name: "", email: "", phone: "", adults: 1, kids: 0, diet: "non-veg" as Diet, message: "", attending: true, glutenFree: false, nutAllergy: false };
 
 export default function RSVPPage() {
   const { data: session, status } = useSession();
@@ -34,9 +34,11 @@ export default function RSVPPage() {
                 phone:     String(existing.phone   || ""),
                 adults:    Number(existing.adults) || 1,
                 kids:      Number(existing.kids)   || 0,
-                diet:      (existing.diet as Diet) || "non-veg",
-                message:   String(existing.message || ""),
-                attending: Boolean(existing.attending),
+                diet:       (existing.diet as Diet) || "non-veg",
+                message:    String(existing.message || ""),
+                attending:  Boolean(existing.attending),
+                glutenFree: Boolean(existing.glutenFree),
+                nutAllergy: Boolean(existing.nutAllergy),
               });
             }
             setPageStatus("idle");
@@ -193,6 +195,30 @@ export default function RSVPPage() {
                         {label}
                       </button>
                     ))}
+                  </div>
+                </div>
+
+                {/* Allergy / special dietary needs */}
+                <div>
+                  <p className="text-xs mb-2 px-1" style={{ color: "rgba(0,0,0,0.45)" }}>Allergies / Special Needs</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {([
+                      ["glutenFree", "🌾", "Gluten Free"],
+                      ["nutAllergy", "🥜", "Nut Allergy"],
+                    ] as [string, string, string][]).map(([key, emoji, label]) => {
+                      const checked = form[key as "glutenFree" | "nutAllergy"];
+                      return (
+                        <button key={key} type="button" onClick={() => update(key, !checked)}
+                          className="flex items-center gap-3 px-4 py-3.5 rounded-2xl border text-sm font-medium transition-all text-left"
+                          style={checked
+                            ? { borderColor: "#FF6B35", background: "rgba(255,107,53,0.08)", color: "#c44a1a" }
+                            : { borderColor: "rgba(0,0,0,0.1)", background: "rgba(255,255,255,0.7)", color: "rgba(0,0,0,0.45)" }}>
+                          <span className="text-lg">{emoji}</span>
+                          <span>{label}</span>
+                          {checked && <span className="ml-auto text-xs font-bold" style={{ color: "#FF6B35" }}>✓</span>}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               </>

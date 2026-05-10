@@ -15,7 +15,7 @@ export async function GET() {
 }
 
 async function saveRsvp(body: Record<string, unknown>, isUpdate = false) {
-  const { name, email, phone, adults, kids, diet, message, song, attending } = body;
+  const { name, email, phone, adults, kids, diet, message, song, attending, glutenFree, nutAllergy } = body;
   const safeName     = String(name    || "").trim();
   const safeEmail    = String(email   || "").trim();
   const safePhone    = String(phone   || "").trim();
@@ -30,10 +30,12 @@ async function saveRsvp(body: Record<string, unknown>, isUpdate = false) {
   const data = {
     name: safeName, email: safeEmail||undefined, phone: safePhone||undefined,
     adults: safeAdults, kids: safeKids,
-    diet:    typeof diet    === "string" ? diet    : undefined,
-    message: typeof message === "string" ? message : undefined,
-    song:    typeof song    === "string" ? song    : undefined,
-    attending: safeAttending,
+    diet:       typeof diet    === "string"  ? diet    : undefined,
+    message:    typeof message === "string"  ? message : undefined,
+    song:       typeof song    === "string"  ? song    : undefined,
+    attending:  safeAttending,
+    glutenFree: Boolean(glutenFree),
+    nutAllergy: Boolean(nutAllergy),
   };
 
   if (isUpdate && safeEmail) {

@@ -124,7 +124,7 @@ export async function streamFile(fileId: string, rangeHeader?: string | null): P
 }
 
 // ── RSVP Sheet ───────────────────────────────────────────────────────────────
-// Columns: timestamp | name | email | phone | attending | adults | kids | diet | message | song
+// Columns: timestamp | name | email | phone | attending | adults | kids | diet | message | song | glutenFree | nutAllergy
 
 export async function appendRsvpToSheet(input: {
   name: string;
@@ -136,6 +136,8 @@ export async function appendRsvpToSheet(input: {
   diet?: string;
   message?: string;
   song?: string;
+  glutenFree?: boolean;
+  nutAllergy?: boolean;
 }): Promise<void> {
   const sheetId = process.env.GOOGLE_SHEET_ID;
   if (!sheetId) throw new Error("Missing GOOGLE_SHEET_ID");
@@ -153,10 +155,12 @@ export async function appendRsvpToSheet(input: {
     input.diet || "",
     input.message || "",
     input.song || "",
+    input.glutenFree ? "yes" : "no",
+    input.nutAllergy ? "yes" : "no",
   ]];
 
   const res = await fetch(
-    `${SHEETS_BASE}/${sheetId}/values/RSVP!A:J:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
+    `${SHEETS_BASE}/${sheetId}/values/RSVP!A:L:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
     {
       method: "POST",
       headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
@@ -173,7 +177,7 @@ export async function findRsvpRowByEmail(email: string): Promise<{ rowIndex: num
   const sheetId = process.env.GOOGLE_SHEET_ID;
   if (!sheetId || !email) return null;
   const accessToken = await getAccessToken();
-  const res = await fetch(`${SHEETS_BASE}/${sheetId}/values/RSVP!A:J`, { headers: { Authorization: `Bearer ${accessToken}` } });
+  const res = await fetch(`${SHEETS_BASE}/${sheetId}/values/RSVP!A:L`, { headers: { Authorization: `Bearer ${accessToken}` } });
   if (!res.ok) return null;
   const data = await res.json();
   const rows: string[][] = data.values || [];
@@ -183,13 +187,14 @@ export async function findRsvpRowByEmail(email: string): Promise<{ rowIndex: num
   const row = rows[idx];
   return {
     rowIndex: idx + 1, // 1-based sheet row
-    rsvp: { name: row[1], email: row[2], phone: row[3], attending: row[4] === "yes", adults: Number(row[5])||1, kids: Number(row[6])||0, diet: row[7]||"non-veg", message: row[8]||"", song: row[9]||"" },
+    rsvp: { name: row[1], email: row[2], phone: row[3], attending: row[4] === "yes", adults: Number(row[5])||1, kids: Number(row[6])||0, diet: row[7]||"non-veg", message: row[8]||"", song: row[9]||"", glutenFree: row[10]==="yes", nutAllergy: row[11]==="yes" },
   };
 }
 
 export async function updateRsvpInSheet(rowIndex: number, input: {
   name: string; email?: string; phone?: string; attending: boolean;
   adults: number; kids: number; diet?: string; message?: string; song?: string;
+  glutenFree?: boolean; nutAllergy?: boolean;
 }): Promise<void> {
   const sheetId = process.env.GOOGLE_SHEET_ID;
   if (!sheetId) throw new Error("Missing GOOGLE_SHEET_ID");
@@ -198,8 +203,9 @@ export async function updateRsvpInSheet(rowIndex: number, input: {
     new Date().toISOString(), input.name, input.email||"", input.phone||"",
     input.attending ? "yes" : "no", String(input.adults), String(input.kids),
     input.diet||"", input.message||"", input.song||"",
+    input.glutenFree ? "yes" : "no", input.nutAllergy ? "yes" : "no",
   ]];
-  const range = `RSVP!A${rowIndex}:J${rowIndex}`;
+  const range = `RSVP!A${rowIndex}:L${rowIndex}`;
   const res = await fetch(
     `${SHEETS_BASE}/${sheetId}/values/${encodeURIComponent(range)}?valueInputOption=RAW`,
     { method: "PUT", headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" }, body: JSON.stringify({ range, majorDimension: "ROWS", values }) }
@@ -213,7 +219,7 @@ export async function readRsvpsFromSheet(): Promise<object[]> {
 
   const accessToken = await getAccessToken();
   const res = await fetch(
-    `${SHEETS_BASE}/${sheetId}/values/RSVP!A:J`,
+    `${SHEETS_BASE}/${sheetId}/values/RSVP!A:L`,
     { headers: { Authorization: `Bearer ${accessToken}` } }
   );
   if (!res.ok) return [];
@@ -232,6 +238,8 @@ export async function readRsvpsFromSheet(): Promise<object[]> {
     diet: row[7] || "non-veg",
     message: row[8] || "",
     song: row[9] || "",
+    glutenFree: row[10] === "yes",
+    nutAllergy: row[11] === "yes",
     reminderSent: false,
   })).reverse();
 }
