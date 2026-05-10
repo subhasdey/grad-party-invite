@@ -323,10 +323,10 @@ export default function WishlistPage() {
       {/* Claim modal */}
       {claimItem && (
         <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center sm:px-4"
-          style={{ background: "rgba(0,0,0,0.5)" }}
+          style={{ background: "rgba(0,0,0,0.5)", paddingBottom: keyboardOffset > 0 ? keyboardOffset : "calc(env(safe-area-inset-bottom, 0px) + 64px)" }}
           onClick={() => setClaimItem(null)}>
           <div className="w-full sm:max-w-sm rounded-t-3xl sm:rounded-3xl flex flex-col"
-            style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 -8px 40px rgba(0,0,0,0.15)", maxHeight: "85dvh", marginBottom: keyboardOffset }}
+            style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 -8px 40px rgba(0,0,0,0.15)", maxHeight: "80dvh" }}
             onClick={e => e.stopPropagation()}>
             {/* Scrollable content */}
             <div className="overflow-y-auto px-6 pt-5 pb-2 flex-1">
