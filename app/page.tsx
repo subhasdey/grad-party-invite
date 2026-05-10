@@ -202,14 +202,14 @@ export default function Home() {
                 style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             </div>
           </div>
-          <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.35em] mb-6 px-4 text-center" style={{ color: "#8A6E00" }}>
+          <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.35em] mb-6 px-4 text-center" style={{ color: "#6B4E00" }}>
             You&rsquo;re Invited · A Twin Celebration
           </p>
           {/* Mobile: caps side-by-side above text */}
           <div className="flex sm:hidden justify-center items-end gap-6 mb-1">
             <div className="w-20">
               <Image src="/cap-purdue.svg" alt="Purdue graduation cap" width={140} height={120}
-                style={{ width: "100%", height: "auto", filter: "drop-shadow(0 4px 16px rgba(139,112,64,0.4))", transform: "rotate(-20deg)" }} />
+                style={{ width: "100%", height: "auto", filter: "drop-shadow(0 4px 20px rgba(100,75,30,0.7))", transform: "rotate(-20deg)" }} />
             </div>
             <div className="w-20">
               <Image src="/cap-michigan.svg" alt="Michigan graduation cap" width={140} height={120}
@@ -217,7 +217,7 @@ export default function Home() {
             </div>
           </div>
           <h1 className="sm:hidden font-display font-bold leading-[0.95] tracking-tight mb-2 text-center"
-            style={{ fontSize: "clamp(2.6rem,12vw,4rem)", background: "linear-gradient(135deg, #FFCB05 0%, #00274C 65%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+            style={{ fontSize: "clamp(2.6rem,12vw,4rem)", background: "linear-gradient(135deg, #00274C 0%, #FFCB05 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
             Graduation
           </h1>
 
@@ -225,10 +225,10 @@ export default function Home() {
           <div className="hidden sm:flex items-center gap-3 mb-2">
             <div className="w-[110px] flex-shrink-0">
               <Image src="/cap-purdue.svg" alt="Purdue graduation cap" width={140} height={120}
-                style={{ width: "100%", height: "auto", filter: "drop-shadow(0 4px 24px rgba(139,112,64,0.5))", transform: "rotate(-20deg)" }} />
+                style={{ width: "100%", height: "auto", filter: "drop-shadow(0 4px 28px rgba(100,75,30,0.75))", transform: "rotate(-20deg)" }} />
             </div>
             <h1 className="font-display font-bold leading-[0.95] tracking-tight"
-              style={{ fontSize: "clamp(2.2rem,10vw,8rem)", background: "linear-gradient(135deg, #FFCB05 0%, #00274C 50%, #FFCB05 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+              style={{ fontSize: "clamp(2.2rem,10vw,8rem)", background: "linear-gradient(135deg, #00274C 0%, #FFCB05 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
               Graduation
             </h1>
             <div className="w-[110px] flex-shrink-0">
@@ -237,7 +237,7 @@ export default function Home() {
             </div>
           </div>
           <h1 className="font-display font-bold leading-[0.95] tracking-tight mb-10"
-            style={{ fontSize: "clamp(2.2rem,10vw,8rem)", color: "rgba(0,0,0,0.1)" }}>
+            style={{ fontSize: "clamp(2.2rem,10vw,8rem)", color: "rgba(0,39,76,0.18)" }}>
             Party
           </h1>
 
@@ -252,12 +252,12 @@ export default function Home() {
           {/* School badges */}
           <div className="flex items-center gap-3 mb-12">
             <span className="text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full"
-              style={{ background: "rgba(139,112,64,0.1)", color: "#6B5020", border: "1px solid rgba(139,112,64,0.3)" }}>
+              style={{ background: "rgba(139,112,64,0.15)", color: "#5A3E10", border: "1px solid rgba(139,112,64,0.45)" }}>
               Boiler Up!
             </span>
-            <span style={{ color: "rgba(0,0,0,0.25)", fontSize: 20 }}>×</span>
+            <span style={{ color: "rgba(0,0,0,0.3)", fontSize: 20 }}>×</span>
             <span className="text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full"
-              style={{ background: "rgba(255,203,5,0.15)", color: "#7A5E00", border: "1px solid rgba(255,203,5,0.4)" }}>
+              style={{ background: "rgba(0,39,76,0.1)", color: "#00274C", border: "1px solid rgba(0,39,76,0.3)" }}>
               Go Blue!
             </span>
           </div>

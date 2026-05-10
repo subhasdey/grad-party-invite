@@ -2,25 +2,25 @@ import Link from "next/link";
 
 export default function ContactPage() {
   return (
-    <main className="min-h-screen flex items-center justify-center px-6 pb-24 relative" style={{ background: "#06090f" }}>
+    <main className="min-h-screen flex items-center justify-center px-6 pb-24 relative" style={{ background: "#f4f7ff" }}>
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-0 w-96 h-96 rounded-full blur-3xl opacity-20" style={{ background: "#00274C", transform: "translate(-40%,-40%)" }} />
-        <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full blur-3xl opacity-10" style={{ background: "#FFCB05", transform: "translate(40%,40%)" }} />
+        <div className="absolute top-0 left-0 w-96 h-96 rounded-full blur-3xl opacity-20" style={{ background: "#c8d8ff", transform: "translate(-40%,-40%)" }} />
+        <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full blur-3xl opacity-15" style={{ background: "#FFCB05", transform: "translate(40%,40%)" }} />
       </div>
       <div className="relative z-10 max-w-md w-full">
-        <Link href="/" className="text-xs mb-8 inline-block transition-all" style={{ color: "rgba(255,255,255,0.35)" }}>
+        <Link href="/" className="text-xs mb-8 inline-block transition-all" style={{ color: "rgba(0,0,0,0.35)" }}>
           ← Back to invite
         </Link>
 
-        <h1 className="text-3xl font-bold mb-1" style={{ letterSpacing: "-0.03em", color: "#ffffff" }}>Contact Us</h1>
-        <p className="text-sm mb-10" style={{ color: "rgba(255,255,255,0.4)" }}>We&apos;d love to hear from you</p>
+        <h1 className="text-3xl font-bold mb-1" style={{ letterSpacing: "-0.03em", color: "#0d1525" }}>Contact Us</h1>
+        <p className="text-sm mb-10" style={{ color: "rgba(0,0,0,0.45)" }}>We&apos;d love to hear from you</p>
 
         <div className="space-y-4">
           {/* Hosts */}
-          <div className="p-6 rounded-3xl" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-            <p className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: "rgba(255,255,255,0.35)" }}>Your Hosts</p>
-            <p className="text-xl font-bold mb-1" style={{ color: "#ffffff" }}>Subhas &amp; Sanchita Dey</p>
-            <p className="text-sm mb-5" style={{ color: "rgba(255,255,255,0.45)" }}>Parents of Iris &amp; Inesh</p>
+          <div className="p-6 rounded-3xl" style={{ background: "rgba(255,255,255,0.85)", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 4px 20px rgba(0,0,0,0.06)" }}>
+            <p className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: "rgba(0,0,0,0.35)" }}>Your Hosts</p>
+            <p className="text-xl font-bold mb-1" style={{ color: "#0d1525" }}>Subhas &amp; Sanchita Dey</p>
+            <p className="text-sm mb-5" style={{ color: "rgba(0,0,0,0.45)" }}>Parents of Iris &amp; Inesh</p>
 
             <div className="space-y-3">
               <a href="tel:4252896422"
@@ -45,19 +45,19 @@ export default function ContactPage() {
           </div>
 
           {/* Event details */}
-          <div className="p-6 rounded-3xl" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-            <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "rgba(255,255,255,0.35)" }}>Event Details</p>
-            <div className="space-y-1.5 text-sm" style={{ color: "rgba(255,255,255,0.55)" }}>
-              <p><span className="font-semibold" style={{ color: "#ffffff" }}>Date:</span> Friday, June 26, 2026</p>
-              <p><span className="font-semibold" style={{ color: "#ffffff" }}>Time:</span> 6:00 PM</p>
-              <p><span className="font-semibold" style={{ color: "#ffffff" }}>Venue:</span> Redmond Senior &amp; Community Center</p>
-              <p><span className="font-semibold" style={{ color: "#ffffff" }}>City:</span> Redmond, WA</p>
+          <div className="p-6 rounded-3xl" style={{ background: "rgba(255,255,255,0.85)", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 4px 20px rgba(0,0,0,0.06)" }}>
+            <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "rgba(0,0,0,0.35)" }}>Event Details</p>
+            <div className="space-y-1.5 text-sm" style={{ color: "rgba(0,0,0,0.55)" }}>
+              <p><span className="font-semibold" style={{ color: "#0d1525" }}>Date:</span> Friday, June 26, 2026</p>
+              <p><span className="font-semibold" style={{ color: "#0d1525" }}>Time:</span> 6:00 PM</p>
+              <p><span className="font-semibold" style={{ color: "#0d1525" }}>Venue:</span> Redmond Senior &amp; Community Center</p>
+              <p><span className="font-semibold" style={{ color: "#0d1525" }}>City:</span> Redmond, WA</p>
             </div>
           </div>
 
           <Link href="/rsvp"
             className="flex items-center justify-center w-full py-4 rounded-2xl text-sm font-bold transition-all hover:scale-[1.01]"
-            style={{ background: "linear-gradient(135deg,#FFCB05,#f5c400)", color: "#06090f" }}>
+            style={{ background: "linear-gradient(135deg,#FFCB05,#f5c400)", color: "#0d1525" }}>
             RSVP Now
           </Link>
         </div>
