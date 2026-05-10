@@ -309,35 +309,40 @@ export default function WishlistPage() {
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:px-4"
           style={{ background: "rgba(0,0,0,0.5)" }}
           onClick={() => setClaimItem(null)}>
-          <div className="w-full sm:max-w-sm rounded-t-3xl sm:rounded-3xl p-6 overflow-y-auto"
-            style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 -8px 40px rgba(0,0,0,0.15)", paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px))", maxHeight: "90dvh" }}
+          <div className="w-full sm:max-w-sm rounded-t-3xl sm:rounded-3xl flex flex-col"
+            style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 -8px 40px rgba(0,0,0,0.15)", maxHeight: "85dvh" }}
             onClick={e => e.stopPropagation()}>
-            {/* drag handle */}
-            <div className="w-10 h-1 rounded-full mx-auto mb-5 sm:hidden" style={{ background: "rgba(0,0,0,0.15)" }} />
-            <div className="mb-4 p-3 rounded-2xl inline-block" style={{ background: "rgba(255,203,5,0.15)" }}>
-              <Gift className="w-6 h-6" style={{ color: "#8A6E00" }} />
+            {/* Scrollable content */}
+            <div className="overflow-y-auto px-6 pt-5 pb-2 flex-1">
+              {/* drag handle */}
+              <div className="w-10 h-1 rounded-full mx-auto mb-5 sm:hidden" style={{ background: "rgba(0,0,0,0.15)" }} />
+              <div className="mb-4 p-3 rounded-2xl inline-block" style={{ background: "rgba(255,203,5,0.15)" }}>
+                <Gift className="w-6 h-6" style={{ color: "#8A6E00" }} />
+              </div>
+              <h3 className="text-lg font-bold mb-1" style={{ color: "#0d1525" }}>Reserve this gift</h3>
+              <p className="text-sm mb-1 font-medium" style={{ color: "#8A6E00" }}>{claimItem.name}</p>
+              {claimItem.price && <p className="text-xs mb-4" style={{ color: "rgba(0,0,0,0.45)" }}>{claimItem.price}</p>}
+              <p className="text-xs mb-3" style={{ color: "rgba(0,0,0,0.5)" }}>Your name will be shown as reserved so others don&apos;t duplicate.</p>
+              <input
+                autoFocus
+                value={claimName}
+                onChange={e => setClaimName(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && submitClaim()}
+                placeholder="Your name"
+                className={inputCls}
+              />
+              {claimError && <p className="text-xs text-red-500 mt-2">{claimError}</p>}
             </div>
-            <h3 className="text-lg font-bold mb-1" style={{ color: "#0d1525" }}>Reserve this gift</h3>
-            <p className="text-sm mb-1 font-medium" style={{ color: "#8A6E00" }}>{claimItem.name}</p>
-            {claimItem.price && <p className="text-xs mb-4" style={{ color: "rgba(0,0,0,0.45)" }}>{claimItem.price}</p>}
-            <p className="text-xs mb-3" style={{ color: "rgba(0,0,0,0.5)" }}>Your name will be shown as reserved so others don&apos;t duplicate.</p>
-            <input
-              autoFocus
-              value={claimName}
-              onChange={e => setClaimName(e.target.value)}
-              onKeyDown={e => e.key === "Enter" && submitClaim()}
-              placeholder="Your name"
-              className={`${inputCls} mb-2`}
-            />
-            {claimError && <p className="text-xs text-red-500 mb-2">{claimError}</p>}
-            <div className="flex gap-2 mt-3">
+            {/* Sticky buttons always visible above keyboard */}
+            <div className="px-6 pt-3 pb-4 flex gap-2 border-t"
+              style={{ borderColor: "rgba(0,0,0,0.06)", paddingBottom: "calc(1rem + env(safe-area-inset-bottom, 0px))", background: "#ffffff" }}>
               <button onClick={() => setClaimItem(null)}
-                className="flex-1 py-3 rounded-2xl text-sm font-medium transition-all"
+                className="flex-1 py-3.5 rounded-2xl text-sm font-medium transition-all"
                 style={{ background: "rgba(0,0,0,0.05)", color: "rgba(0,0,0,0.55)", border: "1px solid rgba(0,0,0,0.08)" }}>
                 Cancel
               </button>
               <button onClick={submitClaim} disabled={claiming}
-                className="flex-1 py-3 rounded-2xl text-sm font-bold transition-all hover:scale-[1.02] disabled:opacity-50"
+                className="flex-1 py-3.5 rounded-2xl text-sm font-bold transition-all disabled:opacity-50"
                 style={{ background: "linear-gradient(135deg,#FFCB05,#f5c400)", color: "#0d1525" }}>
                 {claiming ? "Saving..." : "I'll get this!"}
               </button>
