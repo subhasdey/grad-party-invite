@@ -2,10 +2,10 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const HOST_EMAIL = "subhascdey@gmail.com";
+const HOST_EMAILS = ["subhascdey@gmail.com", "monjoy.dey@gmail.com"];
 const FROM = "Iris & Inesh Graduation <onboarding@resend.dev>";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://grad-party-invite-tan.vercel.app";
+const APP_URL = "https://iris-and-inesh-2026.vercel.app";
 const DATE = "Friday, June 26, 2026";
 const TIME = "6:00 PM";
 const VENUE = "Redmond Senior & Community Center, Redmond, WA";
@@ -77,8 +77,8 @@ function hostNotificationHtml(guestName: string, attending: boolean, details: Re
   <div style="padding:24px 28px">
     <table style="width:100%;border-collapse:collapse">${rows}</table>
   </div>
-  <div style="padding:16px 28px;border-top:1px solid rgba(0,0,0,0.06);text-align:center">
-    <a href="${APP_URL}/admin" style="display:inline-block;background:#00274C;color:#FFCB05;padding:10px 22px;border-radius:50px;text-decoration:none;font-size:12px;font-weight:700">View Admin Dashboard</a>
+  <div style="padding:12px 28px;border-top:1px solid rgba(0,0,0,0.06);text-align:center">
+    <p style="margin:0;font-size:11px;color:rgba(0,0,0,0.35)">Iris &amp; Inesh Graduation Party · June 26, 2026</p>
   </div>
 </div>`;
 }
@@ -111,7 +111,7 @@ export async function sendHostNotification(guestName: string, attending: boolean
     Message: details.message || "",
   };
   try {
-    await resend.emails.send({ from: FROM, to: HOST_EMAIL, subject, html: hostNotificationHtml(guestName, attending, detailMap) });
+    await resend.emails.send({ from: FROM, to: HOST_EMAILS, subject, html: hostNotificationHtml(guestName, attending, detailMap) });
   } catch (err) {
     console.error("Host notification failed:", err);
   }
