@@ -306,12 +306,14 @@ export default function WishlistPage() {
 
       {/* Claim modal */}
       {claimItem && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center px-4 pb-4"
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:px-4"
           style={{ background: "rgba(0,0,0,0.5)" }}
           onClick={() => setClaimItem(null)}>
-          <div className="w-full max-w-sm rounded-3xl p-6"
-            style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}
+          <div className="w-full sm:max-w-sm rounded-t-3xl sm:rounded-3xl p-6 overflow-y-auto"
+            style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 -8px 40px rgba(0,0,0,0.15)", paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px))", maxHeight: "90dvh" }}
             onClick={e => e.stopPropagation()}>
+            {/* drag handle */}
+            <div className="w-10 h-1 rounded-full mx-auto mb-5 sm:hidden" style={{ background: "rgba(0,0,0,0.15)" }} />
             <div className="mb-4 p-3 rounded-2xl inline-block" style={{ background: "rgba(255,203,5,0.15)" }}>
               <Gift className="w-6 h-6" style={{ color: "#8A6E00" }} />
             </div>
