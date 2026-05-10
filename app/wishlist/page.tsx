@@ -17,8 +17,8 @@ interface WishItem {
 
 const CATEGORIES = ["Tech", "Books", "Clothing", "Home", "Experience", "Gift Card", "Other"];
 const PERSON_COLORS = {
-  iris:  { bg: "#1a1200", accent: "#CFB991", label: "Iris", badge: { background: "#CFB991", color: "#3a2800" } },
-  inesh: { bg: "#00111f", accent: "#FFCB05", label: "Inesh", badge: { background: "#00274C", color: "#FFCB05" } },
+  iris:  { accent: "#8A6E00", label: "Iris",  badge: { background: "#f5ead5", color: "#6b4e00" } },
+  inesh: { accent: "#00274C", label: "Inesh", badge: { background: "#e6eef7", color: "#00274C" } },
 };
 
 function maskName(name: string) {
@@ -32,13 +32,11 @@ export default function WishlistPage() {
   const [tab, setTab]             = useState<"iris" | "inesh">("iris");
   const [loading, setLoading]     = useState(true);
 
-  // Claim modal
   const [claimItem, setClaimItem] = useState<WishItem | null>(null);
   const [claimName, setClaimName] = useState("");
   const [claiming, setClaiming]   = useState(false);
   const [claimError, setClaimError] = useState("");
 
-  // Admin
   const [adminOpen, setAdminOpen] = useState(false);
   const [adminPwd, setAdminPwd]   = useState("");
   const [authed, setAuthed]       = useState(false);
@@ -53,11 +51,7 @@ export default function WishlistPage() {
   };
 
   useEffect(() => { load(); }, []);
-
-  // Pre-fill claim name from Google session
-  useEffect(() => {
-    if (session?.user?.name) setClaimName(session.user.name);
-  }, [session]);
+  useEffect(() => { if (session?.user?.name) setClaimName(session.user.name); }, [session]);
 
   const filtered = items.filter(i => i.person === tab || i.person === "both");
   const available = filtered.filter(i => !i.claimedBy).length;
@@ -77,12 +71,8 @@ export default function WishlistPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: claimItem._id, claimedBy: claimName.trim() }),
     });
-    if (res.ok) {
-      await load();
-      setClaimItem(null);
-    } else {
-      setClaimError("Something went wrong. Try again.");
-    }
+    if (res.ok) { await load(); setClaimItem(null); }
+    else setClaimError("Something went wrong. Try again.");
     setClaiming(false);
   };
 
@@ -110,29 +100,30 @@ export default function WishlistPage() {
     setDeleting(null);
   };
 
-  const inputCls = "w-full rounded-2xl px-4 py-3 text-sm text-white placeholder-white/30 bg-white/[0.06] border border-white/10";
+  const inputCls = "w-full rounded-2xl px-4 py-3 text-sm bg-white border border-black/10 text-[#0d1525] placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-yellow-300/40";
 
   return (
-    <main className="min-h-screen px-4 py-10 pb-24" style={{ background: "#06090f" }}>
+    <main className="min-h-screen px-4 py-10 pb-24 relative" style={{ background: "#f4f7ff" }}>
       {/* Blobs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-20" style={{ background: "#00274C", transform: "translate(30%,-30%)", filter: "blur(80px)" }} />
-        <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full opacity-10" style={{ background: "#FFCB05", transform: "translate(-30%,30%)", filter: "blur(80px)" }} />
+        <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-20" style={{ background: "#c8d8ff", transform: "translate(30%,-30%)", filter: "blur(80px)" }} />
+        <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full opacity-15" style={{ background: "#FFCB05", transform: "translate(-30%,30%)", filter: "blur(80px)" }} />
       </div>
 
       <div className="relative z-10 max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-10">
-          <Link href="/" className="inline-block text-xs mb-6 transition-all" style={{ color: "rgba(255,255,255,0.35)" }}>← Back to invite</Link>
-          <div className="mb-4 p-4 rounded-3xl inline-block" style={{ background: "rgba(255,203,5,0.12)" }}>
-            <Gift className="w-12 h-12" style={{ color: "#FFCB05" }} />
+          <Link href="/" className="inline-block text-xs mb-6 transition-all" style={{ color: "rgba(0,0,0,0.35)" }}>← Back to invite</Link>
+          <div className="mb-4 p-4 rounded-3xl inline-block" style={{ background: "rgba(255,203,5,0.15)" }}>
+            <Gift className="w-12 h-12" style={{ color: "#8A6E00" }} />
           </div>
-          <h1 className="text-3xl font-bold mb-1" style={{ letterSpacing: "-0.03em", color: "#ffffff" }}>Gift Ideas</h1>
-          <p className="text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>Iris &amp; Inesh Dey · Class of 2026</p>
+          <h1 className="text-3xl font-bold mb-1" style={{ letterSpacing: "-0.03em", color: "#0d1525" }}>Gift Ideas</h1>
+          <p className="text-sm" style={{ color: "rgba(0,0,0,0.45)" }}>Iris &amp; Inesh Dey · Class of 2026</p>
         </div>
 
         {/* Tabs */}
-        <div className="grid grid-cols-2 gap-2 p-1 rounded-2xl mb-8" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+        <div className="grid grid-cols-2 gap-2 p-1 rounded-2xl mb-8"
+          style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
           {(["iris", "inesh"] as const).map(p => {
             const c = PERSON_COLORS[p];
             const count = items.filter(i => (i.person === p || i.person === "both") && !i.claimedBy && i.name).length;
@@ -140,8 +131,8 @@ export default function WishlistPage() {
               <button key={p} onClick={() => setTab(p)}
                 className="py-3.5 rounded-xl text-sm font-semibold transition-all"
                 style={tab === p
-                  ? { background: p === "iris" ? "#CFB991" : "#00274C", color: p === "iris" ? "#3a2800" : "#FFCB05" }
-                  : { color: "rgba(255,255,255,0.4)" }}>
+                  ? { background: p === "iris" ? "#CFB991" : "#00274C", color: p === "iris" ? "#3a2800" : "#FFCB05", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }
+                  : { color: "rgba(0,0,0,0.4)" }}>
                 {c.label}
                 {count > 0 && <span className="ml-2 text-xs opacity-70">{count} available</span>}
               </button>
@@ -152,13 +143,13 @@ export default function WishlistPage() {
         {/* Stats bar */}
         {!loading && filtered.length > 0 && (
           <div className="flex items-center justify-between mb-5 px-1">
-            <p className="text-xs" style={{ color: "rgba(255,255,255,0.45)" }}>
+            <p className="text-xs" style={{ color: "rgba(0,0,0,0.45)" }}>
               {available} of {filtered.length} items still available
             </p>
-            <div className="flex-1 mx-4 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.08)" }}>
+            <div className="flex-1 mx-4 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(0,0,0,0.08)" }}>
               <div className="h-full rounded-full transition-all" style={{ width: `${Math.round(((filtered.length - available) / Math.max(filtered.length, 1)) * 100)}%`, background: "#FFCB05" }} />
             </div>
-            <p className="text-xs font-semibold" style={{ color: "#FFCB05" }}>
+            <p className="text-xs font-semibold" style={{ color: "#8A6E00" }}>
               {Math.round(((filtered.length - available) / Math.max(filtered.length, 1)) * 100)}% claimed
             </p>
           </div>
@@ -166,11 +157,11 @@ export default function WishlistPage() {
 
         {/* Items */}
         {loading ? (
-          <div className="text-center py-20 text-sm" style={{ color: "rgba(255,255,255,0.35)" }}>Loading...</div>
+          <div className="text-center py-20 text-sm" style={{ color: "rgba(0,0,0,0.35)" }}>Loading...</div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-20">
-            <Gift className="w-12 h-12 mx-auto mb-4 opacity-20" style={{ color: "#ffffff" }} />
-            <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>No gifts added yet — check back soon!</p>
+            <Gift className="w-12 h-12 mx-auto mb-4 opacity-20" style={{ color: "#0d1525" }} />
+            <p className="text-sm" style={{ color: "rgba(0,0,0,0.4)" }}>No gifts added yet — check back soon!</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -178,32 +169,39 @@ export default function WishlistPage() {
               const claimed = !!item.claimedBy;
               return (
                 <div key={item._id} className="p-4 sm:p-5 rounded-2xl transition-all"
-                  style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${claimed ? "rgba(255,255,255,0.06)" : "rgba(255,203,5,0.2)"}`, opacity: claimed ? 0.6 : 1 }}>
+                  style={{
+                    background: "rgba(255,255,255,0.85)",
+                    border: `1px solid ${claimed ? "rgba(0,0,0,0.06)" : "rgba(255,203,5,0.4)"}`,
+                    boxShadow: "0 2px 12px rgba(0,0,0,0.05)",
+                    opacity: claimed ? 0.65 : 1,
+                  }}>
                   <div className="flex flex-col gap-3">
                     {/* Top: badges */}
                     <div className="flex items-center gap-2 flex-wrap">
                       {item.category && (
                         <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
-                          style={{ background: "rgba(255,203,5,0.12)", color: "#FFCB05" }}>{item.category}</span>
+                          style={{ background: "rgba(255,203,5,0.18)", color: "#8A6E00" }}>{item.category}</span>
                       )}
                       {(item.person === "iris" || item.person === "inesh") && (
                         <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
-                          style={PERSON_COLORS[item.person as "iris" | "inesh"].badge}>{PERSON_COLORS[item.person as "iris" | "inesh"].label}</span>
+                          style={PERSON_COLORS[item.person as "iris" | "inesh"].badge}>
+                          {PERSON_COLORS[item.person as "iris" | "inesh"].label}
+                        </span>
                       )}
                     </div>
                     {/* Middle: name + description */}
                     <div>
-                      <p className="font-semibold text-base mb-0.5" style={{ color: "#ffffff" }}>{item.name}</p>
-                      {item.description && <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.5)" }}>{item.description}</p>}
+                      <p className="font-semibold text-base mb-0.5" style={{ color: "#0d1525" }}>{item.name}</p>
+                      {item.description && <p className="text-sm leading-relaxed" style={{ color: "rgba(0,0,0,0.5)" }}>{item.description}</p>}
                     </div>
                     {/* Bottom: price + link + action */}
                     <div className="flex items-center justify-between gap-3 flex-wrap">
                       <div className="flex items-center gap-3 flex-wrap">
-                        {item.price && <span className="text-sm font-semibold" style={{ color: "#FFCB05" }}>{item.price}</span>}
+                        {item.price && <span className="text-sm font-semibold" style={{ color: "#8A6E00" }}>{item.price}</span>}
                         {item.url && (
                           <a href={item.url} target="_blank" rel="noopener noreferrer"
                             className="flex items-center gap-1 text-xs font-medium transition-all hover:underline"
-                            style={{ color: "rgba(255,255,255,0.45)" }}>
+                            style={{ color: "rgba(0,0,0,0.4)" }}>
                             <ExternalLink className="w-3 h-3" /> View item
                           </a>
                         )}
@@ -211,7 +209,7 @@ export default function WishlistPage() {
                       <div className="flex items-center gap-2 flex-shrink-0">
                         {claimed ? (
                           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold"
-                            style={{ background: "rgba(52,199,89,0.1)", color: "#34C759", border: "1px solid rgba(52,199,89,0.2)" }}>
+                            style={{ background: "rgba(52,199,89,0.1)", color: "#1a7a35", border: "1px solid rgba(52,199,89,0.25)" }}>
                             <CheckCircle className="w-3.5 h-3.5" />
                             {maskName(item.claimedBy)}
                           </div>
@@ -243,28 +241,28 @@ export default function WishlistPage() {
           {!adminOpen ? (
             <button onClick={() => setAdminOpen(true)}
               className="flex items-center gap-2 mx-auto text-xs transition-all"
-              style={{ color: "rgba(255,255,255,0.25)" }}>
+              style={{ color: "rgba(0,0,0,0.25)" }}>
               <Lock className="w-3 h-3" /> Manage list
             </button>
           ) : !authed ? (
-            <div className="p-5 rounded-2xl" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <p className="text-xs font-semibold mb-3" style={{ color: "rgba(255,255,255,0.4)" }}>Admin Password</p>
+            <div className="p-5 rounded-2xl" style={{ background: "rgba(255,255,255,0.85)", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 2px 12px rgba(0,0,0,0.05)" }}>
+              <p className="text-xs font-semibold mb-3" style={{ color: "rgba(0,0,0,0.4)" }}>Admin Password</p>
               <div className="flex gap-2">
                 <input type="password" value={adminPwd} onChange={e => setAdminPwd(e.target.value)}
                   placeholder="Password" className={`${inputCls} flex-1`} />
                 <button onClick={() => setAuthed(adminPwd === "admin123")}
                   className="px-5 py-3 rounded-2xl text-sm font-bold"
-                  style={{ background: "linear-gradient(135deg,#FFCB05,#f5c400)", color: "#06090f" }}>Go</button>
+                  style={{ background: "linear-gradient(135deg,#FFCB05,#f5c400)", color: "#0d1525" }}>Go</button>
               </div>
             </div>
           ) : (
-            <div className="p-5 rounded-2xl space-y-3" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <p className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: "#FFCB05" }}>
+            <div className="p-5 rounded-2xl space-y-3" style={{ background: "rgba(255,255,255,0.85)", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 2px 12px rgba(0,0,0,0.05)" }}>
+              <p className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: "#8A6E00" }}>
                 <Plus className="w-3.5 h-3.5" /> Add Gift Idea
               </p>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-xs mb-1" style={{ color: "rgba(255,255,255,0.4)" }}>For</label>
+                  <label className="block text-xs mb-1" style={{ color: "rgba(0,0,0,0.45)" }}>For</label>
                   <select value={form.person} onChange={e => setForm(f => ({ ...f, person: e.target.value }))} className={inputCls}>
                     <option value="iris">Iris</option>
                     <option value="inesh">Inesh</option>
@@ -272,33 +270,33 @@ export default function WishlistPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs mb-1" style={{ color: "rgba(255,255,255,0.4)" }}>Category</label>
+                  <label className="block text-xs mb-1" style={{ color: "rgba(0,0,0,0.45)" }}>Category</label>
                   <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))} className={inputCls}>
                     {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
               </div>
               <div>
-                <label className="block text-xs mb-1" style={{ color: "rgba(255,255,255,0.4)" }}>Item name *</label>
+                <label className="block text-xs mb-1" style={{ color: "rgba(0,0,0,0.45)" }}>Item name *</label>
                 <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="e.g. AirPods Pro" className={inputCls} />
               </div>
               <div>
-                <label className="block text-xs mb-1" style={{ color: "rgba(255,255,255,0.4)" }}>Description</label>
+                <label className="block text-xs mb-1" style={{ color: "rgba(0,0,0,0.45)" }}>Description</label>
                 <input value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder="Short description..." className={inputCls} />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-xs mb-1" style={{ color: "rgba(255,255,255,0.4)" }}>Price range</label>
+                  <label className="block text-xs mb-1" style={{ color: "rgba(0,0,0,0.45)" }}>Price range</label>
                   <input value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} placeholder="e.g. ~$50" className={inputCls} />
                 </div>
                 <div>
-                  <label className="block text-xs mb-1" style={{ color: "rgba(255,255,255,0.4)" }}>Link (optional)</label>
+                  <label className="block text-xs mb-1" style={{ color: "rgba(0,0,0,0.45)" }}>Link (optional)</label>
                   <input value={form.url} onChange={e => setForm(f => ({ ...f, url: e.target.value }))} placeholder="https://..." className={inputCls} />
                 </div>
               </div>
               <button onClick={addItem} disabled={adding || !form.name.trim()}
                 className="w-full py-3.5 rounded-2xl text-sm font-bold transition-all hover:scale-[1.01] disabled:opacity-50"
-                style={{ background: "linear-gradient(135deg,#FFCB05,#f5c400)", color: "#06090f" }}>
+                style={{ background: "linear-gradient(135deg,#FFCB05,#f5c400)", color: "#0d1525" }}>
                 {adding ? "Adding..." : "Add Gift Idea"}
               </button>
             </div>
@@ -309,16 +307,18 @@ export default function WishlistPage() {
       {/* Claim modal */}
       {claimItem && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center px-4 pb-4"
-          style={{ background: "rgba(0,0,0,0.7)" }}
+          style={{ background: "rgba(0,0,0,0.5)" }}
           onClick={() => setClaimItem(null)}>
-          <div className="w-full max-w-sm rounded-3xl p-6" style={{ background: "#0e1117", border: "1px solid rgba(255,255,255,0.1)" }} onClick={e => e.stopPropagation()}>
-            <div className="mb-4 p-3 rounded-2xl inline-block" style={{ background: "rgba(255,203,5,0.12)" }}>
-              <Gift className="w-6 h-6" style={{ color: "#FFCB05" }} />
+          <div className="w-full max-w-sm rounded-3xl p-6"
+            style={{ background: "#ffffff", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}
+            onClick={e => e.stopPropagation()}>
+            <div className="mb-4 p-3 rounded-2xl inline-block" style={{ background: "rgba(255,203,5,0.15)" }}>
+              <Gift className="w-6 h-6" style={{ color: "#8A6E00" }} />
             </div>
-            <h3 className="text-lg font-bold mb-1" style={{ color: "#ffffff" }}>Reserve this gift</h3>
-            <p className="text-sm mb-1 font-medium" style={{ color: "#FFCB05" }}>{claimItem.name}</p>
-            {claimItem.price && <p className="text-xs mb-4" style={{ color: "rgba(255,255,255,0.45)" }}>{claimItem.price}</p>}
-            <p className="text-xs mb-3" style={{ color: "rgba(255,255,255,0.5)" }}>Your name will be shown as reserved so others don&apos;t duplicate.</p>
+            <h3 className="text-lg font-bold mb-1" style={{ color: "#0d1525" }}>Reserve this gift</h3>
+            <p className="text-sm mb-1 font-medium" style={{ color: "#8A6E00" }}>{claimItem.name}</p>
+            {claimItem.price && <p className="text-xs mb-4" style={{ color: "rgba(0,0,0,0.45)" }}>{claimItem.price}</p>}
+            <p className="text-xs mb-3" style={{ color: "rgba(0,0,0,0.5)" }}>Your name will be shown as reserved so others don&apos;t duplicate.</p>
             <input
               autoFocus
               value={claimName}
@@ -327,16 +327,16 @@ export default function WishlistPage() {
               placeholder="Your name"
               className={`${inputCls} mb-2`}
             />
-            {claimError && <p className="text-xs text-red-400 mb-2">{claimError}</p>}
+            {claimError && <p className="text-xs text-red-500 mb-2">{claimError}</p>}
             <div className="flex gap-2 mt-3">
               <button onClick={() => setClaimItem(null)}
                 className="flex-1 py-3 rounded-2xl text-sm font-medium transition-all"
-                style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                style={{ background: "rgba(0,0,0,0.05)", color: "rgba(0,0,0,0.55)", border: "1px solid rgba(0,0,0,0.08)" }}>
                 Cancel
               </button>
               <button onClick={submitClaim} disabled={claiming}
                 className="flex-1 py-3 rounded-2xl text-sm font-bold transition-all hover:scale-[1.02] disabled:opacity-50"
-                style={{ background: "linear-gradient(135deg,#FFCB05,#f5c400)", color: "#06090f" }}>
+                style={{ background: "linear-gradient(135deg,#FFCB05,#f5c400)", color: "#0d1525" }}>
                 {claiming ? "Saving..." : "I'll get this!"}
               </button>
             </div>
