@@ -35,15 +35,31 @@ export default function BottomNav() {
 
   return (
     <nav className="md:hidden fixed bottom-0 inset-x-0 z-50 flex items-center"
-      style={{ background: "rgba(11,14,23,0.95)", backdropFilter: "blur(20px)", borderTop: "1px solid rgba(255,255,255,0.08)", paddingBottom: "env(safe-area-inset-bottom)" }}>
+      style={{
+        background: "rgba(255,255,255,0.92)",
+        backdropFilter: "blur(24px)",
+        WebkitBackdropFilter: "blur(24px)",
+        borderTop: "1px solid rgba(0,0,0,0.08)",
+        paddingBottom: "env(safe-area-inset-bottom)",
+        boxShadow: "0 -4px 20px rgba(0,0,0,0.06)",
+      }}>
       {TABS.map(({ label, href, icon }) => {
         const active = path === href;
         return (
           <Link key={href} href={href}
-            className="flex-1 flex flex-col items-center justify-center gap-1 py-3 transition-all"
-            style={{ color: active ? "#FFCB05" : "rgba(255,255,255,0.4)" }}>
-            {icon(active)}
-            <span className="text-[10px] font-semibold uppercase tracking-wider">{label}</span>
+            className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2.5 active:opacity-60 transition-opacity"
+            style={{ color: active ? "#00274C" : "rgba(0,0,0,0.35)", minHeight: 56 }}>
+            <div className="relative">
+              {icon(active)}
+              {active && (
+                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
+                  style={{ background: "#FFCB05" }} />
+              )}
+            </div>
+            <span className="text-[10px] font-semibold uppercase tracking-wider mt-0.5"
+              style={{ color: active ? "#00274C" : "rgba(0,0,0,0.35)" }}>
+              {label}
+            </span>
           </Link>
         );
       })}
