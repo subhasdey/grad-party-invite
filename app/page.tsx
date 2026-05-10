@@ -89,11 +89,11 @@ export default function Home() {
   const shareUrl  = encodeURIComponent(appUrl);
 
   return (
-    <div style={{ background: "#06090f", color: "#ffffff" }}>
+    <div style={{ background: "#0d1525", color: "#ffffff" }}>
 
       {/* ── STICKY NAV ── */}
       <nav className="fixed top-0 inset-x-0 z-50 transition-all duration-500"
-        style={{ background: navBg ? "rgba(6,9,15,0.92)" : "transparent", backdropFilter: navBg ? "blur(20px)" : "none", borderBottom: navBg ? "1px solid rgba(255,203,5,0.1)" : "none" }}>
+        style={{ background: navBg ? "rgba(13,21,37,0.94)" : "transparent", backdropFilter: navBg ? "blur(20px)" : "none", borderBottom: navBg ? "1px solid rgba(255,203,5,0.1)" : "none" }}>
         <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
           <span className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: "rgba(255,203,5,0.6)" }}>Class of 2026</span>
           <div className="flex items-center gap-2">
@@ -129,7 +129,7 @@ export default function Home() {
                 {/* Dropdown */}
                 {userMenuOpen && (
                   <div className="absolute top-full right-0 mt-2 w-60 rounded-2xl overflow-hidden z-50"
-                    style={{ background: "rgba(14,17,23,0.97)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(24px)", boxShadow: "0 20px 60px rgba(0,0,0,0.6)" }}>
+                    style={{ background: "rgba(18,28,48,0.97)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(24px)", boxShadow: "0 20px 60px rgba(0,0,0,0.6)" }}>
                     {/* Profile */}
                     <div className="flex items-center gap-3 px-4 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
                       {session.user.image
@@ -185,11 +185,11 @@ export default function Home() {
           SECTION 1 — HERO
       ══════════════════════════════════════════ */}
       <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-        <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #060d1f 0%, #0d1b35 50%, #060d1f 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #101e38 0%, #1a2e50 50%, #101e38 100%)" }} />
         {/* Flowing gradient orbs */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute" style={{ top: "-15%", right: "-5%", width: "65vw", height: "65vw", background: "radial-gradient(circle, rgba(255,203,5,0.11) 0%, transparent 60%)", filter: "blur(70px)" }} />
-          <div className="absolute" style={{ bottom: "-15%", left: "-10%", width: "55vw", height: "55vw", background: "radial-gradient(circle, rgba(0,60,120,0.7) 0%, transparent 65%)", filter: "blur(60px)" }} />
+          <div className="absolute" style={{ bottom: "-15%", left: "-10%", width: "55vw", height: "55vw", background: "radial-gradient(circle, rgba(0,60,120,0.5) 0%, transparent 65%)", filter: "blur(60px)" }} />
           <div className="absolute" style={{ top: "45%", left: "25%", width: "40vw", height: "40vw", background: "radial-gradient(circle, rgba(255,203,5,0.05) 0%, transparent 65%)", filter: "blur(90px)" }} />
         </div>
 
@@ -241,7 +241,7 @@ export default function Home() {
             Party
           </h1>
 
-          <div className="flex items-center justify-center gap-2 sm:gap-4 mb-10 text-xs sm:text-sm font-medium flex-wrap" style={{ color: "rgba(255,255,255,0.45)" }}>
+          <div className="flex items-center justify-center gap-2 sm:gap-4 mb-10 text-xs sm:text-sm font-medium flex-wrap" style={{ color: "rgba(255,255,255,0.65)" }}>
             <span>June 26, 2026</span>
             <span style={{ color: "rgba(255,255,255,0.2)" }}>·</span>
             <span>6:00 PM</span>
@@ -284,7 +284,7 @@ export default function Home() {
           {/* Parent message */}
           <div className="mt-12 max-w-xl px-6 py-6 rounded-2xl text-center"
             style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,203,5,0.12)", backdropFilter: "blur(20px)" }}>
-            <p className="text-sm leading-relaxed mb-3" style={{ color: "rgba(255,255,255,0.55)", fontStyle: "italic" }}>
+            <p className="text-sm leading-relaxed mb-3" style={{ color: "rgba(255,255,255,0.75)", fontStyle: "italic" }}>
               &ldquo;Today, our family has double the reason to celebrate the Class of 2026 for all of their hard work and sleepless nights. Our twins have officially made their college commitments, and we couldn&rsquo;t be more proud of the paths they have each chosen. As they prepare to embark on this exciting next chapter, we would love to celebrate their achievements with the people who matter most. Please join us with your family to bless, cheer, and send Inesh and Iris off on their next great adventure!&rdquo;
             </p>
             <p className="text-xs font-semibold" style={{ color: "#FFCB05" }}>— Sanchita and Subhas</p>
@@ -304,7 +304,7 @@ export default function Home() {
           SECTION 2 — THE GRADUATES
       ══════════════════════════════════════════ */}
       <section className="min-h-screen flex flex-col items-center justify-center py-24 px-6 relative overflow-hidden"
-        style={{ background: "linear-gradient(180deg, #080c17 0%, #06090f 100%)" }}>
+        style={{ background: "linear-gradient(180deg, #111e35 0%, #0d1525 100%)" }}>
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute" style={{ top: "10%", left: "-10%", width: "50vw", height: "50vw", background: "radial-gradient(circle, rgba(207,185,145,0.06) 0%, transparent 65%)", filter: "blur(80px)" }} />
         </div>
@@ -416,7 +416,7 @@ export default function Home() {
           SECTION 3 — EVENT DETAILS + COUNTDOWN
       ══════════════════════════════════════════ */}
       <section className="min-h-screen flex flex-col items-center justify-center py-24 px-6 relative overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #0a1628 0%, #06090f 50%, #0a1628 100%)" }}>
+        style={{ background: "linear-gradient(135deg, #142038 0%, #0d1525 50%, #142038 100%)" }}>
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute" style={{ top: "20%", right: "-10%", width: "50vw", height: "50vw", background: "radial-gradient(circle, rgba(255,203,5,0.07) 0%, transparent 65%)", filter: "blur(70px)" }} />
           <div className="absolute" style={{ bottom: "10%", left: "-5%", width: "40vw", height: "40vw", background: "radial-gradient(circle, rgba(0,60,120,0.5) 0%, transparent 65%)", filter: "blur(70px)" }} />
@@ -439,7 +439,7 @@ export default function Home() {
                   <Icon className="w-8 h-8" style={{ color: "#FFCB05" }} />
                 </div>
                 <p className="font-display text-2xl font-bold mb-2 text-white">{val}</p>
-                <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>{sub}</p>
+                <p className="text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>{sub}</p>
               </div>
             ))}
           </div>
@@ -485,7 +485,7 @@ export default function Home() {
           SECTION 4 — EVENING ITINERARY
       ══════════════════════════════════════════ */}
       <section className="min-h-screen flex flex-col items-center justify-center py-24 px-6"
-        style={{ background: "linear-gradient(180deg, #06090f 0%, #080c14 100%)" }}>
+        style={{ background: "linear-gradient(180deg, #0d1525 0%, #111a2e 100%)" }}>
         <div ref={itineraryReveal.ref} className="w-full max-w-3xl transition-all duration-1000"
           style={{ opacity: itineraryReveal.visible ? 1 : 0, transform: itineraryReveal.visible ? "translateY(0)" : "translateY(60px)" }}>
 
@@ -532,7 +532,7 @@ export default function Home() {
                 <Car className="w-4 h-4" style={{ color: "#FFCB05" }} />
                 <p className="text-xs font-bold uppercase tracking-widest" style={{ color: "#FFCB05" }}>Parking</p>
               </div>
-              <p className="text-sm" style={{ color: "rgba(255,255,255,0.5)" }}>Free parking at the Redmond Senior &amp; Community Center lot. Street parking nearby.</p>
+              <p className="text-sm" style={{ color: "rgba(255,255,255,0.65)" }}>Free parking at the Redmond Senior &amp; Community Center lot. Street parking nearby.</p>
             </div>
           </div>
         </div>
@@ -542,7 +542,7 @@ export default function Home() {
           SECTION 5 — WISH WALL
       ══════════════════════════════════════════ */}
       {wishes.length > 0 && (
-        <section className="py-24 px-6" style={{ background: "linear-gradient(135deg, #080c17 0%, #06090f 100%)" }}>
+        <section className="py-24 px-6" style={{ background: "linear-gradient(135deg, #111e35 0%, #0d1525 100%)" }}>
           <div ref={wishReveal.ref} className="w-full max-w-4xl mx-auto transition-all duration-1000"
             style={{ opacity: wishReveal.visible ? 1 : 0, transform: wishReveal.visible ? "translateY(0)" : "translateY(60px)" }}>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-4" style={{ color: "rgba(255,203,5,0.6)" }}>Guest Wishes</p>
@@ -554,7 +554,7 @@ export default function Home() {
               {wishes.map((w, i) => (
                 <div key={i} className="p-6 rounded-2xl flex flex-col"
                   style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${i % 2 === 0 ? "rgba(207,185,145,0.15)" : "rgba(255,203,5,0.15)"}`, backdropFilter: "blur(20px)" }}>
-                  <p className="text-sm leading-relaxed flex-1 mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>&ldquo;{w.message}&rdquo;</p>
+                  <p className="text-sm leading-relaxed flex-1 mb-4" style={{ color: "rgba(255,255,255,0.75)" }}>&ldquo;{w.message}&rdquo;</p>
                   <p className="text-xs font-bold uppercase tracking-widest" style={{ color: i % 2 === 0 ? "#CFB991" : "#FFCB05" }}>— {w.name}</p>
                 </div>
               ))}
@@ -566,7 +566,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════
           SECTION 6 — SHARE (admin only)
       ══════════════════════════════════════════ */}
-      {isAdmin && <section className="py-24 px-6" style={{ background: "linear-gradient(180deg, #06090f 0%, #080c14 100%)" }}>
+      {isAdmin && <section className="py-24 px-6" style={{ background: "linear-gradient(180deg, #0d1525 0%, #111a2e 100%)" }}>
         <div ref={shareReveal.ref} className="w-full max-w-3xl mx-auto transition-all duration-1000"
           style={{ opacity: shareReveal.visible ? 1 : 0, transform: shareReveal.visible ? "translateY(0)" : "translateY(60px)" }}>
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-4" style={{ color: "rgba(255,203,5,0.6)" }}>Spread the Word</p>
@@ -604,7 +604,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════
           FOOTER
       ══════════════════════════════════════════ */}
-      <footer className="py-10 px-6" style={{ borderTop: "1px solid rgba(255,203,5,0.1)", background: "#040711" }}>
+      <footer className="py-10 px-6" style={{ borderTop: "1px solid rgba(255,203,5,0.1)", background: "#0a1220" }}>
         <div className="max-w-4xl mx-auto flex flex-col items-center gap-6">
           {/* School badges */}
           <div className="flex items-center gap-3 text-xs font-medium">
