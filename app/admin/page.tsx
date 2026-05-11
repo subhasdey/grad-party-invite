@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { UserCheck, UserX, Users, Utensils, Music, Gift, CheckCircle, type LucideIcon } from "lucide-react";
+import { UserCheck, UserX, Users, Music, Gift, CheckCircle, type LucideIcon } from "lucide-react";
 
 interface RSVP {
   _id: string; name: string; email: string; phone?: string;
@@ -126,15 +126,30 @@ export default function AdminPage() {
         )}
 
         {/* ── STATS ── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3">
           {([
-            { label: "Total Attendees", value: totalHeads,              sub: `${totalAdults} adults · ${totalKids} kids`, color: "#34C759", Icon: UserCheck as LucideIcon },
-            { label: "RSVPs Attending", value: attending.length,        sub: `families / groups`,                         color: "#FFCB05", Icon: Users    as LucideIcon },
-            { label: "Declined",        value: declined.length,         sub: "cannot make it",                            color: "#FF453A", Icon: UserX    as LucideIcon },
-            { label: "Dietary Breakdown", value: `${vegCount}·${nonVegCount}·${jainCount}`, sub: "veg · non-veg · jain", color: "#CFB991", Icon: Utensils as LucideIcon },
-          ] as { label: string; value: string|number; sub: string; color: string; Icon: LucideIcon }[]).map(s => (
+            { label: "Total Attendees", value: totalHeads,     sub: `${totalAdults} adults · ${totalKids} kids`, color: "#34C759", Icon: UserCheck as LucideIcon },
+            { label: "RSVPs Attending", value: attending.length, sub: "families / groups",                       color: "#FFCB05", Icon: Users    as LucideIcon },
+            { label: "Declined",        value: declined.length,  sub: "cannot make it",                          color: "#FF453A", Icon: UserX    as LucideIcon },
+          ] as { label: string; value: number; sub: string; color: string; Icon: LucideIcon }[]).map(s => (
             <div key={s.label} className="rounded-2xl p-4" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
               <s.Icon className="w-5 h-5 mb-2" style={{ color: s.color }} />
+              <div className="font-display text-2xl font-bold mb-0.5" style={{ color: s.color }}>{s.value}</div>
+              <div className="text-white/60 text-xs font-medium">{s.label}</div>
+              <div className="text-white/30 text-[11px] mt-0.5">{s.sub}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Dietary breakdown — 3 individual cards */}
+        <div className="grid grid-cols-3 gap-3 mb-3">
+          {([
+            { label: "Vegetarian",  value: vegCount,    sub: "guests", color: "#34C759", emoji: "🥦" },
+            { label: "Non-Veg",     value: nonVegCount, sub: "guests", color: "#FF9F0A", emoji: "🍗" },
+            { label: "Jain",        value: jainCount,   sub: "guests", color: "#CFB991", emoji: "🌱" },
+          ]).map(s => (
+            <div key={s.label} className="rounded-2xl p-4" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <span className="text-xl mb-2 block">{s.emoji}</span>
               <div className="font-display text-2xl font-bold mb-0.5" style={{ color: s.color }}>{s.value}</div>
               <div className="text-white/60 text-xs font-medium">{s.label}</div>
               <div className="text-white/30 text-[11px] mt-0.5">{s.sub}</div>
