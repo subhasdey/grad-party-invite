@@ -97,10 +97,14 @@ export default function Home() {
           <div className="flex items-center gap-2">
             {/* Desktop nav links */}
             <div className="hidden md:flex items-center gap-2">
-              {([["Gallery","/gallery"],["Gifts","/wishlist"],["Chat","/chat"],["Admin","/admin"]] as [string,string][]).map(([l,h]) => (
+              {([["Gallery","/gallery"],["Gifts","/wishlist"],["Chat","/chat"]] as [string,string][]).map(([l,h]) => (
                 <Link key={h} href={h} className="px-4 py-1.5 rounded-full text-xs font-medium transition-all hover:text-[#0d1525]"
                   style={{ color: "rgba(0,0,0,0.45)", border: "1px solid rgba(0,0,0,0.1)" }}>{l}</Link>
               ))}
+              {isAdmin && (
+                <Link href="/admin" className="px-4 py-1.5 rounded-full text-xs font-medium transition-all hover:text-[#0d1525]"
+                  style={{ color: "rgba(0,0,0,0.45)", border: "1px solid rgba(0,0,0,0.1)" }}>Admin</Link>
+              )}
               <Link href="/rsvp" className="ml-2 px-5 py-1.5 rounded-full text-xs font-bold transition-all hover:scale-105"
                 style={{ background: "#FFCB05", color: "#0d1525" }}>RSVP Now</Link>
             </div>
@@ -602,21 +606,25 @@ export default function Home() {
       {/* ══════════════════════════════════════════
           FOOTER
       ══════════════════════════════════════════ */}
-      <footer className="py-10 px-6" style={{ borderTop: "1px solid rgba(0,0,0,0.08)", background: "#0d1525" }}>
+      <footer className="py-10 px-6" style={{ borderTop: "1px solid rgba(0,0,0,0.08)", background: "#f4f7ff" }}>
         <div className="max-w-4xl mx-auto flex flex-col items-center gap-6">
           <div className="flex items-center gap-3 text-xs font-medium">
-            <span style={{ color: "#CFB991" }}>Purdue Boilermakers</span>
-            <span style={{ color: "rgba(255,255,255,0.25)" }}>×</span>
-            <span style={{ color: "#FFCB05" }}>Michigan Wolverines</span>
+            <span style={{ color: "#7a5a00" }}>Purdue Boilermakers</span>
+            <span style={{ color: "rgba(0,0,0,0.2)" }}>×</span>
+            <span style={{ color: "#00274C" }}>Michigan Wolverines</span>
           </div>
-          <div className="flex items-center gap-5 text-xs flex-wrap justify-center" style={{ color: "rgba(255,255,255,0.35)" }}>
-            <Link href="/contact" className="hover:text-[#FFCB05] transition-all">Contact Us</Link>
-            <span style={{ color: "rgba(255,255,255,0.1)" }}>·</span>
-            <Link href="/privacy" className="hover:text-[#FFCB05] transition-all">Privacy Policy</Link>
-            <span style={{ color: "rgba(255,255,255,0.1)" }}>·</span>
-            <Link href="/admin" className="hover:text-[#FFCB05] transition-all">Admin</Link>
+          <div className="flex items-center gap-5 text-xs flex-wrap justify-center" style={{ color: "rgba(0,0,0,0.4)" }}>
+            <Link href="/contact" className="hover:text-[#0d1525] transition-all">Contact Us</Link>
+            <span style={{ color: "rgba(0,0,0,0.15)" }}>·</span>
+            <Link href="/privacy" className="hover:text-[#0d1525] transition-all">Privacy Policy</Link>
+            {isAdmin && (
+              <>
+                <span style={{ color: "rgba(0,0,0,0.15)" }}>·</span>
+                <Link href="/admin" className="hover:text-[#0d1525] transition-all">Admin</Link>
+              </>
+            )}
           </div>
-          <p className="text-[11px] text-center" style={{ color: "rgba(255,255,255,0.25)" }}>
+          <p className="text-[11px] text-center" style={{ color: "rgba(0,0,0,0.3)" }}>
             © 2026 Iris &amp; Inesh Dey Graduation Celebration™ · All rights reserved. · Powered by Nuvensa
           </p>
         </div>
