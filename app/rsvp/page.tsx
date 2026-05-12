@@ -17,6 +17,30 @@ export default function RSVPPage() {
 
   const update = (k: string, v: string | number | boolean) => setForm(f => ({ ...f, [k]: v }));
 
+  const checkPhoneDuplicate = async (phone: string) => {
+    if (isEdit || phone.replace(/\D/g, "").length < 7) return;
+    try {
+      const rsvps: Array<Record<string, unknown>> = await fetch("/api/rsvp").then(r => r.json());
+      const clean = (p: string) => String(p || "").replace(/\D/g, "");
+      const existing = rsvps.find(r => clean(String(r.phone || "")) && clean(String(r.phone || "")) === clean(phone));
+      if (existing) {
+        setIsEdit(true);
+        setForm({
+          name:       String(existing.name    || ""),
+          email:      String(existing.email   || ""),
+          phone:      String(existing.phone   || ""),
+          adults:     Number(existing.adults) || 1,
+          kids:       Number(existing.kids)   || 0,
+          diet:       (existing.diet as Diet) || "non-veg",
+          message:    String(existing.message || ""),
+          attending:  Boolean(existing.attending),
+          glutenFree: Boolean(existing.glutenFree),
+          nutAllergy: Boolean(existing.nutAllergy),
+        });
+      }
+    } catch { /* ignore */ }
+  };
+
   useEffect(() => {
     if (session?.user) {
       setForm(f => ({ ...f, name: session.user?.name || f.name, email: session.user?.email || f.email }));
@@ -124,8 +148,16 @@ export default function RSVPPage() {
           <p className="text-sm" style={{ color: "rgba(0,0,0,0.45)" }}>Inesh &amp; Iris Dey · June 26, 2026</p>
         </div>
 
+        {/* Existing RSVP notice (phone-matched, not signed in) */}
+        {isEdit && status === "unauthenticated" && (
+          <div className="mb-6 px-4 py-3 rounded-2xl flex items-center gap-3" style={{ background: "rgba(255,203,5,0.12)", border: "1px solid rgba(255,203,5,0.35)" }}>
+            <span className="text-lg">✏️</span>
+            <p className="text-sm font-medium" style={{ color: "#8A6E00" }}>We found your RSVP — you can update it below.</p>
+          </div>
+        )}
+
         {/* Google Sign-In prompt */}
-        {status === "unauthenticated" && (
+        {status === "unauthenticated" && !isEdit && (
           <div className="mb-6 p-5 rounded-2xl text-center" style={{ background: "rgba(255,255,255,0.8)", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
             <p className="text-sm mb-4" style={{ color: "rgba(0,0,0,0.5)" }}>Sign in to save your RSVP and edit it anytime</p>
             <button onClick={() => signIn("google")}
@@ -178,7 +210,7 @@ export default function RSVPPage() {
               placeholder="Email address" className={inputCls}
               readOnly={status === "authenticated" && !!session?.user?.email}
               style={status === "authenticated" && session?.user?.email ? { opacity: 0.6, cursor: "default" } : {}} />
-            <input type="tel" required value={form.phone} onChange={e => update("phone", e.target.value)} placeholder="Phone number *" className={inputCls} />
+            <input type="tel" required value={form.phone} onChange={e => update("phone", e.target.value)} onBlur={e => checkPhoneDuplicate(e.target.value)} placeholder="Phone number *" className={inputCls} />
 
             {form.attending && (
               <>

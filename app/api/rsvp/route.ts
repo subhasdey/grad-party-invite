@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { appendRsvpToSheet, readRsvpsFromSheet, findRsvpRowByEmail, updateRsvpInSheet } from "@/lib/googledrive";
+import { appendRsvpToSheet, readRsvpsFromSheet, findRsvpRowByEmail, findRsvpRowByPhone, updateRsvpInSheet } from "@/lib/googledrive";
 import { sendConfirmationEmail, sendHostNotification } from "@/lib/email";
 import { sendConfirmationSMS } from "@/lib/sms";
 
@@ -38,11 +38,23 @@ async function saveRsvp(body: Record<string, unknown>, isUpdate = false) {
     nutAllergy: Boolean(nutAllergy),
   };
 
-  if (isUpdate && safeEmail) {
-    const existing = await findRsvpRowByEmail(safeEmail);
+  // For PUT: find by email first, fall back to phone
+  if (isUpdate) {
+    const existing = safeEmail ? await findRsvpRowByEmail(safeEmail) : null
+      || await findRsvpRowByPhone(safePhone);
     if (existing) {
       await updateRsvpInSheet(existing.rowIndex, data);
       return NextResponse.json({ updated: true }, { status: 200 });
+    }
+  }
+
+  // For POST: prevent duplicates — if phone already exists, update instead
+  if (!isUpdate && safePhone) {
+    const existing = await findRsvpRowByPhone(safePhone)
+      || (safeEmail ? await findRsvpRowByEmail(safeEmail) : null);
+    if (existing) {
+      await updateRsvpInSheet(existing.rowIndex, data);
+      return NextResponse.json({ updated: true, alreadyExisted: true }, { status: 200 });
     }
   }
 

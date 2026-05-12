@@ -191,6 +191,24 @@ export async function findRsvpRowByEmail(email: string): Promise<{ rowIndex: num
   };
 }
 
+export async function findRsvpRowByPhone(phone: string): Promise<{ rowIndex: number; rsvp: Record<string, unknown> } | null> {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId || !phone) return null;
+  const accessToken = await getAccessToken();
+  const res = await fetch(`${SHEETS_BASE}/${sheetId}/values/RSVP!A:L`, { headers: { Authorization: `Bearer ${accessToken}` } });
+  if (!res.ok) return null;
+  const data = await res.json();
+  const rows: string[][] = data.values || [];
+  const clean = (p: string) => p.replace(/\D/g, "");
+  const idx = rows.findIndex(row => row[3] && clean(row[3]) === clean(phone));
+  if (idx === -1) return null;
+  const row = rows[idx];
+  return {
+    rowIndex: idx + 1,
+    rsvp: { name: row[1], email: row[2], phone: row[3], attending: row[4] === "yes", adults: Number(row[5])||1, kids: Number(row[6])||0, diet: row[7]||"non-veg", message: row[8]||"", song: row[9]||"", glutenFree: row[10]==="yes", nutAllergy: row[11]==="yes" },
+  };
+}
+
 export async function updateRsvpInSheet(rowIndex: number, input: {
   name: string; email?: string; phone?: string; attending: boolean;
   adults: number; kids: number; diet?: string; message?: string; song?: string;
