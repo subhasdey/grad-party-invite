@@ -160,7 +160,7 @@ export async function appendRsvpToSheet(input: {
   ]];
 
   const res = await fetch(
-    `${SHEETS_BASE}/${sheetId}/values/RSVP!A:L:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
+    `${SHEETS_BASE}/${sheetId}/values/RSVP%21A1:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
     {
       method: "POST",
       headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },

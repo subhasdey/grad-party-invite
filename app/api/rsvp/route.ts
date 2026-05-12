@@ -40,18 +40,18 @@ async function saveRsvp(body: Record<string, unknown>, isUpdate = false) {
 
   // For PUT: find by email first, fall back to phone
   if (isUpdate) {
-    const existing = safeEmail ? await findRsvpRowByEmail(safeEmail) : null
-      || await findRsvpRowByPhone(safePhone);
+    let existing = safeEmail ? await findRsvpRowByEmail(safeEmail) : null;
+    if (!existing) existing = await findRsvpRowByPhone(safePhone);
     if (existing) {
       await updateRsvpInSheet(existing.rowIndex, data);
       return NextResponse.json({ updated: true }, { status: 200 });
     }
   }
 
-  // For POST: prevent duplicates — if phone already exists, update instead
-  if (!isUpdate && safePhone) {
-    const existing = await findRsvpRowByPhone(safePhone)
-      || (safeEmail ? await findRsvpRowByEmail(safeEmail) : null);
+  // For POST: prevent duplicates — update instead of appending if phone/email matches
+  if (!isUpdate) {
+    let existing = await findRsvpRowByPhone(safePhone);
+    if (!existing && safeEmail) existing = await findRsvpRowByEmail(safeEmail);
     if (existing) {
       await updateRsvpInSheet(existing.rowIndex, data);
       return NextResponse.json({ updated: true, alreadyExisted: true }, { status: 200 });
