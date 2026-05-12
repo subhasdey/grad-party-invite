@@ -29,13 +29,14 @@ async function saveRsvp(body: Record<string, unknown>, isUpdate = false) {
 
   const data = {
     name: safeName, email: safeEmail||undefined, phone: safePhone||undefined,
-    adults: safeAdults, kids: safeKids,
-    diet:       typeof diet    === "string"  ? diet    : undefined,
-    message:    typeof message === "string"  ? message : undefined,
-    song:       typeof song    === "string"  ? song    : undefined,
+    adults: safeAttending ? safeAdults : 0,
+    kids:   safeAttending ? safeKids   : 0,
+    diet:       safeAttending && typeof diet === "string" ? diet : undefined,
+    message:    typeof message === "string" ? message : undefined,
+    song:       typeof song    === "string" ? song    : undefined,
     attending:  safeAttending,
-    glutenFree: Boolean(glutenFree),
-    nutAllergy: Boolean(nutAllergy),
+    glutenFree: safeAttending ? Boolean(glutenFree) : false,
+    nutAllergy: safeAttending ? Boolean(nutAllergy) : false,
   };
 
   // For PUT: find by email first, fall back to phone
