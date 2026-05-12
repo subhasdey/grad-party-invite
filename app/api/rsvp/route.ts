@@ -23,8 +23,8 @@ async function saveRsvp(body: Record<string, unknown>, isUpdate = false) {
   const safeKids     = Number(kids)   || 0;
   const safeAttending = Boolean(attending);
 
-  if (!safeName || (!safeEmail && !safePhone)) {
-    return NextResponse.json({ error: "Name and contact required" }, { status: 400 });
+  if (!safeName || !safePhone) {
+    return NextResponse.json({ error: "Name and phone number are required" }, { status: 400 });
   }
 
   const data = {

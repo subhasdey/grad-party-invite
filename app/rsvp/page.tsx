@@ -178,7 +178,7 @@ export default function RSVPPage() {
               placeholder="Email address" className={inputCls}
               readOnly={status === "authenticated" && !!session?.user?.email}
               style={status === "authenticated" && session?.user?.email ? { opacity: 0.6, cursor: "default" } : {}} />
-            <input type="tel" value={form.phone} onChange={e => update("phone", e.target.value)} placeholder="Phone (for reminders)" className={inputCls} />
+            <input type="tel" required value={form.phone} onChange={e => update("phone", e.target.value)} placeholder="Phone number *" className={inputCls} />
 
             {form.attending && (
               <>
