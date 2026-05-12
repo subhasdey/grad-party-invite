@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { UserCheck, UserX, Users, Music, Gift, CheckCircle, type LucideIcon } from "lucide-react";
@@ -126,64 +127,25 @@ export default function AdminPage() {
         )}
 
         {/* ── STATS ── */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3">
+        <div className="grid grid-cols-4 md:grid-cols-6 gap-2 mb-4">
           {([
-            { label: "Total Attendees", value: totalHeads,     sub: `${totalAdults} adults · ${totalKids} kids`, color: "#34C759", Icon: UserCheck as LucideIcon },
-            { label: "RSVPs Attending", value: attending.length, sub: "families / groups",                       color: "#FFCB05", Icon: Users    as LucideIcon },
-            { label: "Declined",        value: declined.length,  sub: "cannot make it",                          color: "#FF453A", Icon: UserX    as LucideIcon },
-          ] as { label: string; value: number; sub: string; color: string; Icon: LucideIcon }[]).map(s => (
-            <div key={s.label} className="rounded-2xl p-4" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <s.Icon className="w-5 h-5 mb-2" style={{ color: s.color }} />
-              <div className="font-display text-2xl font-bold mb-0.5" style={{ color: s.color }}>{s.value}</div>
-              <div className="text-white/60 text-xs font-medium">{s.label}</div>
-              <div className="text-white/30 text-[11px] mt-0.5">{s.sub}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Dietary breakdown — 3 individual cards */}
-        <div className="grid grid-cols-3 gap-3 mb-3">
-          {([
-            { label: "Vegetarian",  value: vegCount,    sub: "guests", color: "#34C759", emoji: "🥦" },
-            { label: "Non-Veg",     value: nonVegCount, sub: "guests", color: "#FF9F0A", emoji: "🍗" },
-            { label: "Jain",        value: jainCount,   sub: "guests", color: "#CFB991", emoji: "🌱" },
-          ]).map(s => (
-            <div key={s.label} className="rounded-2xl p-4" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <span className="text-xl mb-2 block">{s.emoji}</span>
-              <div className="font-display text-2xl font-bold mb-0.5" style={{ color: s.color }}>{s.value}</div>
-              <div className="text-white/60 text-xs font-medium">{s.label}</div>
-              <div className="text-white/30 text-[11px] mt-0.5">{s.sub}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Allergy / special dietary stats */}
-        <div className="grid grid-cols-2 gap-3 mb-3">
-          {([
-            { label: "Gluten Free", value: glutenFreeCount, sub: "attending guests", color: "#FF9F0A", emoji: "🌾" },
-            { label: "Nut Allergy", value: nutAllergyCount, sub: "attending guests", color: "#FF453A", emoji: "🥜" },
-          ]).map(s => (
-            <div key={s.label} className="rounded-2xl p-4" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <span className="text-xl mb-2 block">{s.emoji}</span>
-              <div className="font-display text-2xl font-bold mb-0.5" style={{ color: s.color }}>{s.value}</div>
-              <div className="text-white/60 text-xs font-medium">{s.label}</div>
-              <div className="text-white/30 text-[11px] mt-0.5">{s.sub}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Wishlist summary stats */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          {([
-            { label: "Gift Items",   value: wishlist.length, sub: "total on list",     color: "#9b59ff" },
-            { label: "Claimed",      value: claimed.length,  sub: "reserved by guests", color: "#34C759" },
-            { label: "Still Available", value: unclaimed.length, sub: "not yet taken",  color: "#FFCB05" },
-          ]).map(s => (
-            <div key={s.label} className="rounded-2xl p-4" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <Gift className="w-5 h-5 mb-2" style={{ color: s.color }} />
-              <div className="font-display text-2xl font-bold mb-0.5" style={{ color: s.color }}>{s.value}</div>
-              <div className="text-white/60 text-xs font-medium">{s.label}</div>
-              <div className="text-white/30 text-[11px] mt-0.5">{s.sub}</div>
+            { label: "Attendees",  value: totalHeads,        sub: `${totalAdults}a · ${totalKids}k`, color: "#34C759", icon: <UserCheck className="w-4 h-4" style={{ color: "#34C759" }} /> },
+            { label: "Attending",  value: attending.length,  sub: "RSVPs",                           color: "#FFCB05", icon: <Users    className="w-4 h-4" style={{ color: "#FFCB05" }} /> },
+            { label: "Declined",   value: declined.length,   sub: "can't make it",                   color: "#FF453A", icon: <UserX    className="w-4 h-4" style={{ color: "#FF453A" }} /> },
+            { label: "Vegetarian", value: vegCount,          sub: "guests",                          color: "#34C759", icon: <span className="text-sm">🥦</span> },
+            { label: "Non-Veg",    value: nonVegCount,       sub: "guests",                          color: "#FF9F0A", icon: <span className="text-sm">🍗</span> },
+            { label: "Jain",       value: jainCount,         sub: "guests",                          color: "#CFB991", icon: <span className="text-sm">🌱</span> },
+            { label: "Gluten Free",value: glutenFreeCount,   sub: "allergy",                         color: "#FF9F0A", icon: <span className="text-sm">🌾</span> },
+            { label: "Nut Allergy",value: nutAllergyCount,   sub: "allergy",                         color: "#FF453A", icon: <span className="text-sm">🥜</span> },
+            { label: "Gifts",      value: wishlist.length,   sub: "on list",                         color: "#9b59ff", icon: <Gift     className="w-4 h-4" style={{ color: "#9b59ff" }} /> },
+            { label: "Claimed",    value: claimed.length,    sub: "reserved",                        color: "#34C759", icon: <Gift     className="w-4 h-4" style={{ color: "#34C759" }} /> },
+            { label: "Available",  value: unclaimed.length,  sub: "remaining",                       color: "#FFCB05", icon: <Gift     className="w-4 h-4" style={{ color: "#FFCB05" }} /> },
+          ] as { label: string; value: number; sub: string; color: string; icon: React.ReactNode }[]).map(s => (
+            <div key={s.label} className="rounded-xl p-3" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <div className="mb-1">{s.icon}</div>
+              <div className="text-xl font-bold leading-none mb-1" style={{ color: s.color }}>{s.value}</div>
+              <div className="text-white/60 text-[11px] font-medium leading-tight">{s.label}</div>
+              <div className="text-white/25 text-[10px] mt-0.5">{s.sub}</div>
             </div>
           ))}
         </div>
