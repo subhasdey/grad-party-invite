@@ -45,7 +45,10 @@ export default function GalleryPage() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const load = () =>
-    fetch("/api/media", { cache: "no-store" }).then(r => r.json()).then(d => { setMedia(d); setLoadingMedia(false); }).catch(() => setLoadingMedia(false));
+    fetch("/api/media", { cache: "no-store" })
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(d => { setMedia(d); setLoadingMedia(false); })
+      .catch(() => setLoadingMedia(false));
 
   useEffect(() => {
     load();

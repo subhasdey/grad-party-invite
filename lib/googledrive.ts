@@ -488,14 +488,17 @@ export async function deleteMediaFromSheet(rowIndex: number): Promise<void> {
 
 export async function readMediaFromSheet(): Promise<object[]> {
   const sheetId = process.env.GOOGLE_SHEET_ID;
-  if (!sheetId) return [];
+  if (!sheetId) throw new Error("Missing GOOGLE_SHEET_ID");
 
   const accessToken = await getAccessToken();
   const res = await fetch(
     `${SHEETS_BASE}/${sheetId}/values/Media!A:H`,
     { headers: { Authorization: `Bearer ${accessToken}` } }
   );
-  if (!res.ok) return [];
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Failed to read media (${res.status}): ${err}`);
+  }
   const data = await res.json();
   const rows: string[][] = data.values || [];
 

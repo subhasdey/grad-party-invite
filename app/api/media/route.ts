@@ -10,7 +10,7 @@ export async function GET() {
     return NextResponse.json(media);
   } catch (err) {
     console.error("Media fetch error:", err);
-    return NextResponse.json([]);
+    return NextResponse.json({ error: err instanceof Error ? err.message : "Failed to load media" }, { status: 500 });
   }
 }
 
