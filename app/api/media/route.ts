@@ -17,7 +17,7 @@ export async function GET() {
 // Record metadata after a client-side blob upload completes
 export async function POST(req: NextRequest) {
   try {
-    const { name, url, caption, type } = await req.json();
+    const { name, url, caption, type, email } = await req.json();
     if (!url) return NextResponse.json({ error: "Missing url" }, { status: 400 });
     await appendMediaToSheet({
       name: name || "Guest",
@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
       fileId: url,
       type: type || "image",
       caption: caption || "",
+      email: email || "",
     });
     return NextResponse.json({ ok: true });
   } catch (err) {

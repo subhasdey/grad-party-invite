@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { upload as blobUpload } from "@vercel/blob/client";
 
+const ADMINS = ["subhascdey@gmail.com", "monjoy.dey@gmail.com"];
+
 interface MediaItem {
   _id: string;
   name: string;
@@ -14,11 +16,14 @@ interface MediaItem {
   thumbnail?: string;
   createdAt: string;
   likes: number;
+  email?: string;
 }
 
 export default function GalleryPage() {
   const { data: session, status } = useSession();
   const userName = session?.user?.name || "";
+  const userEmail = session?.user?.email || "";
+  const isAdmin = ADMINS.includes(userEmail);
 
   const [media, setMedia]         = useState<MediaItem[]>([]);
   const [loadingMedia, setLoadingMedia] = useState(true);
@@ -68,11 +73,15 @@ export default function GalleryPage() {
       setProgress(90);
 
       const type = file.type.startsWith("video/") ? "video" : "image";
-      await fetch("/api/media", {
+      const mediaRes = await fetch("/api/media", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: userName, url: blob.url, caption: caption.trim(), type }),
+        body: JSON.stringify({ name: userName, url: blob.url, caption: caption.trim(), type, email: userEmail }),
       });
+      if (!mediaRes.ok) {
+        const data = await mediaRes.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to save media");
+      }
 
       const newItem: MediaItem = {
         _id: String(Date.now()),
@@ -254,7 +263,7 @@ export default function GalleryPage() {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {media.map(item => {
+            {media.filter(item => isAdmin || !item.email || item.email === userEmail).map(item => {
               const isOwn = userName && item.name === userName;
               return (
                 <div key={item._id} className="flex flex-col gap-2">

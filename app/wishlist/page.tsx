@@ -2,7 +2,10 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 import { Gift, ExternalLink, CheckCircle, Lock, Plus, Trash2 } from "lucide-react";
+
+const ADMINS = ["subhascdey@gmail.com", "monjoy.dey@gmail.com"];
 
 interface WishItem {
   _id: string;
@@ -27,7 +30,8 @@ function maskName(name: string) {
 }
 
 export default function WishlistPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const isAdmin = ADMINS.includes(session?.user?.email || "");
   const [items, setItems]         = useState<WishItem[]>([]);
   const [tab, setTab]             = useState<"iris" | "inesh">("iris");
   const [loading, setLoading]     = useState(true);
@@ -137,8 +141,8 @@ export default function WishlistPage() {
           <p className="text-sm" style={{ color: "rgba(0,0,0,0.45)" }}>Iris &amp; Inesh Dey · Class of 2026</p>
         </div>
 
-        {/* Tabs */}
-        <div className="grid grid-cols-2 gap-2 p-1 rounded-2xl mb-8"
+        {/* Tabs — only shown when logged in */}
+        {status === "authenticated" && <div className="grid grid-cols-2 gap-2 p-1 rounded-2xl mb-8"
           style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
           {(["iris", "inesh"] as const).map(p => {
             const c = PERSON_COLORS[p];
@@ -154,10 +158,26 @@ export default function WishlistPage() {
               </button>
             );
           })}
-        </div>
+        </div>}
+
+        {/* Login wall */}
+        {status !== "loading" && status !== "authenticated" && (
+          <div className="text-center py-16 px-6 rounded-3xl" style={{ background: "rgba(255,255,255,0.85)", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 4px 20px rgba(0,0,0,0.06)" }}>
+            <div className="mb-4 p-4 rounded-3xl inline-block" style={{ background: "rgba(255,203,5,0.12)" }}>
+              <Lock className="w-10 h-10" style={{ color: "#8A6E00" }} />
+            </div>
+            <h2 className="text-xl font-bold mb-2" style={{ color: "#0d1525" }}>Sign in to view gifts</h2>
+            <p className="text-sm mb-6" style={{ color: "rgba(0,0,0,0.45)" }}>Please sign in with Google to browse and claim gifts.</p>
+            <button onClick={() => signIn("google")}
+              className="px-8 py-3.5 rounded-2xl text-sm font-bold transition-all hover:scale-[1.02]"
+              style={{ background: "linear-gradient(135deg,#FFCB05,#f5c400)", color: "#0d1525" }}>
+              Sign in with Google
+            </button>
+          </div>
+        )}
 
         {/* Stats bar */}
-        {!loading && filtered.length > 0 && (
+        {status === "authenticated" && !loading && filtered.length > 0 && (
           <div className="flex items-center justify-between mb-5 px-1">
             <p className="text-xs" style={{ color: "rgba(0,0,0,0.45)" }}>
               {available} of {filtered.length} items still available
@@ -172,7 +192,7 @@ export default function WishlistPage() {
         )}
 
         {/* Items */}
-        {loading ? (
+        {status === "authenticated" && (loading ? (
           <div className="grid grid-cols-1 gap-3">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="rounded-3xl p-5 animate-pulse" style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(0,0,0,0.06)" }}>
@@ -241,7 +261,7 @@ export default function WishlistPage() {
                           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold"
                             style={{ background: "rgba(52,199,89,0.1)", color: "#1a7a35", border: "1px solid rgba(52,199,89,0.25)" }}>
                             <CheckCircle className="w-3.5 h-3.5" />
-                            {maskName(item.claimedBy)}
+                            {isAdmin ? item.claimedBy : "Claimed"}
                           </div>
                         ) : (
                           <button onClick={() => openClaim(item)}
@@ -264,7 +284,7 @@ export default function WishlistPage() {
               );
             })}
           </div>
-        )}
+        ))}
 
         {/* Admin section */}
         <div className="mt-12">

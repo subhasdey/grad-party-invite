@@ -49,7 +49,7 @@ export default function ContactPage() {
             <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "rgba(0,0,0,0.35)" }}>Event Details</p>
             <div className="space-y-1.5 text-sm mb-4" style={{ color: "rgba(0,0,0,0.55)" }}>
               <p><span className="font-semibold" style={{ color: "#0d1525" }}>Date:</span> Friday, June 26, 2026</p>
-              <p><span className="font-semibold" style={{ color: "#0d1525" }}>Time:</span> 6:00 PM</p>
+              <p><span className="font-semibold" style={{ color: "#0d1525" }}>Time:</span> 5:00 PM – 9:00 PM</p>
               <p><span className="font-semibold" style={{ color: "#0d1525" }}>Venue:</span> Redmond Senior &amp; Community Center</p>
               <p><span className="font-semibold" style={{ color: "#0d1525" }}>City:</span> Redmond, WA</p>
             </div>

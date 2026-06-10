@@ -374,7 +374,7 @@ export async function readMessagesFromSheet(): Promise<object[]> {
 }
 
 // ── Media Sheet ───────────────────────────────────────────────────────────────
-// Columns: timestamp | name | url | fileId | type | caption
+// Columns: timestamp | name | url | fileId | type | caption | likes | email
 
 export async function appendMediaToSheet(input: {
   name: string;
@@ -382,6 +382,7 @@ export async function appendMediaToSheet(input: {
   fileId: string;
   type: "image" | "video";
   caption?: string;
+  email?: string;
 }): Promise<void> {
   const sheetId = process.env.GOOGLE_SHEET_ID;
   if (!sheetId) throw new Error("Missing GOOGLE_SHEET_ID");
@@ -390,11 +391,11 @@ export async function appendMediaToSheet(input: {
   const now = new Date().toISOString();
 
   const res = await fetch(
-    `${SHEETS_BASE}/${sheetId}/values/Media!A:F:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
+    `${SHEETS_BASE}/${sheetId}/values/Media!A:H:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
     {
       method: "POST",
       headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ values: [[now, input.name, input.url, input.fileId, input.type, input.caption || ""]] }),
+      body: JSON.stringify({ values: [[now, input.name, input.url, input.fileId, input.type, input.caption || "", "", input.email || ""]] }),
     }
   );
   if (!res.ok) {
@@ -491,7 +492,7 @@ export async function readMediaFromSheet(): Promise<object[]> {
 
   const accessToken = await getAccessToken();
   const res = await fetch(
-    `${SHEETS_BASE}/${sheetId}/values/Media!A:G`,
+    `${SHEETS_BASE}/${sheetId}/values/Media!A:H`,
     { headers: { Authorization: `Bearer ${accessToken}` } }
   );
   if (!res.ok) return [];
@@ -507,5 +508,6 @@ export async function readMediaFromSheet(): Promise<object[]> {
     type: row[4] || "image",
     caption: row[5] || "",
     likes: Number(row[6]) || 0,
+    email: row[7] || "",
   })).reverse();
 }

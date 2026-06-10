@@ -37,7 +37,7 @@ export default function OGImage() {
 
           <div style={{ display: "flex", gap: 32, color: "rgba(255,255,255,0.6)", fontSize: 20 }}>
             <span>📅 June 26, 2026</span>
-            <span>🕕 6:00 PM</span>
+            <span>🕔 5:00 PM</span>
             <span>📍 Redmond, WA</span>
           </div>
         </div>

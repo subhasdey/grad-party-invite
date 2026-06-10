@@ -13,17 +13,18 @@ interface Countdown { days: number; hours: number; minutes: number; seconds: num
 interface Wish { name: string; message: string; attending: boolean; }
 
 const ITINERARY: { time: string; label: string; Icon: LucideIcon }[] = [
-  { time: "6:00 PM", label: "Doors Open",       Icon: DoorOpen   },
-  { time: "6:30 PM", label: "Welcome & Drinks",  Icon: Wine       },
-  { time: "7:00 PM", label: "Dinner",            Icon: Utensils   },
-  { time: "8:00 PM", label: "Speeches",          Icon: Mic        },
-  { time: "8:30 PM", label: "Cake & Dessert",    Icon: CakeSlice  },
-  { time: "9:00 PM", label: "Fun Activities",     Icon: Music      },
+  { time: "5:00 PM", label: "Doors Open",       Icon: DoorOpen   },
+  { time: "5:30 PM", label: "Welcome & Drinks",  Icon: Wine       },
+  { time: "6:00 PM", label: "Dinner",            Icon: Utensils   },
+  { time: "7:00 PM", label: "Speeches",          Icon: Mic        },
+  { time: "7:30 PM", label: "Cake & Dessert",    Icon: CakeSlice  },
+  { time: "8:00 PM", label: "Fun Activities",     Icon: Music      },
+  { time: "9:00 PM", label: "Event Ends",         Icon: Heart      },
 ];
 
 const DETAILS: { Icon: LucideIcon; val: string; sub: string }[] = [
   { Icon: Calendar, val: "June 26, 2026",  sub: "Friday"                        },
-  { Icon: Clock,    val: "6:00 PM",        sub: "Evening"                       },
+  { Icon: Clock,    val: "5:00 PM",        sub: "Evening"                       },
   { Icon: MapPin,   val: "Redmond, WA",    sub: "Senior & Community Center"     },
 ];
 
@@ -63,7 +64,7 @@ export default function Home() {
       setWishes(d.filter(r => r.attending && r.message?.trim()).slice(0, 6));
     }).catch(() => {});
 
-    const target = new Date("2026-06-26T18:00:00").getTime();
+    const target = new Date("2026-06-26T17:00:00").getTime();
     const tick = () => {
       const diff = target - Date.now();
       if (diff <= 0) return;
@@ -241,7 +242,7 @@ export default function Home() {
           <div className="flex items-center justify-center gap-2 sm:gap-4 mb-10 text-xs sm:text-sm font-medium flex-wrap" style={{ color: "rgba(0,0,0,0.55)" }}>
             <span>June 26, 2026</span>
             <span style={{ color: "rgba(0,0,0,0.2)" }}>·</span>
-            <span>6:00 PM</span>
+            <span>5:00 PM</span>
             <span style={{ color: "rgba(0,0,0,0.2)" }}>·</span>
             <span>Redmond, WA</span>
           </div>
@@ -489,7 +490,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════
           SECTION 4 — EVENING ITINERARY
       ══════════════════════════════════════════ */}
-      <section className="min-h-screen flex flex-col items-center justify-center py-24 px-6"
+      <section className="flex flex-col items-center justify-center py-24 px-6"
         style={{ background: "#f0f3fc" }}>
         <div ref={itineraryReveal.ref} className="w-full max-w-3xl transition-all duration-1000"
           style={{ opacity: itineraryReveal.visible ? 1 : 0, transform: itineraryReveal.visible ? "translateY(0)" : "translateY(60px)" }}>

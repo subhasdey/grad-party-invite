@@ -27,6 +27,14 @@ async function saveRsvp(body: Record<string, unknown>, isUpdate = false) {
     return NextResponse.json({ error: "Name and phone number are required" }, { status: 400 });
   }
 
+  const digits = safePhone.replace(/\D/g, "");
+  const isUS = digits.length === 10 || (digits.length === 11 && digits[0] === "1");
+  const isIndia = (digits.length === 10 && /^[6-9]/.test(digits)) ||
+                  (digits.length === 12 && digits.startsWith("91") && /^[6-9]/.test(digits[2]));
+  if (!isUS && !isIndia) {
+    return NextResponse.json({ error: "Enter a valid US (+1) or India (+91) phone number" }, { status: 400 });
+  }
+
   const data = {
     name: safeName, email: safeEmail||undefined, phone: safePhone||undefined,
     adults: safeAttending ? safeAdults : 0,

@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   description: "Join us to celebrate Iris (Purdue) & Inesh (Michigan) graduating — June 26, 2026 at Redmond Senior & Community Center. Hosted by Subhas & Sanchita Dey.",
   openGraph: {
     title: "Iris & Inesh Dey – Graduation Party 🎓",
-    description: "Celebrate with us! June 26, 2026 · 6PM · Redmond Senior & Community Center",
+    description: "Celebrate with us! June 26, 2026 · 5PM · Redmond Senior & Community Center",
     url: URL,
     siteName: "Dey Graduation Party 2026",
     type: "website",

@@ -7,7 +7,7 @@ const FROM = "Iris & Inesh Graduation <onboarding@resend.dev>";
 
 const APP_URL = "https://iris-and-inesh-2026.vercel.app";
 const DATE = "Friday, June 26, 2026";
-const TIME = "6:00 PM";
+const TIME = "5:00 PM";
 const VENUE = "Redmond Senior & Community Center, Redmond, WA";
 
 function confirmationHtml(guestName: string, attending: boolean): string {

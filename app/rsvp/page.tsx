@@ -9,15 +9,29 @@ type Diet = "veg" | "non-veg" | "both";
 
 const defaultForm = { name: "", email: "", phone: "", adults: 1, kids: 0, diet: "non-veg" as Diet, message: "", attending: true, glutenFree: false, nutAllergy: false };
 
+function validatePhone(raw: string): string {
+  const digits = raw.replace(/\D/g, "");
+  if (!digits) return "";
+  // US: 10 digits, or 11 starting with 1
+  const isUS = digits.length === 10 || (digits.length === 11 && digits[0] === "1");
+  // India: 10 digits starting with 6-9, or 12 starting with 91 + 6-9
+  const isIndia = (digits.length === 10 && /^[6-9]/.test(digits)) ||
+                  (digits.length === 12 && digits.startsWith("91") && /^[6-9]/.test(digits[2]));
+  if (!isUS && !isIndia) return "Enter a valid US (+1) or India (+91) phone number";
+  return "";
+}
+
 export default function RSVPPage() {
   const { data: session, status } = useSession();
   const [form, setForm]     = useState(defaultForm);
   const [pageStatus, setPageStatus] = useState<"idle"|"loading"|"success"|"error"|"checking">("idle");
   const [isEdit, setIsEdit] = useState(false);
+  const [phoneError, setPhoneError] = useState("");
 
   const update = (k: string, v: string | number | boolean) => setForm(f => ({ ...f, [k]: v }));
 
   const checkPhoneDuplicate = async (phone: string) => {
+    setPhoneError(validatePhone(phone));
     if (isEdit || phone.replace(/\D/g, "").length < 7) return;
     try {
       const rsvps: Array<Record<string, unknown>> = await fetch("/api/rsvp").then(r => r.json());
@@ -74,6 +88,8 @@ export default function RSVPPage() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const err = validatePhone(form.phone);
+    if (err) { setPhoneError(err); return; }
     setPageStatus("loading");
     try {
       const res = await fetch("/api/rsvp", {
@@ -107,13 +123,13 @@ export default function RSVPPage() {
             <div className="mb-6 p-4 rounded-2xl" style={{ background: "rgba(255,255,255,0.8)", border: "1px solid rgba(0,0,0,0.08)" }}>
               <p className="text-xs font-semibold mb-3 text-center" style={{ color: "rgba(0,0,0,0.4)" }}>Add to Calendar</p>
               <div className="flex gap-2">
-                <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Iris+%26+Inesh+Dey+Graduation+Party&dates=20260626T180000/20260626T230000&details=Graduation+celebration+for+Iris+(Purdue)+%26+Inesh+(Michigan)&location=Redmond+Senior+%26+Community+Center,+Redmond,+WA&sf=true"
+                <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Iris+%26+Inesh+Dey+Graduation+Party&dates=20260626T170000/20260626T210000&details=Graduation+celebration+for+Iris+(Purdue)+%26+Inesh+(Michigan)&location=Redmond+Senior+%26+Community+Center,+Redmond,+WA&sf=true"
                   target="_blank" rel="noopener noreferrer"
                   className="flex-1 py-3 rounded-xl text-xs font-semibold text-center transition-all hover:scale-[1.02]"
                   style={{ background: "rgba(66,133,244,0.1)", color: "#4285F4", border: "1px solid rgba(66,133,244,0.2)" }}>
                   Google Calendar
                 </a>
-                <a href="data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ADTSTART:20260626T180000%0ADTEND:20260626T230000%0ASUMMARY:Iris%20%26%20Inesh%20Dey%20Graduation%20Party%0ALOCATION:Redmond%20Senior%20%26%20Community%20Center%2C%20Redmond%2C%20WA%0ADESCRIPTION:Graduation%20party%20for%20Iris%20(Purdue)%20%26%20Inesh%20(Michigan)%0AEND:VEVENT%0AEND:VCALENDAR"
+                <a href="data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ADTSTART:20260626T170000%0ADTEND:20260626T210000%0ASUMMARY:Iris%20%26%20Inesh%20Dey%20Graduation%20Party%0ALOCATION:Redmond%20Senior%20%26%20Community%20Center%2C%20Redmond%2C%20WA%0ADESCRIPTION:Graduation%20party%20for%20Iris%20(Purdue)%20%26%20Inesh%20(Michigan)%0AEND:VEVENT%0AEND:VCALENDAR"
                   download="grad-party-2026.ics"
                   className="flex-1 py-3 rounded-xl text-xs font-semibold text-center transition-all hover:scale-[1.02]"
                   style={{ background: "rgba(0,0,0,0.05)", color: "rgba(0,0,0,0.6)", border: "1px solid rgba(0,0,0,0.1)" }}>
@@ -210,7 +226,14 @@ export default function RSVPPage() {
               placeholder="Email address" className={inputCls}
               readOnly={status === "authenticated" && !!session?.user?.email}
               style={status === "authenticated" && session?.user?.email ? { opacity: 0.6, cursor: "default" } : {}} />
-            <input type="tel" required value={form.phone} onChange={e => update("phone", e.target.value)} onBlur={e => checkPhoneDuplicate(e.target.value)} placeholder="Phone number *" className={inputCls} />
+            <div>
+              <input type="tel" required value={form.phone}
+                onChange={e => { update("phone", e.target.value); if (phoneError) setPhoneError(validatePhone(e.target.value)); }}
+                onBlur={e => checkPhoneDuplicate(e.target.value)}
+                placeholder="Phone number * (US or India)" className={inputCls}
+                style={phoneError ? { borderColor: "#e53e3e", boxShadow: "0 0 0 2px rgba(229,62,62,0.15)" } : {}} />
+              {phoneError && <p className="text-xs mt-1 px-1" style={{ color: "#e53e3e" }}>{phoneError}</p>}
+            </div>
 
             {form.attending && (
               <>
