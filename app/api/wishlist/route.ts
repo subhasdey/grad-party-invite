@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readWishlistFromSheet, appendWishlistItem, claimWishlistItem, deleteWishlistItem } from "@/lib/googledrive";
+import { readWishlistFromSheet, appendWishlistItem, claimWishlistItem, deleteWishlistItem, updateWishlistItemFields } from "@/lib/googledrive";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +20,19 @@ export async function POST(req: NextRequest) {
     if (!name?.trim()) return NextResponse.json({ error: "Name required" }, { status: 400 });
     await appendWishlistItem({ person: person || "both", name: name.trim(), description: description?.trim() || "", price: price?.trim() || "", url: url?.trim() || "", category: category?.trim() || "" });
     return NextResponse.json({ ok: true }, { status: 201 });
+  } catch (err) {
+    return NextResponse.json({ error: err instanceof Error ? err.message : "Failed" }, { status: 500 });
+  }
+}
+
+// Update item fields (admin only)
+export async function PATCH(req: NextRequest) {
+  try {
+    const { password, id, name, description, price, url, category } = await req.json();
+    if (password !== "admin123") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
+    await updateWishlistItemFields(Number(id), { name, description, price, url, category });
+    return NextResponse.json({ ok: true });
   } catch (err) {
     return NextResponse.json({ error: err instanceof Error ? err.message : "Failed" }, { status: 500 });
   }

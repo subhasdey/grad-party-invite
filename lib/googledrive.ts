@@ -301,6 +301,33 @@ export async function appendWishlistItem(input: {
   if (!res.ok) { const err = await res.text(); throw new Error(`Failed to add wishlist item (${res.status}): ${err}`); }
 }
 
+export async function updateWishlistItemFields(rowIndex: number, fields: { name?: string; description?: string; price?: string; url?: string; category?: string }): Promise<void> {
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+  if (!sheetId) throw new Error("Missing GOOGLE_SHEET_ID");
+  const accessToken = await getAccessToken();
+  // Read current row first
+  const readRes = await fetch(`${SHEETS_BASE}/${sheetId}/values/Wishlist!A${rowIndex}:H${rowIndex}`, { headers: { Authorization: `Bearer ${accessToken}` } });
+  const readData = readRes.ok ? await readRes.json() : {};
+  const row: string[] = readData.values?.[0] || [];
+  const updated = [
+    row[0] || "", // createdAt
+    row[1] || "", // person
+    fields.name      !== undefined ? fields.name      : (row[2] || ""),
+    fields.description !== undefined ? fields.description : (row[3] || ""),
+    fields.price     !== undefined ? fields.price     : (row[4] || ""),
+    fields.url       !== undefined ? fields.url       : (row[5] || ""),
+    fields.category  !== undefined ? fields.category  : (row[6] || ""),
+    row[7] || "", // claimedBy
+  ];
+  const range = `Wishlist!A${rowIndex}:H${rowIndex}`;
+  const res = await fetch(
+    `${SHEETS_BASE}/${sheetId}/values/${encodeURIComponent(range)}?valueInputOption=RAW`,
+    { method: "PUT", headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ range, majorDimension: "ROWS", values: [updated] }) }
+  );
+  if (!res.ok) { const err = await res.text(); throw new Error(`Failed to update wishlist item (${res.status}): ${err}`); }
+}
+
 export async function claimWishlistItem(rowIndex: number, claimedBy: string): Promise<void> {
   const sheetId = process.env.GOOGLE_SHEET_ID;
   if (!sheetId) throw new Error("Missing GOOGLE_SHEET_ID");
