@@ -446,7 +446,6 @@ export default function Home() {
             <p className="text-sm font-semibold mb-1" style={{ color: "#0d1525" }}>Redmond Senior &amp; Community Center</p>
             <p className="text-sm mb-2" style={{ color: "rgba(0,0,0,0.5)" }}>
               Hosted by <span className="font-medium" style={{ color: "#0d1525" }}>Subhas &amp; Sanchita Dey</span>
-              &nbsp;·&nbsp; RSVP by <span style={{ color: "#8A6E00", fontWeight: 600 }}>June 12, 2026</span>
             </p>
             <div className="flex items-center justify-center gap-4">
               <a href="tel:4252896422" className="text-sm font-medium transition-all hover:underline" style={{ color: "#8A6E00" }}>
