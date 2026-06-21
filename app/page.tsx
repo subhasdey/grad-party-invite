@@ -375,7 +375,7 @@ export default function Home() {
             </div>
             <div className="px-5 py-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
               {([
-                { name: "Inesh Dey", number: "+14252999168", color: "#8A6E00", hint: "•••• •••• 9168" },
+                { name: "Inesh Dey", number: "+14252299168", color: "#8A6E00", hint: "•••• •••• 9168" },
                 { name: "Iris Dey",  number: "+14255153937", color: "#7a5a00", hint: "•••• •••• 3937" },
               ] as { name: string; number: string; color: string; hint: string }[]).map(({ name: n, number, color, hint }) => (
                 <div key={n} className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl"
