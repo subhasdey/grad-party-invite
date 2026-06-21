@@ -14,7 +14,6 @@ function getTransporter() {
 
 const FROM = `Iris & Inesh Graduation <${process.env.SMTP_USER || "ineshandiris@gmail.com"}>`;
 const HOST_EMAILS = ["subhascdey@gmail.com", "monjoy.dey@gmail.com"];
-const FROM = "Iris & Inesh Graduation <onboarding@resend.dev>";
 
 const APP_URL = "https://iris-and-inesh-2026.vercel.app";
 const DATE = "Friday, June 26, 2026";
