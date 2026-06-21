@@ -1,7 +1,18 @@
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getTransporter() {
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST || "smtp.gmail.com",
+    port: Number(process.env.SMTP_PORT) || 587,
+    secure: false,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
+}
 
+const FROM = `Iris & Inesh Graduation <${process.env.SMTP_USER || "ineshandiris@gmail.com"}>`;
 const HOST_EMAILS = ["subhascdey@gmail.com", "monjoy.dey@gmail.com"];
 const FROM = "Iris & Inesh Graduation <onboarding@resend.dev>";
 
@@ -92,12 +103,12 @@ function hostNotificationHtml(guestName: string, attending: boolean, details: Re
 }
 
 export async function sendConfirmationEmail(to: string, guestName: string, attending: boolean) {
-  if (!process.env.RESEND_API_KEY) { console.log("Email skipped: RESEND_API_KEY not set"); return; }
+  if (!process.env.SMTP_USER) { console.log("Email skipped: SMTP not configured"); return; }
   const subject = attending
     ? `You're confirmed! Iris & Inesh's Graduation Party - June 26`
     : `RSVP received - Iris & Inesh's Graduation Party`;
   try {
-    await resend.emails.send({ from: FROM, to, subject, html: confirmationHtml(guestName, attending) });
+    await getTransporter().sendMail({ from: FROM, to, subject, html: confirmationHtml(guestName, attending) });
   } catch (err) {
     console.error("Confirmation email failed:", err);
   }
@@ -106,7 +117,7 @@ export async function sendConfirmationEmail(to: string, guestName: string, atten
 export async function sendHostNotification(guestName: string, attending: boolean, details: {
   email?: string; phone?: string; adults?: number; kids?: number; diet?: string; message?: string;
 }) {
-  if (!process.env.RESEND_API_KEY) return;
+  if (!process.env.SMTP_USER) return;
   const subject = attending
     ? `New RSVP: ${guestName} is coming!`
     : `RSVP: ${guestName} can't make it`;
@@ -119,16 +130,16 @@ export async function sendHostNotification(guestName: string, attending: boolean
     Message: details.message || "",
   };
   try {
-    await resend.emails.send({ from: FROM, to: HOST_EMAILS, subject, html: hostNotificationHtml(guestName, attending, detailMap) });
+    await getTransporter().sendMail({ from: FROM, to: HOST_EMAILS, subject, html: hostNotificationHtml(guestName, attending, detailMap) });
   } catch (err) {
     console.error("Host notification failed:", err);
   }
 }
 
 export async function sendReminderEmail(to: string, guestName: string) {
-  if (!process.env.RESEND_API_KEY) { console.log("Reminder email skipped: RESEND_API_KEY not set"); return; }
+  if (!process.env.SMTP_USER) { console.log("Reminder email skipped: SMTP not configured"); return; }
   try {
-    await resend.emails.send({
+    await getTransporter().sendMail({
       from: FROM,
       to,
       subject: `Reminder: Iris & Inesh's Graduation Party is this Friday!`,
