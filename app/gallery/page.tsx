@@ -55,58 +55,65 @@ export default function GalleryPage() {
     return () => clearInterval(id);
   }, []);
 
+  const [uploadStatus, setUploadStatus] = useState("");
+
   const upload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
     if (!userName) { setError("Please sign in to upload"); return; }
     setError("");
     setUploading(true);
-    setProgress(15);
 
-    try {
-      const blob = await blobUpload(file.name, file, {
-        access: "public",
-        handleUploadUrl: "/api/upload",
-        clientPayload: JSON.stringify({ name: userName, caption: caption.trim() }),
-        onUploadProgress: ({ percentage }) => {
-          setProgress(Math.min(85, Math.round(percentage * 0.85)));
-        },
-      });
-      setProgress(90);
+    let succeeded = 0;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      setUploadStatus(files.length > 1 ? `Uploading ${i + 1} of ${files.length}…` : "Uploading…");
+      setProgress(5);
+      try {
+        const blob = await blobUpload(file.name, file, {
+          access: "public",
+          handleUploadUrl: "/api/upload",
+          clientPayload: JSON.stringify({ name: userName, caption: caption.trim() }),
+          onUploadProgress: ({ percentage }) => {
+            setProgress(Math.min(90, Math.round(percentage * 0.9)));
+          },
+        });
 
-      const type = file.type.startsWith("video/") ? "video" : "image";
-      const mediaRes = await fetch("/api/media", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: userName, url: blob.url, caption: caption.trim(), type, email: userEmail }),
-      });
-      if (!mediaRes.ok) {
-        const data = await mediaRes.json().catch(() => ({}));
-        throw new Error(data.error || "Failed to save media");
+        const type = file.type.startsWith("video/") ? "video" : "image";
+        const mediaRes = await fetch("/api/media", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: userName, url: blob.url, caption: caption.trim(), type, email: userEmail }),
+        });
+        if (!mediaRes.ok) {
+          const data = await mediaRes.json().catch(() => ({}));
+          throw new Error(data.error || "Failed to save media");
+        }
+
+        const newItem: MediaItem = {
+          _id: String(Date.now() + i),
+          name: userName,
+          url: blob.url,
+          type,
+          caption: caption.trim(),
+          createdAt: new Date().toISOString(),
+          likes: 0,
+        };
+        setMedia(prev => [newItem, ...prev]);
+        succeeded++;
+        setProgress(100);
+      } catch (err) {
+        setError(`Failed to upload ${file.name} — skipping`);
+        console.error(err);
       }
-
-      const newItem: MediaItem = {
-        _id: String(Date.now()),
-        name: userName,
-        url: blob.url,
-        type,
-        caption: caption.trim(),
-        createdAt: new Date().toISOString(),
-        likes: 0,
-      };
-      setMedia(prev => [newItem, ...prev]);
-
-      setCaption("");
-      setProgress(100);
-      setTimeout(() => setProgress(0), 800);
-      setTimeout(load, 2000);
-    } catch (err) {
-      setError("Upload failed — please try again");
-      console.error(err);
-    } finally {
-      setUploading(false);
-      if (fileRef.current) fileRef.current.value = "";
     }
+
+    setCaption("");
+    setUploadStatus(files.length > 1 ? `${succeeded} of ${files.length} uploaded!` : "");
+    setTimeout(() => { setProgress(0); setUploadStatus(""); }, 1500);
+    setTimeout(load, 2000);
+    setUploading(false);
+    if (fileRef.current) fileRef.current.value = "";
   };
 
   const likeItem = async (id: string) => {
@@ -179,7 +186,7 @@ export default function GalleryPage() {
         <div className="mb-8 p-5 rounded-2xl" style={{ background: "rgba(255,255,255,0.85)", border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 4px 20px rgba(0,0,0,0.06)" }}>
           <p className="text-xs uppercase tracking-widest mb-1" style={{ color: "rgba(0,0,0,0.35)" }}>Share a Memory</p>
           <p className="text-xs mb-3" style={{ color: "#8A6E00" }}>
-            📸 Photos up to <span className="font-semibold">25 MB</span> · 🎥 Videos up to <span className="font-semibold">20 seconds</span> or <span className="font-semibold">100 MB</span>
+            📸 Photos up to <span className="font-semibold">25 MB</span> · 🎥 Videos up to <span className="font-semibold">20 seconds</span> or <span className="font-semibold">100 MB</span> · Select multiple at once
           </p>
 
           {status === "unauthenticated" ? (
@@ -224,11 +231,11 @@ export default function GalleryPage() {
                 style={{ background: "#FFCB05", color: "#0d1525" }}
               >
                 {uploading
-                  ? <><span className="w-4 h-4 border-2 border-[#0d1525]/30 border-t-[#0d1525] rounded-full inline-block animate-spin" />Uploading...</>
-                  : <><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>Upload Photo or Video</>
+                  ? <><span className="w-4 h-4 border-2 border-[#0d1525]/30 border-t-[#0d1525] rounded-full inline-block animate-spin" />{uploadStatus || "Uploading…"}</>
+                  : <><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>Upload Photos or Videos</>
                 }
               </button>
-              <input ref={fileRef} type="file" accept="image/*,video/*" className="hidden" onChange={upload} />
+              <input ref={fileRef} type="file" accept="image/*,video/*" multiple className="hidden" onChange={upload} />
             </>
           ) : (
             <p className="text-sm mt-2" style={{ color: "rgba(0,0,0,0.3)" }}>Loading...</p>
